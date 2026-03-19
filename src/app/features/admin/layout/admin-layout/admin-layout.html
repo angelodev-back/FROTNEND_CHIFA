@@ -1,0 +1,10 @@
+<div class="admin-layout">
+  <!-- Role-based Sidebar -->
+  <app-sidebar [role]="userRole" [activeMenu]="activeMenu" (menuChange)="onMenuChange($event)">
+  </app-sidebar>
+
+  <!-- Main Content Area where nested routes render -->
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

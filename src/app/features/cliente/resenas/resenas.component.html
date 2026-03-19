@@ -1,0 +1,95 @@
+<div class="experiences-canvas section-padding">
+  
+  <div class="container experiences-layout">
+    
+    <!-- Experience Ledger (Left Side) -->
+    <div class="experience-ledger anime-fade-in">
+        <header class="ledger-header">
+            <h6 class="section-tag">TESTIMONIOS GOURMET</h6>
+            <h1 class="ledger-display-title">Crónicas de <span class="text-underline">Sabor</span></h1>
+            <p class="ledger-lead">Descubra las historias grabadas en el paladar de nuestros comensales más distinguidos.</p>
+        </header>
+
+        <!-- Dynamic Summary Bar -->
+        <div class="experience-summary-bar">
+            <div class="esb-stat">
+                <span class="esb-val">{{ avgRating() }}</span>
+                <div class="esb-meta">
+                    <div class="esb-stars">
+                        <span class="star-gold">★</span>
+                        <span class="star-gold">★</span>
+                        <span class="star-gold">★</span>
+                        <span class="star-gold">★</span>
+                        <span class="star-half">★</span>
+                    </div>
+                    <span class="esb-txt">Calificación Promedio</span>
+                </div>
+            </div>
+            <div class="esb-divider"></div>
+            <div class="esb-stat">
+                <span class="esb-val">{{ resenas().length }}</span>
+                <div class="esb-meta">
+                    <span class="esb-txt">Reseñas Verificadas</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scrollable Feed -->
+        <div class="experience-feed">
+             <article class="feed-item opacity-in" *ngFor="let r of resenas()">
+                <div class="fit-header">
+                   <div class="fit-avatar">
+                        <span class="fit-initial">{{ r.nombreCliente?.charAt(0) || 'U' }}</span>
+                   </div>
+                   <div class="fit-meta">
+                      <h4 class="fit-name">{{ r.nombreCliente }}</h4>
+                      <time class="fit-date">{{ r.fecha | date:'longDate' }}</time>
+                   </div>
+                   <div class="fit-rating">
+                      <span class="fit-star" *ngFor="let s of [1,2,3,4,5]" [class.active]="(r.estrellas || 0) >= s">★</span>
+                   </div>
+                </div>
+                <div class="fit-content">
+                   <blockquote class="fit-quote">"{{ r.comentario }}"</blockquote>
+                </div>
+             </article>
+        </div>
+    </div>
+
+    <!-- Feedback Portal (Right Side) -->
+    <div class="feedback-portal animate-slide-in">
+        <div class="feedback-card">
+            <h3 class="feedback-title">Comparta su Experiencia</h3>
+            <p class="feedback-text">Su opinión es el ingrediente más valioso para nuestra excelencia.</p>
+
+            <div class="rating-portal-input">
+                <span 
+                    *ngFor="let s of [1,2,3,4,5]" 
+                    (click)="rating = s"
+                    class="portal-star"
+                    [class.star-active]="rating >= s">
+                    ★
+                </span>
+            </div>
+            <div class="rating-label-display">CALIFICACIÓN SELECCIONADA: <strong>{{ rating }} ESTRELLAS</strong></div>
+
+            <div class="pfp-field mt-8">
+                <label class="pfp-label">SU RELATO GASTRONÓMICO</label>
+                <textarea 
+                    class="pfp-textarea" 
+                    rows="6" 
+                    placeholder="¿Cómo fue su experiencia con nuestros sabores y servicio?"
+                    [(ngModel)]="nuevoComentario"></textarea>
+            </div>
+
+            <button class="btn-portal-action mt-8" [disabled]="!nuevoComentario || rating === 0" (click)="enviar()">
+                PUBLICAR MI TESTIMONIO
+            </button>
+            
+            <p class="feedback-disclaimer">Su reseña será visible para la comunidad de Chifa Linda tras una breve validación.</p>
+        </div>
+    </div>
+
+  </div>
+
+</div>

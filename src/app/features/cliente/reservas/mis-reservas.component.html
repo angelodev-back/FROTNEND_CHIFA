@@ -1,0 +1,73 @@
+<div class="agenda-canvas section-padding">
+  
+  <div class="container">
+      <!-- Selective Header -->
+      <header class="agenda-header anime-fade-in">
+        <h6 class="section-tag">HISTORIAL GOURMET</h6>
+        <h1 class="agenda-display-title">Mis <span class="text-underline">Reservaciones</span></h1>
+        <p class="agenda-lead">Administre sus visitas pasadas y asegure sus próximos momentos en Chifa Linda.</p>
+      </header>
+
+      <!-- Digital Agentic Grid -->
+      <div class="agenda-grid-layout">
+        
+        <div class="agenda-ticket-card opacity-in" *ngFor="let r of reservas()">
+            <div class="atc-header">
+                <div class="atc-date-pill">
+                    <span class="atc-day">{{ getDay(r.fechaHoraReserva) }}</span>
+                    <span class="atc-month">{{ getMonthName(r.fechaHoraReserva) }}</span>
+                </div>
+                <div class="atc-status-container">
+                    <span class="badge-premium" [ngClass]="'status-' + r.estado?.toLowerCase()">
+                        {{ r.estado }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="atc-body">
+                <h3 class="atc-mesa-title">Mesa Solicitada</h3>
+                <div class="atc-mesa-val">Mesa {{ r.numeroMesa || 'Principal' }}</div>
+                
+                <div class="atc-data-row">
+                    <div class="atc-data-item">
+                        <span class="atc-label">HORARIO</span>
+                        <span class="atc-val">{{ getTime(r.fechaHoraReserva) }} hrs</span>
+                    </div>
+                    <div class="atc-data-item">
+                        <span class="atc-label">PAX</span>
+                        <span class="atc-val">{{ r.cantidadPersonas }} Invitados</span>
+                    </div>
+                </div>
+
+                <div class="atc-note-box" *ngIf="r.observaciones">
+                    <span class="atc-label">REQUERIMIENTOS ESPECIALES</span>
+                    <p class="atc-note-val">"{{ r.observaciones }}"</p>
+                </div>
+            </div>
+
+            <div class="atc-footer">
+                <ng-container *ngIf="r.estado === 'PENDIENTE'">
+                    <button class="btn-atc-destructive" (click)="cancelar(r.idReserva!)">ANULAR SOLICITUD</button>
+                </ng-container>
+                <ng-container *ngIf="r.estado === 'COMPLETADA'">
+                    <button class="btn-atc-primary" routerLink="/cliente/resenas">COMPARTIR EXPERIENCIA</button>
+                </ng-container>
+                <ng-container *ngIf="r.estado === 'CANCELADA'">
+                    <p class="atc-info-msg">Esta reserva fue cancelada oficialmente.</p>
+                </ng-container>
+            </div>
+        </div>
+
+      </div>
+
+      <!-- Empty Agenda State -->
+      <div class="agenda-empty-canvas" *ngIf="reservas().length === 0">
+         <div class="aec-artwork">🏺</div>
+         <h3 class="aec-title">Su agenda gastronómica está libre</h3>
+         <p class="aec-text">Parece que aún no ha programado su próxima aventura culinaria con nosotros.</p>
+         <button class="btn btn-primary btn-xl mt-8" routerLink="/cliente/reservas">RESERVAR AHORA</button>
+      </div>
+
+  </div>
+
+</div>

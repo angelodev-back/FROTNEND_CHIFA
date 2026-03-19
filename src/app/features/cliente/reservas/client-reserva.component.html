@@ -1,0 +1,121 @@
+<div class="reservation-page-canvas">
+  
+  <!-- Premium Brand Hero -->
+  <div class="reserva-luxury-hero anime-fade-in">
+    <div class="container">
+        <h6 class="section-tag-light">EXPERIENCIA GOURMET</h6>
+        <h1 class="hero-display-title">Reserve su <span class="text-underline">Mesa</span></h1>
+        <p class="hero-lead">Asegure un lugar en nuestra mesa y déjenos crear un momento inolvidable para usted.</p>
+    </div>
+  </div>
+
+  <div class="reserva-grid-portal container">
+    
+    <!-- Left: Operational Command (Form) -->
+    <div class="reserva-form-zone animate-slide-in">
+      <div class="premium-form-card">
+        <div class="pfc-header">
+           <div class="pfc-title-box">
+             <h2 class="pfc-title">Solicitud de Reserva</h2>
+             <p class="pfc-subtitle">Complete los detalles de su visita</p>
+           </div>
+           <div class="pfc-badge-status">PRE-APROBACIÓN</div>
+        </div>
+
+        <form [formGroup]="reservaForm" (ngSubmit)="onSubmit()" class="reserva-form-engine">
+          
+          <div class="form-row-dual">
+            <div class="res-field">
+              <label class="res-label">FECHA DE VISITA</label>
+              <div class="res-input-wrapper">
+                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                 <input type="date" formControlName="fechaReserva" [min]="today" class="res-input">
+              </div>
+            </div>
+
+            <div class="res-field">
+              <label class="res-label">HORARIO PREFERENTE</label>
+              <div class="res-input-wrapper">
+                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                 <input type="time" formControlName="horaReserva" min="12:00" max="22:00" class="res-input">
+              </div>
+            </div>
+          </div>
+
+          <div class="res-field">
+            <label class="res-label">DINERS (NÚMERO DE PERSONAS)</label>
+            <div class="number-control-premium">
+               <button type="button" class="btn-ncp" (click)="changePersonas(-1)" [disabled]="personas <= 1">−</button>
+               <div class="ncp-display">
+                 <span class="ncp-val">{{ personas }}</span>
+                 <span class="ncp-label">Invitados</span>
+               </div>
+               <button type="button" class="btn-ncp" (click)="changePersonas(1)" [disabled]="personas >= 20">+</button>
+            </div>
+          </div>
+
+          <div class="res-field">
+            <label class="res-label">SOLICITUDES ESPECIALES O ALERGIAS</label>
+            <textarea formControlName="comentario" rows="4" placeholder="Ej: Mesa cerca a la ventana, aniversario, alergia al maní..." class="res-textarea"></textarea>
+          </div>
+
+          <button type="submit" class="btn-reserva-action" [disabled]="reservaForm.invalid || loading()">
+            <span *ngIf="!loading()">CONFIRMAR SOLICITUD DE RESERVA</span>
+            <div class="spinner-res" *ngIf="loading()"></div>
+          </button>
+
+          <footer class="form-res-footer">
+             <span class="icon-secure">🔒</span>
+             <p>Su reserva está protegida por nuestra política de privacidad. No se requiere anticipo de pago.</p>
+          </footer>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right: Personal Agenda (History) -->
+    <div class="reserva-history-zone animate-slide-in">
+        <div class="history-card-canvas">
+            <header class="hcc-header">
+                <h3 class="hcc-title">Mi Agenda Gastronómica</h3>
+                <button class="btn-hcc-refresh" (click)="loadHistory()">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                </button>
+            </header>
+
+            <div class="hcc-scroller">
+                <div class="empty-agenda" *ngIf="misReservas().length === 0 && !loadingHistory()">
+                    <div class="ea-artwork">📖</div>
+                    <h4>Su agenda está libre</h4>
+                    <p>No tiene reservas pendientes. Es un gran momento para planear su próxima visita.</p>
+                </div>
+
+                <div class="reserva-ticket-item" *ngFor="let res of misReservas()" [class]="'status-' + res.estado?.toLowerCase()">
+                    <div class="rti-header">
+                        <div class="rti-date-box">
+                            <span class="rti-day">{{ res.fechaHoraReserva | date:'dd' }}</span>
+                            <span class="rti-month">{{ res.fechaHoraReserva | date:'MMM' | uppercase }}</span>
+                        </div>
+                        <div class="rti-info">
+                            <div class="rti-time">🕑 {{ res.fechaHoraReserva | date:'HH:mm' }} hrs</div>
+                            <div class="rti-pax">👥 {{ res.cantidadPersonas }} Personas</div>
+                        </div>
+                        <div class="rti-status">
+                             <span class="status-badge-minimal">{{ getStatusLabel(res.estado) }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="rti-body" *ngIf="res.observaciones">
+                        <p class="rti-note">"{{ res.observaciones }}"</p>
+                    </div>
+
+                    <div class="rti-actions" *ngIf="res.estado === 'PENDIENTE'">
+                        <button class="btn-cancel-rti" (click)="cancelar(res.idReserva)">CANCELAR ESTA RESERVA</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  </div>
+
+</div>

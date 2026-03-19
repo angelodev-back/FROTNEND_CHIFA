@@ -1,0 +1,213 @@
+<div class="caja-container">
+  <!-- HEADER -->
+  <header class="caja-header">
+    <div class="header-title-group">
+      <h1 class="page-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="6" y1="15" x2="6" y2="15.01"/><line x1="10" y1="15" x2="10" y2="15.01"/>
+        </svg>
+        Gestión de Caja
+      </h1>
+      <p class="page-subtitle">Control de turno, pagos y cierre</p>
+    </div>
+    <div class="header-actions">
+      <span class="badge" [class]="cajaAbierta() ? 'badge-abierta' : 'badge-cerrada'">
+        {{ cajaAbierta() ? '🟢 Caja Abierta' : '🔴 Caja Cerrada' }}
+      </span>
+    </div>
+  </header>
+
+  <!-- LOADING -->
+  <div *ngIf="isLoading()" class="loading-state">
+    <div class="spinner"></div>
+    <span>Cargando estado de caja...</span>
+  </div>
+
+  <!-- ERROR -->
+  <div *ngIf="errorMsg() && !isLoading()" class="error-card">
+    <p>{{ errorMsg() }}</p>
+    <button (click)="cargarEstado()" class="btn-retry">Reintentar</button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div *ngIf="!isLoading() && !errorMsg()" class="caja-body">
+
+    <!-- SOLICITUDES EN TIEMPO REAL -->
+    <div class="alerts-section" *ngIf="solicitudesPago().length > 0">
+      <div class="alerts-header">
+        <span class="alerts-dot"></span>
+        <h3 class="alerts-title">Solicitudes en Tiempo Real ({{ solicitudesPago().length }})</h3>
+      </div>
+      <div class="alerts-grid">
+        <div *ngFor="let s of solicitudesPago()" class="alert-card animate-pulse" (click)="seleccionarPedido(s.idPedido); setVista('PAGAR')">
+          <div class="alert-info">
+            <span class="alert-mesa">Mesa {{ s.numeroMesa }}</span>
+            <span class="alert-mozo">Por: {{ s.nombreMozo }}</span>
+          </div>
+          <div class="alert-amount">
+            <span class="alert-total">S/ {{ s.total | number:'1.2-2' }}</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="alert-arrow"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NAV TABS -->
+    <nav class="tab-nav">
+      <button
+        *ngIf="!cajaAbierta()"
+        class="tab-btn"
+        [class.active]="vistaActiva() === 'ABRIR'"
+        (click)="setVista('ABRIR')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Abrir Caja
+      </button>
+      <button
+        *ngIf="cajaAbierta()"
+        class="tab-btn"
+        [class.active]="vistaActiva() === 'RESUMEN'"
+        (click)="setVista('RESUMEN')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+        Resumen
+      </button>
+      <button
+        *ngIf="cajaAbierta()"
+        class="tab-btn"
+        [class.active]="vistaActiva() === 'PAGAR'"
+        (click)="setVista('PAGAR')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Procesar Pago
+      </button>
+      <button
+        *ngIf="cajaAbierta()"
+        class="tab-btn tab-btn-danger"
+        [class.active]="vistaActiva() === 'CERRAR'"
+        (click)="setVista('CERRAR')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+        Cerrar Caja
+      </button>
+    </nav>
+
+    <!-- VISTA: ABRIR CAJA -->
+    <section *ngIf="vistaActiva() === 'ABRIR'" class="form-card animate-in">
+      <h2 class="card-title">Apertura de Turno</h2>
+      <p class="card-desc">Ingresa el monto inicial disponible en físico para esta caja.</p>
+      <div class="form-group">
+        <label class="form-label">Monto Inicial (S/)</label>
+        <div class="input-prefix-wrap">
+          <span class="input-prefix">S/</span>
+          <input type="number" [(ngModel)]="montoIncial" min="0" step="0.01"
+            class="form-input" placeholder="0.00" id="montoInicial"/>
+        </div>
+      </div>
+      <button class="btn-primary" [disabled]="isSubmitting()" (click)="abrirCaja()">
+        <span *ngIf="!isSubmitting()">Abrir Caja</span>
+        <span *ngIf="isSubmitting()">Abriendo...</span>
+      </button>
+    </section>
+
+    <!-- VISTA: RESUMEN DEL TURNO -->
+    <section *ngIf="vistaActiva() === 'RESUMEN' && resumen()" class="resumen-grid animate-in">
+      <div class="resumen-card">
+        <span class="rc-label">Cajero</span>
+        <span class="rc-value">{{ resumen()!.usuarioAdmin }}</span>
+      </div>
+      <div class="resumen-card">
+        <span class="rc-label">Apertura</span>
+        <span class="rc-value">{{ resumen()!.fechaApertura | date:'dd/MM HH:mm' }}</span>
+      </div>
+      <div class="resumen-card">
+        <span class="rc-label">Monto Inicial</span>
+        <span class="rc-value">S/ {{ resumen()!.montoApertura | number:'1.2-2' }}</span>
+      </div>
+      <div class="resumen-card rc-highlight">
+        <span class="rc-label">Total Ventas</span>
+        <span class="rc-value">S/ {{ resumen()!.totalVentas | number:'1.2-2' }}</span>
+      </div>
+      <div class="resumen-card">
+        <span class="rc-label">Efectivo</span>
+        <span class="rc-value">S/ {{ resumen()!.ingresosEfectivo | number:'1.2-2' }}</span>
+      </div>
+      <div class="resumen-card">
+        <span class="rc-label">Tarjeta</span>
+        <span class="rc-value">S/ {{ resumen()!.ingresosTarjeta | number:'1.2-2' }}</span>
+      </div>
+      <div class="resumen-card">
+        <span class="rc-label">Yape / Plin</span>
+        <span class="rc-value">S/ {{ resumen()!.ingresosYapePlin | number:'1.2-2' }}</span>
+      </div>
+      <div class="resumen-card rc-total">
+        <span class="rc-label">Cierre Calculado</span>
+        <span class="rc-value">S/ {{ resumen()!.montoCierreCalculado | number:'1.2-2' }}</span>
+      </div>
+    </section>
+
+    <!-- VISTA: PROCESAR PAGO -->
+    <section *ngIf="vistaActiva() === 'PAGAR'" class="form-card animate-in">
+      <h2 class="card-title">Procesar Pago de Pedido</h2>
+      <p class="card-desc">Selecciona el pedido servido y el método de pago.</p>
+
+      <!-- Lista de pedidos servidos -->
+      <div class="pedidos-list" *ngIf="pedidosServidos().length > 0">
+        <div
+          *ngFor="let p of pedidosServidos()"
+          class="pedido-item"
+          [class.pedido-selected]="pagoForm.idPedido === p.idPedido"
+          (click)="seleccionarPedido(p.idPedido)">
+          <span class="pedido-id">#{{ p.idPedido }}</span>
+          <span class="pedido-mesa">Mesa {{ p.numeroMesa ?? '—' }}</span>
+          <span class="pedido-total">S/ {{ p.total | number:'1.2-2' }}</span>
+          <span class="pedido-estado badge-servido">{{ p.estado }}</span>
+        </div>
+      </div>
+      <p *ngIf="pedidosServidos().length === 0" class="empty-msg">
+        No hay pedidos en estado SERVIDO o LISTO pendientes de pago.
+      </p>
+
+      <div class="form-group mt-4">
+        <label class="form-label">Pedido seleccionado (ID)</label>
+        <input type="number" [(ngModel)]="pagoForm.idPedido"
+          class="form-input" id="idPedidoPago" placeholder="ID del pedido"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Método de pago</label>
+        <div class="metodo-grid">
+          <button *ngFor="let m of metodosDisponibles"
+            class="metodo-btn"
+            [class.active]="pagoForm.metodoPago === m"
+            (click)="setMetodoPago(m)">
+            {{ m }}
+          </button>
+        </div>
+      </div>
+      <button class="btn-primary" [disabled]="isSubmitting() || !pagoForm.idPedido" (click)="procesarPago()">
+        <span *ngIf="!isSubmitting()">Confirmar Pago</span>
+        <span *ngIf="isSubmitting()">Procesando...</span>
+      </button>
+    </section>
+
+    <!-- VISTA: CERRAR CAJA -->
+    <section *ngIf="vistaActiva() === 'CERRAR'" class="form-card form-card-danger animate-in">
+      <h2 class="card-title danger-title">Cierre de Turno</h2>
+      <p class="card-desc">Ingresa el monto real contado en físico al cierre del turno.</p>
+
+      <div *ngIf="resumen()" class="cierre-info">
+        <span>Cierre calculado por sistema: <strong>S/ {{ resumen()!.montoCierreCalculado | number:'1.2-2' }}</strong></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Monto Real Contado (S/)</label>
+        <div class="input-prefix-wrap">
+          <span class="input-prefix">S/</span>
+          <input type="number" [(ngModel)]="montoRealCierre" min="0" step="0.01"
+            class="form-input" placeholder="0.00" id="montoRealCierre"/>
+        </div>
+      </div>
+      <button class="btn-danger" [disabled]="isSubmitting()" (click)="cerrarCaja()">
+        <span *ngIf="!isSubmitting()">Confirmar Cierre</span>
+        <span *ngIf="isSubmitting()">Cerrando...</span>
+      </button>
+    </section>
+
+  </div>
+</div>

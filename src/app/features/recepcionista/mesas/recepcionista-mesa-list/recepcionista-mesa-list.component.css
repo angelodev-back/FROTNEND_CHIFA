@@ -1,0 +1,201 @@
+/* Enterprise Floor Plan - Premium Soft UI / Bento */
+.admin-page { 
+    padding: 3rem 4rem; 
+    max-width: 100%; 
+    margin: 0; 
+    background-color: var(--color-bg);
+}
+
+.admin-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2.5rem !important;
+    background: var(--color-surface);
+    padding: 1.5rem 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-md);
+}
+
+.aph-left { display: flex; align-items: center; gap: 1.5rem; }
+
+.aph-title {
+    font-size: 2.5rem !important;
+    font-weight: 950;
+    letter-spacing: -0.04em;
+    color: var(--color-text);
+    line-height: 1;
+    margin: 0;
+}
+
+.aph-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 8px 16px rgba(14, 165, 233, 0.25);
+}
+
+.mesa-grid-premium {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2.5rem;
+    margin-top: 1rem;
+}
+
+.mesa-card-enterprise {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition-spring);
+}
+
+.mesa-card-enterprise:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-primary);
+}
+
+.mce-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.mce-id-box {
+    background: #1e293b; color: white;
+    width: 50px; height: 50px; border-radius: var(--radius-md);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Outfit'; font-weight: 950; font-size: 1.6rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.mce-badge-cap {
+    display: flex; align-items: center; gap: 0.45rem;
+    background: var(--color-bg); color: var(--color-text-muted); padding: 0.4rem 0.85rem;
+    border-radius: var(--radius-sm); font-weight: 900; font-size: 0.75rem;
+    border: 1px solid var(--color-border-light);
+}
+
+.mce-body { flex: 1; display: flex; flex-direction: column; gap: 1rem; }
+.mce-status-line {
+    display: flex; align-items: center; gap: 0.75rem;
+    font-size: 0.7rem; font-weight: 950; text-transform: uppercase; letter-spacing: 0.1em;
+}
+
+.status-indicator { 
+    width: 10px; height: 10px; border-radius: 50%; 
+    animation: pulse-md 2s infinite ease-in-out;
+}
+
+@keyframes pulse-md {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.7; }
+}
+
+.disponible .status-indicator { background: var(--color-success); }
+.disponible .mce-status-line { color: var(--color-success); }
+
+.ocupada .status-indicator { background: var(--color-danger); }
+.ocupada .mce-status-line { color: var(--color-danger); }
+.ocupada { border-top: 5px solid var(--color-danger); }
+
+.reservada .status-indicator { background: var(--color-warning); }
+.reservada .mce-status-line { color: var(--color-warning); }
+.reservada { border-top: 5px solid var(--color-warning); }
+
+.mce-client-area {
+    padding: 1rem;
+    background: var(--color-bg-alt);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-light);
+}
+
+.mce-client-label { font-size: 0.65rem; font-weight: 950; color: var(--color-text-muted); letter-spacing: 0.1em; margin-bottom: 0.35rem; text-transform: uppercase; }
+.mce-client-name { font-weight: 950; font-size: 1.15rem; color: var(--color-text); font-family: 'Outfit'; letter-spacing: -0.01em; }
+
+.mce-ready-txt { font-size: 0.9rem; font-weight: 700; color: var(--color-text-muted); font-style: italic; opacity: 0.6; }
+
+.mce-footer { display: flex; gap: 0.75rem; border-top: 1px solid var(--color-border-light); padding-top: 1.5rem; }
+
+.btn-mce {
+    flex: 1; padding: 0.75rem; border-radius: var(--radius-md);
+    font-weight: 950; font-size: 0.8rem; cursor: pointer;
+    transition: var(--transition-normal); border: none; display: flex; align-items: center; justify-content: center;
+    text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Outfit';
+}
+
+.btn-mce-primary { background: #1e293b; color: white; }
+.btn-mce-primary:hover { background: var(--color-primary); box-shadow: var(--shadow-md); }
+
+.btn-mce-amber { background: var(--color-warning-bg); color: var(--color-warning); border: 1.5px solid var(--color-warning); }
+.btn-mce-amber:hover { background: var(--color-warning); color: white; }
+
+.btn-mce-ghost { background: var(--color-bg); color: var(--color-text-muted); border: 1.5px solid var(--color-border-light); }
+.btn-mce-ghost:hover { background: var(--color-surface); color: var(--color-text); border-color: var(--color-text); }
+
+/* Assignment Modal Styles - Industrial Design */
+.kds-feedback-portal {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px);
+    display: flex; align-items: center; justify-content: center; z-index: 1000;
+}
+
+.assignment-modal-card {
+    background: var(--color-surface); width: 640px; border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg); overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.amc-header { background: #1e293b; padding: 2.5rem; color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+.amc-title { font-family: 'Outfit'; font-weight: 950; font-size: 2rem; line-height: 1.1; letter-spacing: -0.02em; }
+.amc-sub { font-size: 0.85rem; color: #94a3b8; margin-top: 0.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+.amc-close { background: none; border: none; color: white; font-size: 2.5rem; cursor: pointer; opacity: 0.4; transition: var(--transition-fast); line-height: 1; }
+.amc-close:hover { opacity: 1; transform: rotate(90deg); }
+
+.amc-body { padding: 3rem; }
+
+.amc-tabs { display: flex; gap: 1rem; margin-bottom: 2.5rem; background: var(--color-bg); padding: 0.6rem; border-radius: var(--radius-md); border: 1px solid var(--color-border-light); }
+.amc-tab {
+    flex: 1; padding: 1rem; border-radius: var(--radius-sm); border: none;
+    font-weight: 950; font-size: 0.8rem; cursor: pointer;
+    transition: var(--transition-normal); background: transparent; color: var(--color-text-muted);
+}
+.amc-tab.active { background: var(--color-surface); color: var(--color-primary); box-shadow: var(--shadow-sm); }
+
+.amc-search-wrap {
+    display: flex; align-items: center; gap: 1.25rem;
+    background: var(--color-bg); border: 2px solid var(--color-border-light);
+    padding: 1.25rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 2rem;
+    transition: var(--transition-normal);
+}
+.amc-search-wrap:focus-within { border-color: var(--color-primary); box-shadow: 0 0 0 4px var(--color-primary-bg); }
+.amc-input { border: none; background: transparent; outline: none; flex: 1; font-weight: 900; color: var(--color-text); font-size: 1.1rem; font-family: 'Outfit'; }
+
+.amc-scroll-list { max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; padding-right: 0.5rem; }
+.amcl-item {
+    padding: 1.25rem 1.75rem; background: var(--color-bg); border-radius: var(--radius-md);
+    border: 2px solid transparent; cursor: pointer; transition: var(--transition-normal);
+    display: flex; justify-content: space-between; align-items: center;
+}
+.amcl-item:hover { transform: scale(1.02); background: var(--color-surface); border-color: var(--color-border-light); }
+.amcl-item.selected { border-color: var(--color-primary); background: var(--color-primary-bg); transform: scale(1.02); }
+
+.amcl-name { display: block; font-weight: 950; color: var(--color-text); font-size: 1.1rem; font-family: 'Outfit'; }
+.amcl-id { font-size: 0.8rem; font-weight: 850; color: var(--color-text-muted); margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.amcl-check { color: var(--color-primary); }
+
+.amc-footer { padding: 3rem; background: var(--color-bg); border-top: 1.5px solid var(--color-border-light); display: flex; justify-content: flex-end; gap: 1.5rem; }
+
+@media (max-width: 1024px) {
+    .admin-page { padding: 1.5rem; }
+    .mesa-grid-premium { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .admin-page-header { flex-direction: column; align-items: stretch; gap: 1.5rem; }
+    .assignment-modal-card { width: 95%; margin: 1rem; }
+}

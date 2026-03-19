@@ -1,0 +1,115 @@
+<div class="profile-canvas section-padding">
+  
+  <div class="container profile-grid">
+    
+    <!-- Profile Sidebar (Identity Card) -->
+    <aside class="profile-sidebar anime-fade-in">
+        <div class="identity-card-premium">
+            <div class="icp-avatar-portal">
+                <div class="icp-avatar shine-effect">{{ user?.nombres?.charAt(0) || 'U' }}</div>
+                <button class="icp-edit-trigger">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                </button>
+            </div>
+
+            <div class="icp-meta">
+                <h2 class="icp-name">{{ user?.nombres }} {{ user?.apellidos }}</h2>
+                <p class="icp-email">{{ user?.email }}</p>
+                <div class="icp-tier-badge">
+                    <span class="tier-icon">🎖️</span>
+                    <span class="tier-txt">COMENSAL DISTINGUIDO</span>
+                </div>
+            </div>
+
+            <nav class="icp-navigation">
+                <div class="icp-nav-item icp-active">
+                    <span class="icp-nav-icon">👤</span>
+                    <span class="icp-nav-txt">Mi Perfil</span>
+                </div>
+                <div class="icp-nav-item">
+                    <span class="icp-nav-icon">🔔</span>
+                    <span class="icp-nav-txt">Notificaciones</span>
+                </div>
+                <div class="icp-nav-item">
+                    <span class="icp-nav-icon">🛡️</span>
+                    <span class="icp-nav-txt">Seguridad</span>
+                </div>
+                <div class="icp-nav-item icp-danger" (click)="logout()">
+                    <span class="icp-nav-icon">🚪</span>
+                    <span class="icp-nav-txt">Cerrar Sesión</span>
+                </div>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Profile Main Content -->
+    <main class="profile-main-area animate-slide-in">
+        
+        <!-- Information Section -->
+        <section class="profile-section-card">
+            <header class="psc-header">
+                <h3 class="psc-title">Información de Identidad</h3>
+                <p class="psc-lead">Gestione sus datos personales para una experiencia más fluida.</p>
+            </header>
+
+            <div class="psc-body">
+                <div class="pfp-grid-form">
+                    <div class="pfp-field">
+                        <label class="pfp-label">NOMBRES</label>
+                        <input type="text" class="pfp-control pfp-readonly" [value]="user?.nombres" readonly>
+                    </div>
+                    <div class="pfp-field">
+                        <label class="pfp-label">APELLIDOS</label>
+                        <input type="text" class="pfp-control pfp-readonly" [value]="user?.apellidos" readonly>
+                    </div>
+                    <div class="pfp-field">
+                        <label class="pfp-label">DNI / DOCUMENTO</label>
+                        <input type="text" class="pfp-control pfp-readonly" [value]="user?.dni" readonly>
+                    </div>
+                    <div class="pfp-field">
+                        <label class="pfp-label">CORREO ELECTRÓNICO</label>
+                        <input type="email" class="pfp-control" [(ngModel)]="editModel.email" placeholder="tu@email.com">
+                    </div>
+                    <div class="pfp-field">
+                        <label class="pfp-label">TELÉFONO DE CONTACTO</label>
+                        <input type="text" class="pfp-control" [(ngModel)]="editModel.celular" placeholder="Ej. 999 888 777">
+                    </div>
+                    <div class="pfp-field">
+                        <label class="pfp-label">DIRECCIÓN DE CORTECÍA</label>
+                        <input type="text" class="pfp-control" [(ngModel)]="editModel.direccion" placeholder="Ej. Av. Principal 123, Distrito">
+                    </div>
+                </div>
+
+                <div class="psc-footer mt-10">
+                    <button class="btn-portal-action py-4 px-10 w-auto" [disabled]="isSaving()" (click)="guardarCambios()">
+                        <span *ngIf="!isSaving()">ACTUALIZAR CREDENCIALES</span>
+                        <span *ngIf="isSaving()" class="loader-inline">PROCESANDO...</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metrics Grid -->
+        <section class="profile-metrics-grid mt-8">
+            <div class="metric-block-premium">
+                <div class="mbp-visual">📅</div>
+                <div class="mbp-meta">
+                    <span class="mbp-val">{{ totalReservas }}</span>
+                    <span class="mbp-label">RESERVAS TOTALES</span>
+                </div>
+            </div>
+
+            <div class="metric-block-premium">
+                <div class="mbp-visual">💎</div>
+                <div class="mbp-meta">
+                    <span class="mbp-val">1,250</span>
+                    <span class="mbp-label">PUNTOS DE LEALTAD</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+  </div>
+
+</div>

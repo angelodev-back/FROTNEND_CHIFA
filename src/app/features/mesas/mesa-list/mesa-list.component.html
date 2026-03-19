@@ -1,0 +1,114 @@
+<div class="mesas-container">
+  <header class="mesas-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <i class="bi bi-grid-3x3-gap-fill me-2"></i> Gestión de Mesas
+      </h1>
+      <p class="page-subtitle text-muted">Selecciona una mesa para tomar un pedido o ver el estado actual.</p>
+    </div>
+    <div class="actions">
+      <button class="btn btn-outline-primary" (click)="cargarMesas()" [disabled]="isLoading()">
+        <i class="bi bi-arrow-clockwise me-1" [class.spin]="isLoading()"></i> Actualizar 
+      </button>
+    </div>
+  </header>
+
+  <!-- Error Handle -->
+  @if (error()) {
+    <div class="alert alert-danger shadow-sm d-flex align-items-center" role="alert">
+      <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+      <div>
+        <strong>¡Ups! </strong> {{ error() }}
+      </div>
+    </div>
+  }
+
+  <!-- Empty / Loading States -->
+  @if (isLoading() && mesas().length === 0) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+        <span class="visually-hidden">Cargando mesas...</span>
+      </div>
+      <p class="mt-3 text-muted fw-semibold">Cargando distribución del salón...</p>
+    </div>
+  } @else if (mesas().length === 0 && !error()) {
+    <div class="text-center py-5 empty-state">
+      <i class="bi bi-inboxes display-1 text-muted opacity-50 mb-3"></i>
+      <h3 class="fw-bold">No hay mesas registradas</h3>
+      <p class="text-muted">El administrador aún no ha configurado las mesas en el sistema.</p>
+    </div>
+  }
+
+  <!-- Grid de Mesas -->
+  @if (mesas().length > 0) {
+    <div class="mesas-grid">
+      @for (mesa of mesas(); track mesa.idMesa || mesa.id) {
+        <div class="mesa-card shadow-sm" [class.mesa-mi-mesa]="mesa.atendidaPorMi" [ngClass]="getEstadoBadgeClass(mesa.estado)">
+          
+          <div class="card-top-indicator"></div>
+
+          <div class="mesa-body">
+            <!-- Header (Id + Capacidad) -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="mesa-numero fw-bold display-6 mb-0">
+                #{{ mesa.numeroMesa || mesa.numero }}
+              </span>
+              <span class="badge rounded-pill bg-light text-dark shadow-sm border px-3 py-2">
+                <i class="bi bi-people-fill me-1"></i> {{ mesa.capacidad }}
+              </span>
+            </div>
+
+            <!-- Estado -->
+            <div class="mb-3">
+              <span class="badge-status custom-badge w-100 text-center py-2 fs-6 fw-semibold text-uppercase tracking-wide">
+                {{ mesa.estado }}
+              </span>
+            </div>
+
+            <!-- Mozo Details si Ocupada/Reservada -->
+            @if (mesa.nombreMozoAsignado) {
+              <div class="mt-auto d-flex align-items-center mozo-info p-2 rounded bg-opacity-10"
+                   [class.bg-primary]="mesa.atendidaPorMi"
+                   [class.bg-secondary]="!mesa.atendidaPorMi">
+                <div class="mozo-avatar bg-white text-dark rounded-circle shadow-sm d-flex justify-content-center align-items-center me-2" [class.text-primary]="mesa.atendidaPorMi">
+                  <i class="bi" [class.bi-person-check-fill]="mesa.atendidaPorMi" [class.bi-person-fill]="!mesa.atendidaPorMi"></i>
+                </div>
+                <div class="mozo-text">
+                  <small class="text-muted d-block lh-1" style="font-size: 0.75rem;">Atendido por</small>
+                  <span class="fw-bold text-truncate d-inline-block" style="max-width: 130px;" [class.text-primary]="mesa.atendidaPorMi" [class.text-dark]="!mesa.atendidaPorMi">
+                    {{ mesa.atendidaPorMi ? 'Tú' : mesa.nombreMozoAsignado }}
+                  </span>
+                </div>
+              </div>
+            } @else {
+              <div class="mt-auto mozo-empty text-center py-2 opacity-50">
+                <small>Sin asignar</small>
+              </div>
+            }
+          </div>
+
+          <!-- Acciones Dinámicas -->
+          <div class="mesa-footer border-top bg-light p-3">
+             @if (mesa.estado === 'DISPONIBLE') {
+               <button class="btn btn-primary w-100 fw-bold d-flex align-items-center justify-content-center" 
+                       (click)="atenderMesa(mesa)" [disabled]="isLoading()">
+                 <i class="bi bi-clipboard2-plus me-2"></i> Tomar Mesa
+               </button>
+             } @else if (mesa.atendidaPorMi || mesa.idMozoAsignado === currentMozoId()) {
+               <button class="btn btn-warning w-100 fw-bold text-dark d-flex align-items-center justify-content-center" 
+                       (click)="verPedidoOcupado(mesa)" [disabled]="isLoading()">
+                 <i class="bi bi-cart-plus me-2"></i> Ver / Editar Pedido
+               </button>
+             } @else {
+               <button class="btn btn-secondary w-100 fw-bold d-flex align-items-center justify-content-center opacity-75" 
+                       disabled>
+                 <i class="bi bi-slash-circle me-2"></i> No Disponible
+               </button>
+             }
+          </div>
+
+        </div>
+      }
+    </div>
+  }
+</div>

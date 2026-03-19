@@ -1,0 +1,98 @@
+<div class="contact-canvas section-padding">
+  
+  <div class="container contact-grid">
+    
+    <!-- Contact Info (Left Side) -->
+    <div class="contact-identity anime-fade-in">
+        <header class="identity-header">
+            <h6 class="section-tag">CONECTIVIDAD</h6>
+            <h1 class="identity-display-title">Estamos a un <span class="text-underline">Mensaje</span></h1>
+            <p class="identity-lead">Nuestra hospitalidad trasciende las mesas. Háganos saber cualquier duda, sugerencia o solicitud especial.</p>
+        </header>
+
+        <div class="identity-blocks">
+            <div class="identity-block" *ngIf="info">
+                <div class="ib-icon">📍</div>
+                <div class="ib-meta">
+                    <span class="ib-label">UBICACIÓN GOURMET</span>
+                    <p class="ib-val">{{ info.direccion }}</p>
+                </div>
+            </div>
+
+            <div class="identity-block" *ngIf="info">
+                <div class="ib-icon">📞</div>
+                <div class="ib-meta">
+                    <span class="ib-label">LÍNEA DE ATENCIÓN</span>
+                    <p class="ib-val">{{ info.telefono }}</p>
+                </div>
+            </div>
+
+            <div class="identity-block" *ngIf="info">
+                <div class="ib-icon">✉️</div>
+                <div class="ib-meta">
+                    <span class="ib-label">CONSIGNAS DIGITALES</span>
+                    <p class="ib-val">{{ info.email }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Artistic Map Frame -->
+        <div class="map-aesthetic-frame">
+            <div class="ma-overlay">
+                <span class="ma-pin">📍</span>
+                <span class="ma-cta">Explorar en Google Maps</span>
+            </div>
+            <div class="ma-visual">🗺️</div>
+        </div>
+    </div>
+
+    <!-- Contact Portal (Right Side) -->
+    <div class="contact-portal animate-slide-in">
+        <div class="portal-card">
+            <h3 class="portal-title">Envíenos un comunicado</h3>
+            <p class="portal-text">Atención personalizada garantizada en menos de 24 horas.</p>
+
+            <form class="portal-form" #f="ngForm">
+                <div class="pfp-field">
+                    <label class="pfp-label">NOMBRE Y APELLIDOS</label>
+                    <input type="text" class="pfp-control" name="nombre" [(ngModel)]="model.nombre" placeholder="Ej: Sr. Lorenzo Chifa" required>
+                </div>
+
+                <div class="pfp-grid-form mt-4">
+                    <div class="pfp-field">
+                        <label class="pfp-label">CORREO ELECTRÓNICO</label>
+                        <input type="email" class="pfp-control" name="email" [(ngModel)]="model.email" placeholder="contacto@ejemplo.com" required>
+                    </div>
+
+                    <div class="pfp-field">
+                        <label class="pfp-label">MOTIVO DEL CONTACTO</label>
+                        <select class="pfp-control pfp-select" name="asunto" [(ngModel)]="model.asunto">
+                            <option>Consulta General</option>
+                            <option>Eventos y Banquetes</option>
+                            <option>Sugerencias</option>
+                            <option>Otros</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pfp-field full-width mt-4">
+                    <label class="pfp-label">CUERPO DEL MENSAJE</label>
+                    <textarea 
+                        class="pfp-textarea" 
+                        name="mensaje" 
+                        rows="6" 
+                        [(ngModel)]="model.mensaje" 
+                        placeholder="Escriba aquí los detalles de su consulta..." 
+                        required></textarea>
+                </div>
+
+                <button type="button" class="btn-portal-action mt-8" [disabled]="!f.valid" (click)="enviar()">
+                    DESPACHAR MENSAJE
+                </button>
+            </form>
+        </div>
+    </div>
+
+  </div>
+
+</div>

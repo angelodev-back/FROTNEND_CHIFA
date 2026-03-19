@@ -1,0 +1,122 @@
+<div class="admin-page-compact" [class.is-modal]="isModal">
+  
+  <!-- Form Header (only if not in modal) -->
+  <div class="page-header" *ngIf="!isModal">
+    <div class="page-header-left">
+      <div class="flex items-center gap-4">
+        <button routerLink="/admin/menu" class="btn-icon-sm" title="Volver">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        </button>
+        <div>
+          <h1 class="page-title">{{ isEditMode ? 'Editar Producto' : 'Nuevo Producto' }}</h1>
+          <p class="page-subtitle">Configure los detalles técnicos y visuales del producto</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form [formGroup]="menuForm" (ngSubmit)="onSubmit()" class="enterprise-form-layout">
+    <div class="form-main-content">
+      
+      <!-- Section: Información Básica -->
+      <div class="form-section">
+        <div class="section-header">
+          <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <h2 class="section-title">Información del Plato</h2>
+        </div>
+        
+        <div class="form-grid-2">
+          <div class="form-group col-span-2">
+            <label class="form-label">Nombre del Producto <span class="required">*</span></label>
+            <input type="text" formControlName="nombre" class="form-input" placeholder="Ej: Tallarín Saltado Especial">
+            <div *ngIf="menuForm.get('nombre')?.touched && menuForm.get('nombre')?.invalid" class="form-error">
+              El nombre es indispensable para identificar el producto.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Categoría <span class="required">*</span></label>
+            <select formControlName="idCategoria" class="form-input form-select">
+              <option [ngValue]="null">Seleccione Categoría</option>
+              <option *ngFor="let cat of categorias" [value]="cat.idCategoria">{{cat.nombre}}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Precio de Venta (S/) <span class="required">*</span></label>
+            <div class="input-with-icon">
+              <span class="input-icon">S/</span>
+              <input type="number" formControlName="precio" step="0.10" class="form-input" placeholder="0.00" style="padding-left: 3rem;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Stock Inicial <span class="required">*</span></label>
+            <input type="number" formControlName="stock" class="form-input" placeholder="0">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Estado de Venta</label>
+            <div class="estado-toggle" (click)="menuForm.get('estado')?.setValue(!menuForm.get('estado')?.value)" [class.toggle-on]="menuForm.get('estado')?.value">
+              <div class="toggle-knob"></div>
+              <span class="toggle-label">{{ menuForm.get('estado')?.value ? 'Disponible' : 'No disponible' }}</span>
+            </div>
+          </div>
+
+          <div class="form-group col-span-2">
+            <label class="form-label">Descripción del Producto</label>
+            <textarea formControlName="descripcion" rows="3" class="form-input" placeholder="Describa ingredientes, porción o detalles relevantes..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Media & Visuals -->
+      <div class="form-section">
+        <div class="section-header">
+          <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <h2 class="section-title">Imagen y Presentación</h2>
+        </div>
+        <div class="form-group">
+          <label class="form-label">URL de la Imagen</label>
+          <input type="text" formControlName="imagenUrl" class="form-input" placeholder="https://mi-servidor.com/plato.jpg">
+          <p class="field-hint">Se recomienda usar imágenes cuadradas (1:1) para mejor visualización.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Live Preview -->
+    <div class="form-side-content">
+      <div class="sticky-preview">
+        <h3 class="preview-title">Vista Previa</h3>
+        <div class="product-preview-card">
+          <div class="preview-img-container">
+            <img [src]="menuForm.get('imagenUrl')?.value || 'assets/no-product.png'" alt="Preview" onerror="this.src='assets/no-product.png'">
+            <div class="preview-badge" *ngIf="menuForm.get('idCategoria')?.value">
+               {{ getCategoriaName(menuForm.get('idCategoria')?.value) }}
+            </div>
+          </div>
+          <div class="preview-body">
+            <h4 class="pb-name">{{ menuForm.get('nombre')?.value || 'Nombre del Plato' }}</h4>
+            <p class="pb-desc">{{ menuForm.get('descripcion')?.value || 'Aquí aparecerá la descripción captada del cliente...' }}</p>
+            <div class="pb-footer">
+              <span class="pb-price">S/ {{ (menuForm.get('precio')?.value || 0).toFixed(2) }}</span>
+              <span class="pb-stock" [class.low]="(menuForm.get('stock')?.value || 0) < 10">
+                Stock: {{ menuForm.get('stock')?.value || 0 }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="preview-actions">
+          <button type="button" (click)="isModal ? onCancel.emit() : null" [routerLink]="isModal ? null : '/admin/menu'" class="btn btn-ghost w-full">
+            Cancelar
+          </button>
+          <button type="submit" [disabled]="menuForm.invalid || submitting" class="btn btn-primary w-full shadow-lg shadow-blue-500/30">
+            <span *ngIf="submitting" class="spinner-border spinner-border-sm mr-2"></span>
+            {{ isEditMode ? 'Actualizar Producto' : 'Registrar Producto' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

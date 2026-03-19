@@ -1,0 +1,39 @@
+import { HttpInterceptorFn, HttpRequest, HttpHandlerFn, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { AuthService } from '../services/auth.service';
+import { LoadingService } from '../services/loading.service';
+import { ToastService } from '../services/toast.service';
+import { Observable, catchError, throwError, finalize } from 'rxjs';
+
+export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> => {
+    const authService = inject(AuthService);
+    const loadingService = inject(LoadingService);
+    const toastService = inject(ToastService);
+    const token = authService.getToken();
+
+    loadingService.show();
+
+    let authReq = req;
+    if (token) {
+        authReq = req.clone({
+            setHeaders: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    }
+
+    return next(authReq).pipe(
+        catchError((error: HttpErrorResponse) => {
+            if (error.status === 401) {
+                authService.logout();
+                toastService.error('Sesión expirada');
+            } else if (error.status === 403) {
+                toastService.error('Sin permisos para esta acción');
+            } else if (error.status === 0) {
+                toastService.error('Error de conexión con el servidor');
+            }
+            return throwError(() => error);
+        }),
+        finalize(() => loadingService.hide())
+    );
+};

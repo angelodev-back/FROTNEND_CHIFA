@@ -1,0 +1,85 @@
+<div class="pedido-wrapper">
+  
+  <div class="header-nav">
+    <button routerLink="/mesas" class="btn-back">⬅ Volver a Mesas</button>
+    <div class="mesa-title">
+      <h1>Comanda: Mesa {{ mesa?.numeroMesa }}</h1>
+      <span class="badge">Capacidad: {{ mesa?.capacidad }}</span>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loader">Cargando catálogo...</div>
+
+  <div class="pedido-grid" *ngIf="!loading">
+    
+    <!-- Columna Izquierda: Catálogo de Productos -->
+    <div class="catalog-section">
+      <div class="section-title">
+        <h3>🍽️ Catálogo de Platos</h3>
+      </div>
+      <div class="products-grid">
+        <div *ngFor="let prod of productos" class="product-item" (click)="agregarProducto(prod)">
+          <div class="product-info">
+            <span class="product-name">{{ prod.nombre }}</span>
+            <span class="product-price">S/ {{ prod.precio | number:'1.2-2' }}</span>
+          </div>
+          <div class="product-stock" [ngClass]="{'low-stock': prod.stock < 5}">
+            Stock: {{ prod.stock }}
+          </div>
+          <div class="add-btn">+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna Derecha: Detalle del Pedido Actual -->
+    <div class="order-section">
+      <div class="section-title">
+        <h3>📝 Detalle del Pedido</h3>
+      </div>
+      
+      <div class="order-details-list">
+        <div *ngIf="detalles.length === 0" class="empty-order">
+          <p>No hay productos seleccionados.</p>
+          <span>Toca un producto de la izquierda para agregarlo.</span>
+        </div>
+
+        <div *ngFor="let det of detalles; let i = index" class="detail-item">
+          <div class="detail-main">
+            <div class="detail-info">
+              <strong>{{ det.nombreProducto }}</strong>
+              <span>S/ {{ det.precioUnitario | number:'1.2-2' }} x {{ det.cantidad }}</span>
+            </div>
+            <div class="quantity-controls">
+              <button (click)="decrementarCantidad(i)">-</button>
+              <span>{{ det.cantidad }}</span>
+              <button (click)="incrementarCantidad(i)">+</button>
+            </div>
+          </div>
+          <div class="detail-obs">
+            <input [(ngModel)]="det.observacion" placeholder="Nota especial (ej. sin cebolla)..." type="text">
+          </div>
+          <div class="detail-subtotal">
+            S/ {{ (det.cantidad * det.precioUnitario) | number:'1.2-2' }}
+          </div>
+        </div>
+      </div>
+
+      <div class="order-footer" *ngIf="detalles.length > 0">
+        <div class="observaciones-global">
+          <label>Observaciones del Pedido:</label>
+          <textarea [(ngModel)]="observaciones" placeholder="Notas globales para todo el pedido..."></textarea>
+        </div>
+
+        <div class="total-section">
+          <span>TOTAL A PAGAR</span>
+          <span class="total-amount">S/ {{ calcularTotal() | number:'1.2-2' }}</span>
+        </div>
+
+        <button (click)="guardarPedido()" [disabled]="submitting" class="btn-submit">
+          {{ submitting ? 'Enviando...' : 'CONFIRMAR PEDIDO' }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

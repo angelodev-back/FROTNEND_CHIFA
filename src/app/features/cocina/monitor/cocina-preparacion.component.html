@@ -1,0 +1,71 @@
+<div class="kds-sub-page admin-page">
+  
+  <!-- Sub-View Header -->
+  <div class="admin-page-header">
+    <div class="aph-left">
+      <div class="aph-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M2 12h20"/></svg>
+      </div>
+      <div>
+        <h1 class="aph-title">Monitor de Preparación</h1>
+        <p class="aph-sub">{{ pedidos().length }} órdenes activas bajo supervisión</p>
+      </div>
+    </div>
+    <div class="aph-right">
+       <button class="btn btn-outline" routerLink="/cocina/monitor">
+         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:8px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+         Monitor General
+       </button>
+    </div>
+  </div>
+
+  <div class="kds-sub-grid" *ngIf="pedidos().length > 0; else empty">
+    <div class="kds-ticket ticket-active animate-slide-in" *ngFor="let p of pedidos()">
+      <div class="kt-header">
+        <span class="kt-id">#{{ p.idPedido }}</span>
+        <div class="kt-meta-pills">
+           <span class="kt-pill-time">⏱ {{ p.fechaPedido | date:'HH:mm' }}</span>
+           <span class="kt-pill-type" [ngClass]="'tp-' + p.tipoPedido.toLowerCase()">{{ p.tipoPedido }}</span>
+        </div>
+      </div>
+      
+      <div class="kt-context">
+        <div class="kt-mesa-badge">
+           <span class="mb-label">MESA</span>
+           <span class="mb-val">{{ p.numeroMesa || 'D' }}</span>
+        </div>
+      </div>
+
+      <div class="kt-items-interactive">
+        <div class="ktii-row" *ngFor="let d of p.detalles" [class.is-done]="d.estadoCocina === 'LISTO'">
+          <div class="ktii-info">
+             <span class="kti-qty">x{{ d.cantidad }}</span>
+             <span class="kti-name">{{ d.nombreProducto }}</span>
+          </div>
+          <button class="ktii-chk" (click)="marcarDet(d)" *ngIf="d.estadoCocina !== 'LISTO'">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+          <div class="ktii-done-mark" *ngIf="d.estadoCocina === 'LISTO'">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="4"><path d="M20 6L9 17L4 12"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="kt-actions">
+        <button class="btn btn-kds-finish" (click)="marcarTodoListo(p)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:8px;"><polyline points="20 6 9 17 4 12"/></svg>
+          DESPACHAR ORDEN
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #empty>
+    <div class="empty-state-enterprise">
+      <div class="ese-artwork">🍳</div>
+      <h3>Estación Despejada</h3>
+      <p>No hay pedidos en preparación asignados para este monitor. Revisa la cola de entrada.</p>
+      <button class="btn btn-ghost btn-sm mt-4" routerLink="/cocina/monitor">Regresar al Monitor</button>
+    </div>
+  </ng-template>
+</div>

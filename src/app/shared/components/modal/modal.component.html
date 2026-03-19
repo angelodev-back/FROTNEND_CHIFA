@@ -1,0 +1,38 @@
+<div class="luxury-modal-overlay" (click)="close()">
+  
+  <div class="modal-canvas anime-bounce-in" (click)="$event.stopPropagation()">
+    
+    <!-- Header: Sophisticated Control Center -->
+    <header class="modal-premium-header">
+        <div class="header-content">
+            <h6 class="modal-tag">SISTEMA CHIFA LINDA</h6>
+            <h2 class="modal-premium-title">{{ title }}</h2>
+        </div>
+        
+        <button class="modal-premium-close" (click)="close()" aria-label="Cerrar modal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Body: Flexible Content Area -->
+    <div class="modal-premium-body">
+        <div class="body-inner-scroll">
+            <ng-content></ng-content>
+        </div>
+    </div>
+
+    <!-- Optional: Ornamental Footer Indicator -->
+    <footer class="modal-premium-footer">
+        <div class="footer-divider"></div>
+        <div class="footer-status">
+            <span class="status-dot"></span>
+            <span class="status-txt">Entorno Seguro de Gestión</span>
+        </div>
+    </footer>
+
+  </div>
+
+</div>

@@ -1,0 +1,129 @@
+<div class="user-form-wrapper" [class.is-modal]="isModal">
+    <!-- Header Decorativo (Solo si no es modal o para dar contexto) -->
+    <div class="form-header-premium">
+        <div class="header-icon">
+            <i class="bi bi-person-plus-fill" *ngIf="!isEditMode"></i>
+            <i class="bi bi-person-gear" *ngIf="isEditMode"></i>
+        </div>
+        <div class="header-content">
+            <h2>{{ isEditMode ? 'Editar Colaborador' : 'Nuevo Colaborador' }}</h2>
+            <p>{{ isEditMode ? 'Actualiza los permisos y datos del personal.' : 'Registra un nuevo miembro del equipo.' }}</p>
+        </div>
+        <button *ngIf="isModal" type="button" class="btn-close-modal" (click)="onCancel.emit()">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    @if (loading) {
+        <div class="loading-overlay">
+            <div class="premium-spinner"></div>
+            <span>Cargando perfil...</span>
+        </div>
+    } @else {
+        <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()" class="premium-form-body">
+            
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="bi bi-info-circle"></i>
+                    <span>Información Personal</span>
+                </div>
+                
+                <div class="premium-grid">
+                    <div class="p-input-group">
+                        <label>Nombres</label>
+                        <div class="input-with-icon">
+                            <i class="bi bi-person"></i>
+                            <input type="text" formControlName="nombres" placeholder="Ej. Juan Carlos">
+                        </div>
+                        <div class="error-msg" *ngIf="usuarioForm.get('nombres')?.touched && usuarioForm.get('nombres')?.invalid">
+                            Mínimo 3 caracteres requeridos.
+                        </div>
+                    </div>
+
+                    <div class="p-input-group">
+                        <label>Apellidos</label>
+                        <div class="input-with-icon">
+                            <i class="bi bi-person-badge"></i>
+                            <input type="text" formControlName="apellidos" placeholder="Ej. Pérez García">
+                        </div>
+                    </div>
+
+                    <div class="p-input-group">
+                        <label>DNI / Documento</label>
+                        <div class="input-with-icon">
+                            <i class="bi bi-card-checklist"></i>
+                            <input type="text" formControlName="dni" placeholder="8-15 dígitos">
+                        </div>
+                    </div>
+
+                    <div class="p-input-group">
+                        <label>Celular</label>
+                        <div class="input-with-icon">
+                            <i class="bi bi-phone"></i>
+                            <input type="text" formControlName="celular" placeholder="Opcional">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="bi bi-shield-lock"></i>
+                    <span>Accesos y Seguridad</span>
+                </div>
+
+                <div class="premium-grid">
+                    <div class="p-input-group">
+                        <label>Correo Electrónico</label>
+                        <div class="input-with-icon">
+                            <i class="bi bi-envelope-at"></i>
+                            <input type="email" formControlName="email" placeholder="usuario@chifalinda.com">
+                        </div>
+                    </div>
+
+                    <div class="p-input-group">
+                        <label>Contraseña {{ isEditMode ? '(Opcional)' : '' }}</label>
+                        <div class="input-with-icon">
+                            <i class="bi bi-key"></i>
+                            <input type="password" formControlName="password" placeholder="Min. 6 caracteres">
+                        </div>
+                    </div>
+
+                    <div class="p-input-group">
+                        <label>Rol Interno</label>
+                        <div class="input-with-icon">
+                            <i class="bi bi-briefcase"></i>
+                            <select formControlName="idRol">
+                                <option value="" disabled selected>Seleccione un cargo...</option>
+                                @for (rol of roles; track rol.idRol) {
+                                    <option [value]="rol.idRol">{{ rol.nombre }}</option>
+                                }
+                            </select>
+                            <i class="bi bi-chevron-down arrow-abs"></i>
+                        </div>
+                    </div>
+
+                    <div class="p-input-group status-toggle-wrapper">
+                        <label *ngIf="isEditMode">Estado del Colaborador</label>
+                        <label class="premium-toggle" *ngIf="isEditMode">
+                            <input type="checkbox" formControlName="estado">
+                            <span class="p-slider"></span>
+                            <span class="status-label">{{ usuarioForm.get('estado')?.value ? 'ACTIVO' : 'INACTIVO' }}</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions-premium">
+                <button type="button" class="btn-p-secondary" (click)="isModal ? onCancel.emit() : null" [routerLink]="isModal ? null : '/admin/usuarios'">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn-p-primary" [disabled]="usuarioForm.invalid || submitting">
+                    <i class="bi bi-check2-circle" *ngIf="!submitting"></i>
+                    <span class="p-spinner-sm" *ngIf="submitting"></span>
+                    {{ isEditMode ? 'Guardar Cambios' : 'Registrar Usuario' }}
+                </button>
+            </div>
+        </form>
+    }
+</div>

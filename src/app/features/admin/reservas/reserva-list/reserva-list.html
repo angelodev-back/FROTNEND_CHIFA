@@ -1,0 +1,152 @@
+<div class="admin-page">
+  <!-- Standardized Header -->
+  <div class="admin-page-header">
+    <div class="aph-left">
+      <div class="aph-icon" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+      <div>
+        <h1 class="aph-title">Reservas</h1>
+      </div>
+    </div>
+    <div class="aph-right">
+       <!-- Admin only views reservations. Creation moved to Recepcionista/Cliente -->
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kc-icon kci-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div class="kc-body">
+        <span class="kc-label">Total Reservas</span>
+        <span class="kc-val">{{ stats().total }}</span>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kc-icon kci-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+      <div class="kc-body">
+        <span class="kc-label">Confirmadas</span>
+        <span class="kc-val">{{ stats().confirmadas }}</span>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kc-icon kci-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+      <div class="kc-body">
+        <span class="kc-label">Pendientes</span>
+        <span class="kc-val">{{ stats().pendientes }}</span>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kc-icon kci-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <div class="kc-body">
+        <span class="kc-label">Reservas Hoy</span>
+        <span class="kc-val">{{ stats().hoy }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="admin-filter-bar">
+    <div class="flex items-center gap-4 flex-1">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" [ngModel]="searchQuery()" (ngModelChange)="onSearchChange($event)" placeholder="Buscar por cliente, documento o mesa..." class="search-input" />
+      </div>
+      <div class="filter-chips">
+        <button class="chip" [class.chip-active]="filtroEstado() === ''" (click)="onFilterChange('')">Todos</button>
+        <button class="chip" [class.chip-active]="filtroEstado() === 'PENDIENTE'"  (click)="onFilterChange('PENDIENTE')">Pendientes</button>
+        <button class="chip" [class.chip-active]="filtroEstado() === 'CONFIRMADA'" (click)="onFilterChange('CONFIRMADA')">Confirmadas</button>
+        <button class="chip" [class.chip-active]="filtroEstado() === 'ANULADA'"    (click)="onFilterChange('ANULADA')">Anuladas</button>
+      </div>
+    </div>
+
+    <div class="admin-filter-actions">
+      <label class="text-sm font-bold text-slate-500">Mostrar:</label>
+      <select [ngModel]="pageSize()" (change)="onPageSizeChange($event)" class="form-input text-sm py-2 px-4 rounded-xl">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <div class="card shadow-sm border-0 overflow-hidden">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Fecha y Hora</th>
+          <th>Cliente</th>
+          <th>Contacto</th>
+          <th>DNI / Documento</th>
+          <th>Mesa</th>
+          <th>Cantidad</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of paginatedReservas()" class="admin-row">
+          <td>
+            <div class="flex flex-col">
+              <span class="font-bold text-slate-700">{{ r.fechaHoraReserva | date:'shortDate' }}</span>
+              <span class="text-xs text-slate-500">{{ r.fechaHoraReserva | date:'shortTime' }}</span>
+            </div>
+          </td>
+          <td>
+            <span class="font-medium text-slate-900">{{ r.nombreCliente }}</span>
+          </td>
+          <td>
+            <span class="text-slate-600 font-medium">{{ r.telefonoCliente }}</span>
+          </td>
+          <td>
+            <span class="text-slate-700 font-bold bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
+              {{ r.dniCliente || 'Sin DNI' }}
+            </span>
+          </td>
+          <td>
+            <span *ngIf="r.numeroMesa" class="px-3 py-1 bg-blue-50 text-blue-700 rounded-lg text-xs font-black ring-1 ring-blue-100">
+              Mesa {{ r.numeroMesa }}
+            </span>
+            <span *ngIf="!r.numeroMesa" class="text-slate-400 italic text-xs">Sin asignar</span>
+          </td>
+          <td>
+            <div class="flex items-center gap-1">
+              <span class="font-black text-slate-800">{{ r.cantidadPersonas }}</span>
+              <span class="text-[10px] text-slate-400 font-bold uppercase">Pers.</span>
+            </div>
+          </td>
+          <td>
+            <span class="badge-estado" [class]="getEstadoClass(r.estado || '')">{{ r.estado }}</span>
+          </td>
+        </tr>
+        <tr *ngIf="paginatedReservas().length === 0">
+          <td colspan="6" class="td-empty">No se encontraron reservas</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <!-- Table Footer with Pagination Controls -->
+    <div class="admin-pagination" *ngIf="reservasFiltradas().length > 0">
+      <div class="admin-pagination-info">
+        Mostrando <span>{{ (currentPage() - 1) * pageSize() + 1 }}</span> a <span>{{ Math.min(currentPage() * pageSize(), reservasFiltradas().length) }}</span> de <span>{{ reservasFiltradas().length }}</span> reservas
+      </div>
+      <div class="admin-pagination-controls">
+        <button class="admin-pagination-btn"
+                [disabled]="currentPage() === 1"
+                (click)="prevPage()">
+          Anterior
+        </button>
+        <div class="admin-pagination-page">
+          Página {{ currentPage() }} de {{ totalPages() }}
+        </div>
+        <button class="admin-pagination-btn"
+                [disabled]="currentPage() >= totalPages()"
+                (click)="nextPage()">
+          Siguiente
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

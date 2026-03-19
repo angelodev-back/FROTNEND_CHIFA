@@ -1,0 +1,289 @@
+/* ════════════════════════════════════════════
+   SIDEBAR — Enterprise Premium Soft UI Shell
+   ════════════════════════════════════════════ */
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border-light);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 100;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border-light) transparent;
+    font-family: 'Inter', sans-serif;
+    box-shadow: var(--shadow-md);
+}
+
+/* ── Brand ── */
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 2.5rem 2rem 2rem;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    background: var(--color-bg-alt);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border-light);
+    transition: var(--transition-spring);
+}
+
+.sidebar-brand:hover .brand-icon {
+    transform: scale(1.1) rotate(-8deg);
+    border-color: var(--color-primary);
+    box-shadow: 0 10px 20px rgba(217, 70, 239, 0.15);
+}
+
+.brand-name {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 950;
+    color: var(--color-text);
+    display: block;
+    line-height: 1;
+    letter-spacing: -0.04em;
+}
+
+.brand-subtitle {
+    font-size: 0.75rem;
+    color: var(--color-primary);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 850;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* ── Nav ── */
+.sidebar-nav {
+    flex: 1;
+    padding: 1.5rem 0;
+    overflow-y: auto;
+}
+
+.sidebar-nav::-webkit-scrollbar { width: 4px; }
+.sidebar-nav::-webkit-scrollbar-thumb { background: var(--color-border-light); border-radius: 10px; }
+
+/* ── Group ── */
+.menu-group {
+    margin-bottom: 1.5rem;
+}
+
+.group-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 900;
+    color: var(--color-text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0 2rem 0.75rem;
+    opacity: 0.8;
+}
+
+.menu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 1rem;
+}
+
+/* ── Menu Item ── */
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1.25rem;
+    margin: 0.2rem 0;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition-normal);
+    text-decoration: none;
+    color: var(--color-text-muted);
+    position: relative;
+    font-weight: 700;
+}
+
+.menu-item:hover {
+    background: var(--color-bg-alt);
+    color: var(--color-text);
+    transform: translateX(6px);
+}
+
+.menu-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 0%;
+    width: 4px;
+    background: var(--color-primary);
+    border-radius: 0 4px 4px 0;
+    transition: var(--transition-spring);
+}
+
+.menu-item.active {
+    background: var(--color-primary-bg);
+    color: var(--color-primary);
+    font-weight: 850;
+    box-shadow: inset 0 0 0 1px rgba(217, 70, 239, 0.1);
+}
+
+.menu-item.active::before {
+    height: 50%;
+}
+
+.menu-item.active .menu-icon svg {
+    color: var(--color-primary);
+}
+
+/* ── Icon ── */
+.menu-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.menu-icon svg {
+    width: 20px;
+    height: 20px;
+    color: inherit;
+    transition: var(--transition-fast);
+}
+
+.menu-item:hover .menu-icon svg {
+    transform: scale(1.15);
+    color: var(--color-text);
+}
+
+/* ── Label ── */
+.menu-label {
+    font-size: 0.95rem;
+    flex: 1;
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+}
+
+/* ── Badge live ── */
+.notif-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    background: var(--color-danger);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 900;
+    border-radius: 50%;
+    padding: 0 2px;
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+    animation: pulse-notif 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes pulse-notif {
+    0%, 100% { transform: scale(1); box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); }
+    50% { transform: scale(1.1); box-shadow: 0 6px 15px rgba(239, 68, 68, 0.4); }
+}
+
+/* ── Footer ── */
+.sidebar-footer {
+    flex-shrink: 0;
+    padding: 1.5rem;
+    border-top: 1px solid var(--color-border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-surface);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.user-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 950;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
+    border: 2px solid white;
+    font-family: 'Outfit';
+}
+
+.user-details {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 900;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: 'Outfit';
+    letter-spacing: -0.01em;
+}
+
+.user-role {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 850;
+}
+
+.btn-logout {
+    width: 40px;
+    height: 40px;
+    border: 1.5px solid var(--color-border);
+    background: var(--color-bg-alt);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+}
+
+.btn-logout:hover {
+    background: var(--color-danger-bg);
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+    transform: translateY(-3px) rotate(-8deg);
+}

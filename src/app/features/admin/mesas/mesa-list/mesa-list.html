@@ -1,0 +1,160 @@
+<div class="admin-page">
+  
+  <!-- Standardized Header -->
+  <div class="admin-page-header">
+    <div class="aph-left">
+      <div class="aph-icon" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div>
+        <h1 class="aph-title">Mesas</h1>
+      </div>
+    </div>
+    
+    <div class="aph-right">
+      <div class="toggle-vista" style="margin-right: 1.5rem;">
+        <button (click)="vista.set('grid')" [class.active]="vista() === 'grid'" class="vista-btn" title="Vista cuadrícula">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/></svg>
+        </button>
+        <button (click)="vista.set('tabla')" [class.active]="vista() === 'tabla'" class="vista-btn" title="Vista tabla">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>
+        </button>
+      </div>
+      <button (click)="abrirNuevo()" class="btn btn-primary" style="padding: 0.8rem 1.5rem; border-radius: 12px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 5px; width: 18px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nueva Mesa
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Indicators -->
+  <div class="mini-kpis" *ngIf="stats()">
+    <div class="mini-kpi">
+        <span class="mini-val">{{ stats().total }}</span>
+        <span class="mini-label">Total Mesas</span>
+    </div>
+    <div class="mini-kpi kpi-green">
+        <span class="mini-val" style="color:#059669;">{{ stats().disponibles }}</span>
+        <span class="mini-label">Disponibles</span>
+    </div>
+    <div class="mini-kpi kpi-red">
+        <span class="mini-val" style="color:#dc2626;">{{ stats().ocupadas }}</span>
+        <span class="mini-label">Ocupadas</span>
+    </div>
+    <div class="mini-kpi kpi-blue">
+        <span class="mini-val" style="color:#2563eb;">{{ stats().reservadas }}</span>
+        <span class="mini-label">Reservadas</span>
+    </div>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="filter-bar">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" placeholder="Buscar por número..." class="search-input" />
+    </div>
+    <div class="filter-chips">
+      <button class="chip" [class.chip-active]="filtroEstado() === ''" (click)="filtroEstado.set('')">Todas</button>
+      <button class="chip" [class.chip-active]="filtroEstado() === 'DISPONIBLE'" (click)="filtroEstado.set('DISPONIBLE')">Disponibles</button>
+      <button class="chip" [class.chip-active]="filtroEstado() === 'OCUPADA'" (click)="filtroEstado.set('OCUPADA')">Ocupadas</button>
+      <button class="chip" [class.chip-active]="filtroEstado() === 'RESERVADA'" (click)="filtroEstado.set('RESERVADA')">Reservadas</button>
+    </div>
+  </div>
+
+  <!-- Grid View -->
+  <div *ngIf="vista() === 'grid'" class="mesas-grid">
+    <div *ngFor="let m of mesasFiltradas()" 
+         class="card-mesa" 
+         [ngClass]="{
+           'estado-disponible': m.estado === 'DISPONIBLE',
+           'estado-ocupada': m.estado === 'OCUPADA',
+           'estado-reservada': m.estado === 'RESERVADA',
+           'estado-mantenimiento': m.estado === 'MANTENIMIENTO'
+         }">
+      <div class="mesa-header">
+        <span class="mesa-number">{{ m.numeroMesa || m.numero }}</span>
+        <div class="mesa-status-dot"></div>
+      </div>
+      <div class="mesa-body">
+        <div class="mesa-icon">
+          <!-- Icono de Mesa -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 12h16M4 12l1-4h14l1 4M4 12v6M20 12v6M8 8V4h8v4M9 18v2M15 18v2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <p class="mesa-capacidad">{{ m.capacidad }} Personas</p>
+        <span class="status-label">{{ m.estado }}</span>
+      </div>
+      <div class="mesa-footer">
+        <button (click)="abrirEditar(m.idMesa!)" class="btn-icon-sm" title="Editar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button (click)="eliminarMesa(m)" class="btn-icon-sm btn-delete text-red-500" title="Eliminar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+        </button>
+      </div>
+    </div>
+    
+    <div *ngIf="mesasFiltradas().length === 0" class="empty-state" style="grid-column: 1 / -1;">
+        <span class="empty-icon">🪑</span>
+        <p>No se encontraron mesas que coincidan con la búsqueda.</p>
+    </div>
+  </div>
+
+  <!-- Table View -->
+  <div *ngIf="vista() === 'tabla'" class="card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Identificación</th>
+          <th>Capacidad</th>
+          <th>Estado Actual</th>
+          <th style="text-align: right;">Gestión</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let m of mesasFiltradas()">
+          <td>
+            <div class="d-flex align-center gap-3">
+                <span class="mesa-badge-mini">{{ m.numeroMesa || m.numero }}</span>
+                <span class="fw-700 text-slate-800">Mesa Individual</span>
+            </div>
+          </td>
+          <td class="fw-600 text-slate-500">{{ m.capacidad }} Comensales</td>
+          <td>
+            <span class="badge-estado" 
+                [class.badge-green]="m.estado === 'DISPONIBLE'"
+                [class.badge-red]="m.estado === 'OCUPADA'"
+                [class.badge-blue]="m.estado === 'RESERVADA'"
+                [class.badge-yellow]="m.estado === 'MANTENIMIENTO'">
+              {{ getEstadoLabel(m.estado) }}
+            </span>
+          </td>
+          <td class="td-actions" style="justify-content: flex-end;">
+            <button (click)="abrirEditar(m.idMesa!)" class="btn-icon-sm" title="Editar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            <button (click)="eliminarMesa(m)" class="btn-icon-sm btn-delete" title="Eliminar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="mesasFiltradas().length === 0">
+          <td colspan="4" class="td-empty">No se encontraron mesas</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <app-modal *ngIf="showModal()" [title]="isEditMode() ? 'Editar Configuración Mesa' : 'Registro de Nueva Mesa'" (onClose)="cerrarModal()">
+    <app-admin-mesa-form
+      [isModal]="true"
+      [isEditMode]="isEditMode()"
+      [mesaId]="selectedId()"
+      [nextMesaNumero]="siguienteNumero()"
+      (onSave)="onSave()"
+      (onCancel)="cerrarModal()">
+    </app-admin-mesa-form>
+  </app-modal>
+</div>

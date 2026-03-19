@@ -1,0 +1,213 @@
+/* Enterprise Mozo Orders Specific Styles (Soft UI Bento) */
+.mozo-page { 
+    padding: 3rem 4rem; 
+    max-width: 100%; 
+    margin: 0; 
+    background-color: var(--color-bg);
+}
+
+.admin-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2.5rem !important;
+    background: var(--color-surface);
+    padding: 1.5rem 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-md);
+}
+
+.aph-left { display: flex; align-items: center; gap: 1.5rem; }
+
+.aph-title {
+    font-size: 2.5rem !important;
+    font-weight: 950;
+    letter-spacing: -0.04em;
+    color: var(--color-text);
+    line-height: 1;
+    margin: 0;
+}
+
+.aph-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 8px 16px rgba(99, 102, 241, 0.25);
+}
+
+.order-tabs-enterprise {
+    display: flex;
+    background: var(--color-bg-alt);
+    padding: 0.4rem;
+    border-radius: var(--radius-md);
+    gap: 0.25rem;
+    border: 1px solid var(--color-border);
+}
+
+.ot-btn {
+    border: none;
+    background: transparent;
+    padding: 0.6rem 1.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 850;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: var(--transition-normal);
+    font-family: 'Outfit';
+}
+
+.ot-btn:hover { color: var(--color-text); }
+.ot-btn.is-active { 
+    background: var(--color-surface); 
+    color: var(--color-primary); 
+    box-shadow: var(--shadow-sm); 
+}
+
+.orders-enterprise-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-top: 2.5rem;
+}
+
+.order-premium-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: var(--transition-spring);
+}
+
+.order-premium-card:hover { 
+    transform: translateY(-8px); 
+    box-shadow: var(--shadow-lg); 
+}
+
+.opc-enterprise-header {
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.opc-mesa-ident { display: flex; flex-direction: column; }
+.mi-label { 
+    font-size: 0.65rem; 
+    font-weight: 850; 
+    color: var(--color-text-muted); 
+    text-transform: uppercase; 
+    letter-spacing: 0.08em; 
+}
+.mi-num { 
+    font-family: 'Outfit'; 
+    font-weight: 950; 
+    font-size: 1.75rem; 
+    color: var(--color-text); 
+    line-height: 1; 
+}
+
+.opc-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1rem;
+    border-radius: var(--radius-full);
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.os-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+
+.os-prep { background: var(--color-warning-bg); color: var(--color-warning); border: 1px solid var(--color-warning); }
+.os-ready { background: var(--color-success-bg); color: var(--color-success); border: 1px solid var(--color-success); }
+.os-done { background: var(--color-bg-alt); color: var(--color-text-muted); border: 1px solid var(--color-border); }
+
+.opc-enterprise-body { padding: 2rem; flex: 1; }
+
+.opc-meta-row { display: flex; gap: 2.5rem; margin-bottom: 2rem; }
+.omr-item { display: flex; flex-direction: column; gap: 0.25rem; }
+.omr-label { font-size: 0.65rem; font-weight: 850; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.omr-value { font-size: 1rem; font-weight: 850; color: var(--color-text); font-family: 'Outfit'; }
+
+.opc-total-section {
+    background: var(--color-bg-alt);
+    padding: 1.25rem 1.5rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1.5px solid var(--color-border);
+}
+
+.ots-label { font-size: 0.7rem; font-weight: 900; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.ots-value { font-family: 'Outfit'; font-weight: 950; font-size: 1.5rem; color: var(--color-primary); }
+
+.opc-enterprise-footer { 
+    padding: 1.5rem 2rem; 
+    border-top: 1.5px dashed var(--color-border-light); 
+    background: var(--color-bg-alt);
+}
+
+.opc-status-msg { text-align: center; }
+.msg-working { 
+    font-size: 0.85rem; 
+    font-weight: 850; 
+    color: var(--color-warning); 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 0.75rem; 
+}
+.msg-complete { 
+    font-size: 0.85rem; 
+    font-weight: 900; 
+    color: var(--color-success); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.msg-spinner {
+    width: 18px;
+    height: 18px;
+    border: 3px solid var(--color-warning-bg);
+    border-top-color: var(--color-warning);
+    border-radius: 50%;
+    animation: msg-spin 1s linear infinite;
+}
+
+@keyframes msg-spin { to { transform: rotate(360deg); } }
+
+.empty-state-enterprise {
+    padding: 8rem 2rem;
+    text-align: center;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    margin-top: 3rem;
+    box-shadow: var(--shadow-md);
+}
+
+.ese-icon { font-size: 4rem; margin-bottom: 2rem; filter: grayscale(1); opacity: 0.4; }
+.empty-state-enterprise h3 { font-family: 'Outfit'; font-weight: 950; font-size: 2rem; color: var(--color-text); margin-bottom: 0.75rem; }
+.empty-state-enterprise p { color: var(--color-text-muted); font-weight: 650; font-size: 1.1rem; }
+
+@media (max-width: 1024px) {
+    .mozo-page { padding: 1.5rem; }
+    .orders-enterprise-grid { grid-template-columns: 1fr; }
+    .admin-page-header { flex-direction: column; align-items: stretch; gap: 1.5rem; }
+}

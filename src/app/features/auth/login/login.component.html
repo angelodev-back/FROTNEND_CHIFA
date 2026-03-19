@@ -1,0 +1,95 @@
+<div class="login-root">
+  <!-- Immersive Interactive Background -->
+  <div class="login-canvas">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="glass-overlay"></div>
+  </div>
+
+  <div class="login-container">
+    <!-- Branding Section -->
+    <div class="brand-section">
+      <div class="brand-logo-wrapper">
+        <div class="logo-glow"></div>
+        <svg viewBox="0 0 48 48" fill="none" class="main-logo">
+          <circle cx="24" cy="24" r="24" fill="url(#logo-grad)"/>
+          <path d="M12 29 C12 21, 17 12, 24 12 C31 12, 36 21, 36 29" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <circle cx="24" cy="29" r="4" fill="white"/>
+          <defs>
+            <linearGradient id="logo-grad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#D946EF"/>
+              <stop offset="1" stop-color="#4f46e5"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <h1 class="brand-title">Chifa Linda</h1>
+      <p class="brand-subtitle">Smart Restaurant Management System</p>
+      
+      <div class="brand-stats">
+        <div class="stat-pill"><span>POS</span></div>
+        <div class="stat-pill"><span>KDS</span></div>
+        <div class="stat-pill"><span>Inventory</span></div>
+        <div class="stat-pill"><span>Analytics</span></div>
+      </div>
+    </div>
+
+    <!-- Modern Login Card -->
+    <div class="login-auth-card animate-scaleIn">
+      <div class="card-glass-bg"></div>
+      
+      <div class="card-header">
+        <h2 class="card-title">Bienvenido</h2>
+        <p class="card-subtitle">Ingresa a tu cuenta corporativa</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="modern-form">
+        <div class="input-group">
+          <div class="input-field">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <input id="email" type="email" formControlName="email" placeholder="Usuario o Email" 
+                   [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" />
+          </div>
+          <span class="error-msg" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+            Email corporativo requerido
+          </span>
+        </div>
+
+        <div class="input-group">
+          <div class="input-field">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input id="password" type="password" formControlName="password" placeholder="Contraseña Segura" 
+                   [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" />
+          </div>
+        </div>
+
+        <div class="system-alert" *ngIf="errorMessage">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          {{ errorMessage }}
+        </div>
+
+        <button type="submit" class="prime-btn" [disabled]="loginForm.invalid || loading">
+          <span *ngIf="!loading">AUTENTICAR</span>
+          <div *ngIf="loading" class="btn-loader"></div>
+        </button>
+
+        <!-- Dynamic Credential Access -->
+        <div class="fast-access">
+          <p class="fast-title">Perfiles de Acceso</p>
+          <div class="fast-grid">
+            <button type="button" class="access-pill" (click)="fillCredentials('admin@chifalinda.com', 'password123')">ADMIN</button>
+            <button type="button" class="access-pill" (click)="fillCredentials('mozo@chifalinda.com', 'password123')">MOZO</button>
+            <button type="button" class="access-pill" (click)="fillCredentials('recepcion@chifalinda.com', 'password123')">RECPC</button>
+            <button type="button" class="access-pill" (click)="fillCredentials('cocina@chifalinda.com', 'password123')">COCNA</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- System Footer -->
+  <div class="system-footer">
+    <span>Powered by Chifa Linda Enterprise v4.0</span>
+  </div>
+</div>

@@ -1,0 +1,120 @@
+<!-- HEADER BAR -->
+<header class="cocina-header">
+  <div class="header-left">
+    <div class="live-indicator">
+      <span class="live-dot"></span>
+      EN VIVO
+    </div>
+    <h1 class="header-title">Monitor de Cocina</h1>
+  </div>
+  <div class="header-right">
+    <div class="stat-pill">
+      <span class="stat-num">{{ getPendientesCount() }}</span> Pendientes
+    </div>
+    <div class="stat-pill stat-pill-prep">
+      <span class="stat-num">{{ getPreparandoCount() }}</span> En Prep.
+    </div>
+    <div class="clock">{{ tiempoActual | date:'HH:mm:ss' }}</div>
+  </div>
+</header>
+
+<!-- Error State -->
+<div *ngIf="error" class="error-state">
+  <p>{{ error }}</p>
+  <button (click)="cargarPedidos()" class="btn-retry">Reintentar</button>
+</div>
+
+<!-- LOADING -->
+<div class="loading-state" *ngIf="loading && !error">
+  <div class="spinner-large"></div>
+  <p>Cargando pedidos de cocina...</p>
+</div>
+
+<!-- MAIN MONITOR GRID -->
+<main class="monitor-grid" *ngIf="!loading" role="main" aria-label="Pedidos en cocina">
+
+  <!-- EMPTY STATE -->
+  <div class="empty-kitchen" *ngIf="pedidos.length === 0">
+    <div class="empty-icon" aria-hidden="true">
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="32" r="32" fill="rgba(16,185,129,0.1)"/>
+        <path d="M32 18C24.268 18 18 24.268 18 32s6.268 14 14 14 14-6.268 14-14S39.732 18 32 18z" stroke="#10b981" stroke-width="2"/>
+        <path d="M25 32l5 5 9-9" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h3>¡Cocina despejada!</h3>
+    <p>No hay pedidos pendientes por el momento.</p>
+  </div>
+
+  <!-- TICKET CARDS -->
+  <div
+    *ngFor="let pedido of pedidos"
+    class="ticket"
+    [class.ticket-delivery]="pedido.tipoPedido === 'DELIVERY'"
+    role="article"
+  >
+    <!-- Ticket Header -->
+    <div class="ticket-header">
+      <div class="ticket-id-section">
+        <span class="ticket-id">#{{ pedido.idPedido }}</span>
+        <span class="ticket-mesa" *ngIf="pedido.numeroMesa">Mesa {{ pedido.numeroMesa }}</span>
+        <span class="ticket-mesa" *ngIf="!pedido.numeroMesa">DELIVERY</span>
+        <span class="ticket-type">{{ pedido.tipoPedido }}</span>
+      </div>
+      <div class="ticket-timer">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+        </svg>
+        <span>{{ pedido.fechaPedido | date:'HH:mm' }}</span>
+      </div>
+    </div>
+
+    <!-- Cliente info -->
+    <div class="ticket-cliente">{{ pedido.nombreCliente || 'Sin nombre' }}</div>
+
+    <!-- Items -->
+    <div class="ticket-items">
+      <div
+        *ngFor="let det of pedido.detalles"
+        class="order-item"
+        [class.item-listo]="det.estadoCocina === 'LISTO'"
+      >
+        <div class="item-info">
+          <span class="item-qty">{{ det.cantidad }}x</span>
+          <span class="item-name">{{ det.nombreProducto }}</span>
+          <span *ngIf="det.nota" class="item-nota">{{ det.nota }}</span>
+        </div>
+
+        <div class="item-actions">
+          <span *ngIf="det.estadoCocina === 'LISTO'" class="badge-listo">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            LISTO
+          </span>
+          <button
+            *ngIf="det.estadoCocina === 'PENDIENTE'"
+            (click)="actualizarEstado(pedido.idPedido, det, 'EN_PREPARACION')"
+            class="btn-action btn-cook"
+          >
+            <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Preparar
+          </button>
+          <button
+            *ngIf="det.estadoCocina === 'EN_PREPARACION'"
+            (click)="actualizarEstado(pedido.idPedido, det, 'LISTO')"
+            class="btn-action btn-done"
+          >
+            <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            ¡Terminar!
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer observaciones -->
+    <div class="ticket-obs" *ngIf="pedido.observaciones">
+      <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+      {{ pedido.observaciones }}
+    </div>
+  </div>
+
+</main>

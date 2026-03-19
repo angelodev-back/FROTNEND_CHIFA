@@ -1,0 +1,105 @@
+/* Enterprise Admin Pedido List - Premium Soft UI */
+.admin-page { 
+    padding: 3rem 4rem; 
+    max-width: 100%; 
+    margin: 0; 
+    background-color: var(--color-bg);
+}
+
+.admin-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2.5rem !important;
+    background: var(--color-surface);
+    padding: 1.5rem 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-md);
+}
+
+.aph-left { display: flex; align-items: center; gap: 1.5rem; }
+
+.aph-title {
+    font-size: 2.5rem !important;
+    font-weight: 950;
+    letter-spacing: -0.04em;
+    color: var(--color-text);
+    line-height: 1;
+    margin: 0;
+}
+
+.aph-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 8px 16px rgba(14, 165, 233, 0.25);
+}
+
+/* Layout for KPI Cards Grid */
+.kpis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.premium-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.badge-estado {
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius-full);
+    font-size: 0.70rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.badge-yellow { background: var(--color-warning-bg); color: var(--color-warning); border: 1px solid var(--color-warning); }
+.badge-blue { background: var(--color-info-bg); color: var(--color-info); border: 1px solid var(--color-info); }
+.badge-green { background: var(--color-success-bg); color: var(--color-success); border: 1px solid var(--color-success); }
+.badge-red { background: var(--color-danger-bg); color: var(--color-danger); border: 1px solid var(--color-danger); }
+
+.cliente-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.cliente-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 900;
+    font-family: 'Outfit';
+}
+
+.sync-footer {
+    display: flex;
+    align-items: center;
+    padding: 1.25rem 2rem;
+    background: var(--color-bg-alt);
+}
+
+.ml-auto { margin-left: auto; }
+
+@media (max-width: 1024px) {
+    .admin-page { padding: 1.5rem; }
+    .kpis-grid { grid-template-columns: 1fr; }
+}

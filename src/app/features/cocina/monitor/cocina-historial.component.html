@@ -1,0 +1,70 @@
+<div class="kds-sub-page admin-page">
+  
+  <!-- History Header -->
+  <div class="admin-page-header">
+    <div class="aph-left">
+      <div class="aph-icon" style="background: linear-gradient(135deg, #64748b, #475569);">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div>
+        <h1 class="aph-title">Bitácora de Cocina</h1>
+        <p class="aph-sub">Audit trail of finished production tickets and serves</p>
+      </div>
+    </div>
+    <div class="aph-right">
+       <button class="btn btn-outline" routerLink="/cocina/monitor">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:8px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Monitor General
+       </button>
+    </div>
+  </div>
+
+  <!-- Historical Data Table -->
+  <div class="premium-card mt-8">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Ticket</th>
+          <th>Ubicación</th>
+          <th>Composición de Orden</th>
+          <th style="text-align: right;">Estado de Despacho</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of historial()">
+          <td class="ht-num"><span class="td-id">#{{ p.idPedido }}</span></td>
+          <td>
+            <div class="cliente-cell">
+              <span class="cliente-avatar" style="background: #1e293b; color: white; font-weight: 850;">M</span>
+              <span style="font-weight: 700; color: #1e293b;">Mesa {{ p.numeroMesa }}</span>
+            </div>
+          </td>
+          <td>
+            <div class="ht-platos">
+              <span *ngFor="let d of p.detalles" class="plato-chip-enterprise">
+                <span class="pce-qty">{{ d.cantidad }}x</span>
+                <span class="pce-name">{{ d.nombreProducto }}</span>
+              </span>
+            </div>
+          </td>
+          <td style="text-align: right;">
+            <span class="badge-estado badge-green">
+               <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="4" style="margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg>
+               DESPACHADO
+            </span>
+          </td>
+        </tr>
+        
+        <tr *ngIf="historial().length === 0">
+          <td colspan="4">
+             <div class="empty-state-enterprise" style="padding: 4rem; border: none;">
+                <div class="ese-artwork" style="font-size: 2.5rem;">📂</div>
+                <h3>Sin historial reciente</h3>
+                <p>No se han registrado cierres de producción en el turno actual.</p>
+             </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

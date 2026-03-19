@@ -1,0 +1,40 @@
+/* Enterprise Cocina Historial Specific Styles */
+
+.plato-chip-enterprise {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f1f5f9;
+    padding: 0.35rem 0.75rem;
+    border-radius: 8px;
+    margin: 0.25rem 0.5rem 0.25rem 0;
+    border: 1px solid #e2e8f0;
+}
+
+.pce-qty {
+    font-weight: 900;
+    color: #2563eb;
+    font-size: 0.75rem;
+}
+
+.pce-name {
+    font-weight: 700;
+    color: #475569;
+    font-size: 0.8rem;
+}
+
+.ht-platos {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 500px;
+}
+
+.ht-num .td-id {
+    color: #2563eb;
+    font-weight: 850;
+    font-family: 'Outfit';
+}
+
+@media (max-width: 1024px) {
+    .ht-platos { max-width: 300px; }
+}

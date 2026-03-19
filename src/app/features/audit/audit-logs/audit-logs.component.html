@@ -1,0 +1,115 @@
+<div class="audit-wrapper">
+  
+  <!-- Standardized Header -->
+  <div class="admin-page-header">
+    <div class="aph-left">
+      <div class="aph-icon" style="background: linear-gradient(135deg, #1e293b, #0f172a);">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div>
+        <h1 class="aph-title">Sistema de Auditoría</h1>
+      </div>
+    </div>
+    <div class="aph-right" style="display: flex; align-items: center; gap: 1rem;">
+      <div class="admin-filter-actions" style="margin: 0; display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+        <label style="font-size: 0.75rem; font-weight: 800; color: #94a3b8; letter-spacing: 0.05em;">MOSTRAR:</label>
+        <select [ngModel]="pageSize" (change)="onPageSizeChange($event)" style="background: transparent; color: white; border: none; font-family: 'Outfit'; font-weight: 800; outline: none; cursor: pointer;">
+          <option value="5" style="background: #1e293b;">5</option>
+          <option value="10" style="background: #1e293b;">10</option>
+          <option value="15" style="background: #1e293b;">15</option>
+          <option value="20" style="background: #1e293b;">20</option>
+        </select>
+      </div>
+      <div class="stats-mini">
+          <span class="count">{{ logs.length }}</span>
+          <span>REGISTROS TOTALES</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-controls">
+    <div class="search-bubble">
+      <label>🔍 Filtrar Módulo</label>
+      <select [(ngModel)]="filtroModulo" (ngModelChange)="onModuloChange()" class="select-modern">
+        <option value="">Todos los Módulos</option>
+        <option value="AUTH">Sesiones (AUTH)</option>
+        <option value="PEDIDOS">Ventas (PEDIDOS)</option>
+        <option value="CAJA">Finanzas (CAJA)</option>
+        <option value="PRODUCTOS">Inventario (PRODUCTOS)</option>
+        <option value="MESAS">Operaciones (MESAS)</option>
+      </select>
+    </div>
+
+    <div class="search-bubble">
+      <label>⚡ Acción Específica</label>
+      <input type="text" [(ngModel)]="filtroAccion" (ngModelChange)="onAccionChange()" class="input-modern" placeholder="Creación, Pago, Login...">
+    </div>
+
+    <button (click)="cargarLogs()" class="btn-refresh">🔄 Sincronizar</button>
+  </div>
+
+  <div *ngIf="loading" class="loading-overlay">
+    <div class="radar"></div>
+    <p>Escaneando registros de seguridad...</p>
+  </div>
+
+  <div class="table-container" *ngIf="!loading">
+    <table class="audit-grid">
+      <thead>
+        <tr>
+          <th>FECHA Y HORA</th>
+          <th>USUARIO</th>
+          <th>MÓDULO</th>
+          <th>ACCIÓN</th>
+          <th>DETALLES DE OPERACIÓN</th>
+          <th>IP</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let log of getPaginatedLogs()">
+          <td class="date-cell">
+              <span class="day">{{ log.fecha | date:'dd MMM' }}</span>
+              <span class="time">{{ log.fecha | date:'HH:mm:ss' }}</span>
+          </td>
+          <td class="user-cell">
+             <div class="user-avatar">{{ log.usuario.substring(0,1).toUpperCase() }}</div>
+             <span>{{ log.usuario }}</span>
+          </td>
+          <td><span class="tag" [attr.data-module]="log.modulo">{{ log.modulo }}</span></td>
+          <td><code class="action-code">{{ log.accion }}</code></td>
+          <td class="desc-cell">{{ log.descripcion }}</td>
+          <td class="ip-cell">{{ log.ipCliente }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Table Footer with Pagination Controls -->
+    <div class="admin-pagination" *ngIf="getFilteredDocs().length > 0">
+      <div class="admin-pagination-info">
+        Mostrando <span>{{ (currentPage - 1) * pageSize + 1 }}</span> a <span>{{ Math.min(currentPage * pageSize, getFilteredDocs().length) }}</span> de <span>{{ getFilteredDocs().length }}</span> registros
+      </div>
+      <div class="admin-pagination-controls">
+        <button class="admin-pagination-btn"
+                [disabled]="currentPage === 1"
+                (click)="prevPage()">
+          Anterior
+        </button>
+        <div class="admin-pagination-page">
+          Página {{ currentPage }} de {{ getTotalPages() }}
+        </div>
+        <button class="admin-pagination-btn"
+                [disabled]="currentPage >= getTotalPages()"
+                (click)="nextPage()">
+          Siguiente
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="getFilteredDocs().length === 0" class="no-results">
+        <div class="no-results-icon">🕵️‍♂️</div>
+        <h3>Sin coincidencias</h3>
+        <p>Ajuste los filtros para encontrar el registro deseado.</p>
+    </div>
+  </div>
+
+</div>

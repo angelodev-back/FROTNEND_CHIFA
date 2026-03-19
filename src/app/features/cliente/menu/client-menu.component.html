@@ -1,0 +1,66 @@
+<div class="menu-page-canvas container section-padding">
+  
+  <!-- Premium Header -->
+  <div class="menu-header text-center anime-fade-in">
+    <h6 class="section-tag">CATÁLOGO GOURMET</h6>
+    <h1 class="menu-display-title">Nuestra <span class="text-underline">Colección</span> Culinaria</h1>
+    <p class="menu-lead mx-auto">Cada plato es una obra maestra de equilibrio, técnica y pasión. Explore los sabores que definen nuestra identidad.</p>
+  </div>
+
+  <!-- Operational Filters -->
+  <div class="menu-controls-wrapper">
+    <div class="category-navigation">
+       <button 
+         class="cat-premium-chip" 
+         *ngFor="let cat of categorias()" 
+         [class.is-active]="catSeleccionada()?.idCategoria === cat.idCategoria"
+         (click)="seleccionarCategoria(cat)">
+         <span class="cat-dot"></span>
+         {{ cat.nombre }}
+       </button>
+    </div>
+    
+    <div class="menu-search-box">
+       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+       <input type="text" placeholder="Buscar en la carta..." [(ngModel)]="searchQuery" class="menu-search-input">
+    </div>
+  </div>
+
+  <!-- Product Digital Canvas -->
+  <div class="menu-grid-display">
+    <div class="product-premium-card animate-slide-in" *ngFor="let p of filteredProducts()">
+      <div class="ppc-visual">
+         <div class="ppc-mock-img">🥢</div>
+         <div class="ppc-badge-popular" *ngIf="p.popular || p.idProducto % 5 === 0">TOP SELECTION</div>
+         <div class="ppc-price-tag">S/ {{ p.price || p.precio?.toFixed(2) }}</div>
+      </div>
+      
+      <div class="ppc-content">
+        <div class="ppc-meta">
+           <span class="ppc-category">{{ p.nombreCategoria }}</span>
+        </div>
+        <h3 class="ppc-title">{{ p.nombre }}</h3>
+        <p class="ppc-description">{{ p.descripcion }}</p>
+        
+        <div class="ppc-actions">
+           <div class="ppc-stat">
+              <span class="ppc-stat-val">🔥 {{ p.idProducto + 20 }}</span>
+              <span class="ppc-stat-lab">Ord/Mes</span>
+           </div>
+           <button class="btn-ppc-action">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
+           </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty Exploration State -->
+  <div class="menu-empty-canvas" *ngIf="filteredProducts().length === 0">
+     <div class="mec-artwork">🍛</div>
+     <h3 class="mec-title">Sin resultados para su búsqueda</h3>
+     <p class="mec-text">Nuestros maestros chiferos están creando nuevos sabores, pero este aún no está en la carta.</p>
+     <button class="btn btn-outline btn-xl mt-6" (click)="resetFilters()">RESTAURAR CARTA COMPLETA</button>
+  </div>
+
+</div>

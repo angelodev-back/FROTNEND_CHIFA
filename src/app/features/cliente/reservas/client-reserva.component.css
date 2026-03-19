@@ -1,0 +1,328 @@
+/* Guest Experience: Reservation Portal Styles */
+
+.reservation-page-canvas {
+    background: #f8fafc;
+    min-height: 100vh;
+    padding-bottom: 8rem;
+}
+
+.reserva-luxury-hero {
+    background: #0f172a;
+    padding: 8rem 0 10rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.reserva-luxury-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -150px;
+    left: -10%;
+    width: 120%;
+    height: 300px;
+    background: #f8fafc;
+    transform: rotate(-3deg);
+}
+
+.hero-display-title {
+    font-family: 'Outfit';
+    font-weight: 950;
+    font-size: 4rem;
+    color: white;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.03em;
+}
+
+.hero-lead {
+    font-size: 1.25rem;
+    color: #94a3b8;
+    max-width: 600px;
+    margin: 0 auto;
+    font-weight: 500;
+}
+
+.reserva-grid-portal {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 4rem;
+    margin-top: -5rem;
+    position: relative;
+    z-index: 10;
+}
+
+/* FORM ZONE */
+.premium-form-card {
+    background: white;
+    border-radius: 40px;
+    padding: 3.5rem;
+    box-shadow: 0 40px 100px -20px rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.8);
+}
+
+.pfc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 2rem;
+}
+
+.pfc-title {
+    font-family: 'Outfit';
+    font-weight: 950;
+    font-size: 1.75rem;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+}
+
+.pfc-subtitle {
+    color: #64748b;
+    font-weight: 600;
+}
+
+.pfc-badge-status {
+    background: #f1f5f9;
+    color: #475569;
+    font-weight: 950;
+    font-size: 0.65rem;
+    padding: 0.5rem 1rem;
+    border-radius: 100px;
+    letter-spacing: 0.1em;
+}
+
+.reserva-form-engine {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.form-row-dual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.res-label {
+    display: block;
+    font-weight: 900;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.res-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.res-input-wrapper svg {
+    position: absolute;
+    left: 1.25rem;
+    color: #cbd5e1;
+}
+
+.res-input {
+    width: 100%;
+    padding: 1rem 1.25rem 1rem 3.5rem;
+    border-radius: 16px;
+    border: 2px solid #f1f5f9;
+    background: #f8fafc;
+    font-weight: 800;
+    color: #0f172a;
+    transition: 0.3s;
+    outline: none;
+}
+
+.res-input:focus {
+    border-color: #4f46e5;
+    background: white;
+    box-shadow: 0 10px 30px rgba(79, 70, 229, 0.1);
+}
+
+.res-textarea {
+    width: 100%;
+    padding: 1.25rem;
+    border-radius: 16px;
+    border: 2px solid #f1f5f9;
+    background: #f8fafc;
+    font-weight: 700;
+    outline: none;
+    transition: 0.3s;
+    resize: none;
+}
+
+.res-textarea:focus { border-color: #4f46e5; background: white; }
+
+.number-control-premium {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background: #0f172a;
+    padding: 0.5rem;
+    border-radius: 20px;
+    width: fit-content;
+}
+
+.btn-ncp {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    border: none;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 300;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-ncp:hover:not(:disabled) { background: #4f46e5; transform: scale(1.05); }
+
+.ncp-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px;
+}
+
+.ncp-val { color: white; font-size: 1.5rem; font-weight: 950; font-family: 'Outfit'; }
+.ncp-label { color: #64748b; font-size: 0.65rem; font-weight: 900; text-transform: uppercase; }
+
+.btn-reserva-action {
+    background: #4f46e5;
+    color: white;
+    border: none;
+    padding: 1.5rem;
+    border-radius: 20px;
+    font-weight: 950;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 20px 40px rgba(79, 70, 229, 0.3);
+}
+
+.btn-reserva-action:hover:not(:disabled) { transform: translateY(-5px); box-shadow: 0 30px 60px rgba(79, 70, 229, 0.4); }
+
+.form-res-footer {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    background: #fffbeb;
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    border: 1px solid #fef3c7;
+}
+
+.form-res-footer p { font-size: 0.75rem; color: #92400e; font-weight: 600; line-height: 1.5; }
+
+/* HISTORY ZONE */
+.history-card-canvas {
+    background: white;
+    border-radius: 40px;
+    padding: 2.5rem;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.05);
+    height: 100%;
+}
+
+.hcc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
+.hcc-title { font-family: 'Outfit'; font-weight: 950; font-size: 1.5rem; color: #0f172a; }
+
+.btn-hcc-refresh {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: #f1f5f9;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-hcc-refresh:hover { transform: rotate(180deg); background: #0f172a; color: white; }
+
+.reserva-ticket-item {
+    background: #f8fafc;
+    border-radius: 24px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1.5px solid #f1f5f9;
+    transition: 0.3s;
+}
+
+.reserva-ticket-item:hover { border-color: #cbd5e1; transform: scale(1.02); }
+
+.rti-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.rti-date-box {
+    background: white;
+    padding: 0.5rem 1rem;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.rti-day { display: block; font-size: 1.5rem; font-weight: 950; color: #0f172a; line-height: 1; }
+.rti-month { font-size: 0.65rem; font-weight: 900; color: #6366f1; }
+
+.rti-info { flex: 1; }
+.rti-time { font-weight: 900; color: #1e293b; font-size: 0.95rem; margin-bottom: 0.25rem; }
+.rti-pax { font-weight: 700; color: #64748b; font-size: 0.8rem; }
+
+.status-badge-minimal {
+    font-size: 0.65rem;
+    font-weight: 950;
+    padding: 0.4rem 0.8rem;
+    border-radius: 100px;
+    background: white;
+}
+
+.status-pendiente .status-badge-minimal { color: #d97706; background: #fffbeb; }
+.status-confirmada .status-badge-minimal { color: #059669; background: #ecfdf5; }
+
+.rti-body {
+    margin-top: 1.25rem;
+    border-top: 1px dashed #e2e8f0;
+    padding-top: 1rem;
+}
+
+.rti-note { font-style: italic; font-size: 0.85rem; color: #64748b; }
+
+.rti-actions { margin-top: 1.5rem; }
+
+.btn-cancel-rti {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1.5px solid #fee2e2;
+    background: white;
+    color: #ef4444;
+    font-weight: 800;
+    font-size: 0.75rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-cancel-rti:hover { background: #ef4444; color: white; border-color: #ef4444; }
+
+@media (max-width: 1100px) {
+    .reserva-grid-portal { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 700px) {
+    .form-row-dual { grid-template-columns: 1fr; }
+    .hero-display-title { font-size: 3rem; }
+}

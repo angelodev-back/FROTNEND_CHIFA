@@ -1,0 +1,125 @@
+/* Guest Experience: Connectivity Canvas Styles */
+
+.contact-canvas {
+    background: white;
+    min-height: 100vh;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 7rem;
+    align-items: flex-start;
+}
+
+/* IDENTITY SIDE */
+.identity-header { margin-bottom: 4rem; }
+
+.identity-display-title {
+    font-family: 'Outfit';
+    font-weight: 950;
+    font-size: 3.5rem;
+    color: #0f172a;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+}
+
+.identity-lead {
+    font-size: 1.15rem;
+    color: #64748b;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+.identity-blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    margin-bottom: 4rem;
+}
+
+.identity-block {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.ib-icon {
+    width: 60px;
+    height: 60px;
+    background: #f8fafc;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+    border: 1px solid #f1f5f9;
+}
+
+.ib-meta { display: flex; flex-direction: column; gap: 0.25rem; }
+
+.ib-label {
+    font-size: 0.7rem;
+    font-weight: 950;
+    color: #94a3b8;
+    letter-spacing: 0.1em;
+}
+
+.ib-val {
+    font-weight: 850;
+    color: #0f172a;
+    font-size: 1.15rem;
+}
+
+/* MAP FRAME */
+.map-aesthetic-frame {
+    background: #f1f5f9;
+    height: 280px;
+    border-radius: 40px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ma-overlay {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+}
+
+.ma-pin { font-size: 3rem; display: block; margin-bottom: 1rem; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1)); animation: bounce 2s infinite; }
+.ma-cta { font-weight: 900; font-size: 0.8rem; color: #4f46e5; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.ma-visual {
+    position: absolute;
+    font-size: 10rem;
+    opacity: 0.1;
+    bottom: -2rem;
+    right: -2rem;
+}
+
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+/* PORTAL CARD */
+.portal-card {
+    background: white;
+    border-radius: 40px;
+    padding: 3.5rem;
+    border: 1.5px solid #f1f5f9;
+    box-shadow: 0 30px 60px -10px rgba(0,0,0,0.05);
+}
+
+.portal-title { font-family: 'Outfit'; font-weight: 950; font-size: 2.25rem; color: #0f172a; margin-bottom: 1rem; }
+.portal-text { color: #64748b; font-weight: 500; margin-bottom: 3rem; }
+
+@media (max-width: 1100px) {
+    .contact-grid { grid-template-columns: 1fr; gap: 4rem; }
+}
+
+@media (max-width: 600px) {
+    .identity-display-title { font-size: 2.5rem; }
+    .portal-card { padding: 2rem; }
+}

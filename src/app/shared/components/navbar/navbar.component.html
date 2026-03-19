@@ -1,0 +1,15 @@
+<nav class="navbar" *ngIf="authService.currentUser()">
+  <div class="nav-brand">
+    <h2>Chifa Linda</h2>
+    <span class="role-badge" *ngIf="authService.currentUser()?.role">{{ authService.currentUser()?.role }}</span>
+  </div>
+  
+
+
+  <div class="nav-user">
+    <div class="user-info">
+      <span class="name">{{ authService.currentUser()?.email }}</span>
+    </div>
+    <button class="btn-logout" (click)="logout()">Cerrar Sesión</button>
+  </div>
+</nav>

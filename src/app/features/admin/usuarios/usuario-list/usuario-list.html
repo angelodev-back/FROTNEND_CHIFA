@@ -1,0 +1,150 @@
+<div class="admin-page">
+
+  <!-- Standardized Header -->
+  <div class="admin-page-header">
+    <div class="aph-left">
+      <div class="aph-icon" style="background: linear-gradient(135deg, #6366f1, #4338ca);">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div>
+        <h1 class="aph-title">Usuarios del Sistema</h1>
+      </div>
+    </div>
+    <div class="aph-right">
+      <button (click)="abrirNuevo()" class="btn btn-primary shadow-lg shadow-indigo-500/20">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width: 18px; margin-right: 8px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nuevo Usuario
+      </button>
+    </div>
+  </div>
+
+  <!-- Mini KPIs -->
+  <div class="mini-kpis" *ngIf="stats()">
+    <div class="mini-kpi"><span class="mini-val">{{ stats().total }}</span><span class="mini-label">Total</span></div>
+    <div class="mini-kpi kpi-green"><span class="mini-val">{{ stats().activos }}</span><span class="mini-label">Activos</span></div>
+    <div class="mini-kpi kpi-blue"><span class="mini-val">{{ stats().admins }}</span><span class="mini-label">Admins</span></div>
+  </div>
+
+  <!-- Premium Filter Console -->
+  <div class="filter-bar">
+    <div class="flex items-center gap-6 flex-1">
+      <div class="search-wrap">
+        <input type="text" [ngModel]="searchTerm()" 
+               (ngModelChange)="onSearchChange($event)" 
+               placeholder="Buscar por nombre, email o ID..." 
+               class="search-input" />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <button class="btn-clear-search" *ngIf="searchTerm()" (click)="onSearchChange('')" title="Limpiar búsqueda">
+          &times;
+        </button>
+      </div>
+      <div class="filter-chips">
+        <button class="chip" [class.chip-active]="filtroRol() === ''"              (click)="onRolChange('')">Todos</button>
+        <button class="chip" [class.chip-active]="filtroRol() === 'ADMIN'"         (click)="onRolChange('ADMIN')">Admin</button>
+        <button class="chip" [class.chip-active]="filtroRol() === 'RECEPCIONISTA'" (click)="onRolChange('RECEPCIONISTA')">Recepción</button>
+        <button class="chip" [class.chip-active]="filtroRol() === 'MOZO'"          (click)="onRolChange('MOZO')">Mozo</button>
+        <button class="chip" [class.chip-active]="filtroRol() === 'COCINERO'"      (click)="onRolChange('COCINERO')">Cocinero</button>
+      </div>
+    </div>
+
+    <div class="admin-filter-actions">
+      <span class="text-xs font-black text-slate-400 uppercase tracking-widest mr-4">Registros por página:</span>
+      <select [ngModel]="pageSize()" (change)="onPageSizeChange($event)" class="form-input text-sm py-2 px-4 rounded-xl border-slate-200">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Users Table -->
+  <div class="card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Email</th>
+          <th>DNI</th>
+          <th>Rol</th>
+          <th>Registro</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of paginatedUsuarios()">
+          <td>
+            <div class="user-cell">
+              <div class="user-avatar-lg" [style.background]="getAvatarColor(u.rol.nombre)">
+                {{ getInitials(u) }}
+              </div>
+              <div class="user-cell-info">
+                <span class="user-fullname">{{ u.nombres }} {{ u.apellidos }}</span>
+                <span class="user-id">ID #{{ u.idUsuario }}</span>
+              </div>
+            </div>
+          </td>
+          <td class="td-email">{{ u.email }}</td>
+          <td>{{ u.dni }}</td>
+          <td><span class="rol-chip" [class]="getRolClass(u.rol.nombre)">{{ u.rol.nombre }}</span></td>
+          <td>{{ u.fechaRegistro | date:'dd/MM/yyyy' }}</td>
+          <td>
+            <div class="estado-toggle" (click)="toggleEstado(u)" [class.toggle-on]="u.estado" [title]="u.estado ? 'Activo — click para desactivar' : 'Inactivo — click para activar'">
+              <div class="toggle-knob"></div>
+              <span class="toggle-label">{{ u.estado ? 'Activo' : 'Inactivo' }}</span>
+            </div>
+          </td>
+          <td class="td-actions">
+            <button (click)="abrirEditar(u.idUsuario!)" class="btn-icon-sm" title="Editar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            <button class="btn-icon-sm btn-delete" title="Eliminar" (click)="eliminar(u.idUsuario!)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Table Footer with Pagination Controls -->
+    <div class="admin-pagination" *ngIf="filtrados().length > 0">
+      <div class="admin-pagination-info">
+        Mostrando <span>{{ (currentPage() - 1) * pageSize() + 1 }}</span> a <span>{{ Math.min(currentPage() * pageSize(), filtrados().length) }}</span> de <span>{{ filtrados().length }}</span> usuarios
+      </div>
+      <div class="admin-pagination-controls">
+        <button class="admin-pagination-btn"
+                [disabled]="currentPage() === 1"
+                (click)="prevPage()">
+          Anterior
+        </button>
+        <div class="admin-pagination-page">
+          Página {{ currentPage() }} de {{ totalPages() }}
+        </div>
+        <button class="admin-pagination-btn"
+                [disabled]="currentPage() >= totalPages()"
+                (click)="nextPage()">
+          Siguiente
+        </button>
+      </div>
+    </div>
+
+    <app-empty-state 
+      *ngIf="filtrados().length === 0"
+      icon="👥"
+      title="Sin Coincidencias"
+      description="No hemos encontrado usuarios que coincidan con tus criterios de búsqueda o filtros.">
+    </app-empty-state>
+  </div>
+
+  <!-- Modal de Usuario -->
+  <app-modal *ngIf="showModal()" [title]="isEditMode() ? 'Editar Usuario' : 'Nuevo Usuario'" (onClose)="cerrarModal()">
+    <app-usuario-form 
+      [isModal]="true" 
+      [isEditMode]="isEditMode()" 
+      [usuarioId]="selectedUserId()"
+      (onSave)="onUsuarioGuardado()"
+      (onCancel)="cerrarModal()">
+    </app-usuario-form>
+  </app-modal>
+</div>

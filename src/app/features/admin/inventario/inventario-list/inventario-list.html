@@ -1,0 +1,312 @@
+<div class="admin-page">
+
+  <!-- Standardized Header -->
+  <div class="admin-page-header">
+    <div class="aph-left">
+      <div class="aph-icon" style="background: linear-gradient(135deg, var(--color-success), var(--color-success));">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12.89 2.18c-.55-.24-1.23-.24-1.78 0l-8.5 3.7c-.38.17-.61.55-.61.96v7.72c0 .3.17.58.44.71l8.5 4.31c.21.1.44.15.68.15.24 0 .47-.05.68-.15l8.5-4.31c.27-.14.42-.42.44-.71l-.01-7.72c0-.41-.23-.79-.61-.96l-8.49-3.7z"/></svg>
+      </div>
+      <div>
+        <h1 class="aph-title">Inventario de Insumos</h1>
+      </div>
+    </div>
+    <div class="aph-right">
+      <button class="btn btn-outline" (click)="openHistorial()" style="margin-right: 0.75rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px; margin-right:6px;"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Historial de Movimientos
+      </button>
+      <button class="btn btn-primary shadow-lg shadow-emerald-500/20" (click)="openNuevo()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:16px; margin-right:6px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nuevo Insumo
+      </button>
+    </div>
+  </div>
+
+  <!-- Critical Stock Alert -->
+  <div class="enterprise-alert alert-warning" *ngIf="stats().empty > 0 || stats().low > 0" style="margin-bottom: 2rem;">
+    <div class="alert-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+    <div class="alert-content">
+      <p class="alert-title">Atención: Niveles de Stock Críticos Detectados</p>
+      <p class="alert-desc">
+        <span *ngIf="stats().empty > 0">Dispone de <strong>{{ stats().empty }}</strong> insumo(s) totalmente agotados.</span>
+        <span *ngIf="stats().low > 0"> Hay <strong>{{ stats().low }}</strong> insumo(s) por debajo del stock mínimo de seguridad.</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Inventory Analytics Grid (Premium) -->
+  <div class="kpis-grid" *ngIf="stats()">
+    <app-kpi-card 
+      titulo="Stock Maestro" 
+      [valor]="stats().total" 
+      icono="pedidos" 
+      color="blue" 
+      tendencia="neutral"
+      tendenciaLabel="Total insumos">
+    </app-kpi-card>
+
+    <app-kpi-card 
+      titulo="Niveles Óptimos" 
+      [valor]="stats().ok" 
+      icono="pedidos" 
+      color="green" 
+      tendencia="up"
+      tendenciaLabel="Stock saludable">
+    </app-kpi-card>
+
+    <app-kpi-card 
+      titulo="Stock Bajo" 
+      [valor]="stats().low" 
+      icono="rating" 
+      color="orange" 
+      tendencia="down"
+      tendenciaLabel="Punto de reorden">
+    </app-kpi-card>
+
+    <app-kpi-card 
+      titulo="Sin Existencias" 
+      [valor]="stats().empty" 
+      icono="rating" 
+      color="red" 
+      tendencia="neutral"
+      tendenciaLabel="Atención inmediata">
+    </app-kpi-card>
+  </div>
+
+  <!-- Advanced Toolbar -->
+  <div class="filter-bar">
+    <div class="flex items-center gap-4 flex-1">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" [ngModel]="searchTerm()" (ngModelChange)="onSearchChange($event)" placeholder="Buscar insumo por nombre..." class="search-input" />
+      </div>
+      <div class="filter-chips">
+        <button class="chip" [class.chip-active]="filtroEstado() === ''"      (click)="onEstadoChange('')">Todo el Catálogo</button>
+        <button class="chip" [class.chip-active]="filtroEstado() === 'OK'"    (click)="onEstadoChange('OK')">Existencias OK</button>
+        <button class="chip" [class.chip-active]="filtroEstado() === 'LOW'"   (click)="onEstadoChange('LOW')">Alerta de Reposición</button>
+        <button class="chip" [class.chip-active]="filtroEstado() === 'EMPTY'" (click)="onEstadoChange('EMPTY')">Agotados</button>
+      </div>
+    </div>
+
+    <div class="admin-filter-actions">
+      <label class="text-sm font-bold text-slate-500">Mostrar:</label>
+      <select [ngModel]="pageSize()" (change)="onPageSizeChange($event)" class="form-input text-sm py-2 px-4 rounded-xl">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Inventory Data Asset -->
+  <div class="premium-card overflow-hidden">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 30%;">Insumo / Descripción</th>
+          <th>Unidad</th>
+          <th>Mínimo</th>
+          <th>Stock Actual</th>
+          <th style="width: 20%;">Salud del Stock</th>
+          <th>Estado</th>
+          <th style="text-align: right;">Operaciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of paginatedInsumos()" 
+            [class.row-critical]="item.cantidadActual <= 0"
+            [class.row-warning]="item.cantidadActual > 0 && item.cantidadActual <= item.stockMinimo">
+          <td>
+            <div class="insumo-cell">
+              <div class="insumo-icon-box" [class]="'box-' + (item.cantidadActual <= 0 ? 'red' : (item.cantidadActual <= item.stockMinimo ? 'amber' : 'green'))">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.89 2.18c-.55-.24-1.23-.24-1.78 0l-8.5 3.7c-.38.17-.61.55-.61.96v7.72c0 .3.17.58.44.71l8.5 4.31c.21.1.44.15.68.15.24 0 .47-.05.68-.15l8.5-4.31c.27-.14.42-.42.44-.71l-.01-7.72c0-.41-.23-.79-.61-.96l-8.49-3.7z"/></svg>
+              </div>
+              <div>
+                <span style="display:block; font-family:'Outfit'; font-weight:800; color:var(--color-text); font-size:1rem;">{{ item.nombreInsumo }}</span>
+                <span style="font-size:0.75rem; color:var(--color-text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.02em;">Suministro Maestro</span>
+              </div>
+            </div>
+          </td>
+          <td style="font-weight:700; color:var(--color-text-muted);">{{ item.unidadMedida }}</td>
+          <td style="font-weight:700; color:var(--color-text-muted);">{{ item.stockMinimo }}</td>
+          <td style="font-weight:900; color:var(--color-text); font-size:1.1rem;">{{ item.cantidadActual | number:'1.1-2' }}</td>
+          <td>
+            <div class="enterprise-progress-container">
+              <div class="ep-bar">
+                <div class="ep-fill" [class]="getBarClass(item)" [style.width.%]="getStockPct(item)"></div>
+              </div>
+              <span class="ep-label">{{ getStockPct(item) }}%</span>
+            </div>
+          </td>
+          <td>
+            <span class="badge-estado" [class.badge-green]="item.cantidadActual > item.stockMinimo" 
+                  [class.badge-yellow]="item.cantidadActual > 0 && item.cantidadActual <= item.stockMinimo"
+                  [class.badge-red]="item.cantidadActual <= 0">
+              {{ getEstadoLabel(item) }}
+            </span>
+          </td>
+          <td class="td-actions" style="justify-content: flex-end;">
+            <button class="btn-icon-sm btn-action-in" (click)="openEntrada(item)" title="Registrar Entrada">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <button class="btn-icon-sm btn-action-out" (click)="openSalida(item)" title="Registrar Salida" [disabled]="item.cantidadActual <= 0">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Table Footer with Pagination Controls -->
+    <div class="admin-pagination" *ngIf="filtrados().length > 0">
+      <div class="admin-pagination-info">
+        Mostrando <span>{{ (currentPage() - 1) * pageSize() + 1 }}</span> a <span>{{ Math.min(currentPage() * pageSize(), filtrados().length) }}</span> de <span>{{ filtrados().length }}</span> insumos
+      </div>
+      <div class="admin-pagination-controls">
+        <button class="admin-pagination-btn"
+                [disabled]="currentPage() === 1"
+                (click)="prevPage()">
+          Anterior
+        </button>
+        <div class="admin-pagination-page">
+          Página {{ currentPage() }} de {{ totalPages() }}
+        </div>
+        <button class="admin-pagination-btn"
+                [disabled]="currentPage() >= totalPages()"
+                (click)="nextPage()">
+          Siguiente
+        </button>
+      </div>
+    </div>
+    
+    <app-empty-state 
+      *ngIf="filtrados().length === 0"
+      icon="📦"
+      title="Inventario Vacío"
+      description="No se han encontrado registros que coincidan con la búsqueda actual o filtros aplicados."
+      actionLabel="DAR DE ALTA INSUMO"
+      (onAction)="openNuevo()">
+    </app-empty-state>
+  </div>
+
+  <!-- Unified Movement Modal -->
+  <app-modal *ngIf="showInvModal()" 
+             [title]="modalMode() === 'nuevo' ? 'Alta de Nuevo Insumo' : (modalMode() === 'entrada' ? 'Incremento de Suministros' : 'Registro de Consumo')" 
+             (onClose)="closeModal()">
+    
+    <!-- NUEVO INSUMO -->
+    <div *ngIf="modalMode() === 'nuevo'" style="padding: 2rem;">
+      <div class="enterprise-form-layout" style="grid-template-columns: 1fr;">
+        <div class="form-section">
+          <div class="section-header">
+             <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+             <h3 class="section-title">Definición de Insumo</h3>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group col-span-2">
+              <label class="form-label">Nombre Comercial del Insumo <span class="required">*</span></label>
+              <input class="form-input" type="text" [(ngModel)]="modalNombre" placeholder="Ej: Arroz Largo Extra" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Unidad de Medida <span class="required">*</span></label>
+              <select class="form-input form-select" [(ngModel)]="modalUnidad">
+                <option value="KG">Kilogramos (kg)</option>
+                <option value="LITROS">Litros (L)</option>
+                <option value="UNIDADES">Unidades (und)</option>
+                <option value="GRAMOS">Gramos (g)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Punto de Reorden (S. Mínimo) <span class="required">*</span></label>
+              <input class="form-input" type="number" [(ngModel)]="modalMinimo" min="0" placeholder="0" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-footer mt-6" style="border-top:1px solid var(--color-border); padding-top:1.5rem;">
+        <button class="btn btn-ghost" (click)="closeModal()">Cancelar Procedimiento</button>
+        <button class="btn btn-primary" [disabled]="!modalNombre" (click)="confirmar()">Registrar en Inventario Maestro</button>
+      </div>
+    </div>
+
+    <!-- ENTRADA / SALIDA -->
+    <div *ngIf="modalMode() !== 'nuevo'" style="padding: 2rem;">
+      <div class="movement-context-card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <span class="ctx-label">INSUMO SELECCIONADO</span>
+            <h3 class="ctx-title">{{ selectedItem()?.nombreInsumo }}</h3>
+          </div>
+          <div class="ctx-stock-pill">
+            <span class="pill-label">EXISTENCIA ACTUAL</span>
+            <span class="pill-val">{{ selectedItem()?.cantidadActual | number:'1.1-2' }} <small>{{ selectedItem()?.unidadMedida }}</small></span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 2rem;">
+        <label class="form-label text-center block mb-4" style="font-size: 0.9rem; color:var(--color-text-muted);">CANTIDAD A {{ modalMode() === 'entrada' ? 'INGRESAR' : 'RETIRAR' }} DEL STOCK</label>
+        <div class="premium-big-input">
+           <input type="number" [(ngModel)]="modalCantidad" min="0.1" step="0.1" placeholder="0.0" autofocus>
+           <span class="input-suffix">{{ selectedItem()?.unidadMedida }}</span>
+        </div>
+        
+        <div *ngIf="modalMode() === 'salida' && selectedItem() && modalCantidad > selectedItem()!.cantidadActual" class="error-strip">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Operación Imposible: La cantidad de retiro excede el stock actual disponible.
+        </div>
+      </div>
+
+      <div class="form-footer mt-8" style="border-top:1px solid var(--color-border); padding-top:1.5rem; justify-content:center;">
+        <button class="btn btn-ghost" (click)="closeModal()">Cancelar</button>
+        <button class="btn px-10"
+                [class.btn-success]="modalMode() === 'entrada'" 
+                [class.btn-danger]="modalMode() === 'salida'"
+                (click)="confirmar()" [disabled]="modalCantidad <= 0">
+          {{ modalMode() === 'entrada' ? 'Confirmar Entrada' : 'Efectuar Salida' }}
+        </button>
+      </div>
+    </div>
+  </app-modal>
+
+  <!-- History Modal Master -->
+  <app-modal *ngIf="showHistorial" title="Bitácora de Movimientos de Inventario" (onClose)="closeHistorial()">
+    <div class="history-enterprise-view">
+      <div *ngIf="cargandoHistorial" class="p-20 text-center">
+        <div class="spinner-enterprise"></div>
+        <p style="margin-top:1.5rem; color:var(--color-text-muted); font-weight:600;">Consultando registros históricos...</p>
+      </div>
+      
+      <div class="premium-card overflow-hidden" style="border:none; border-radius:0;" *ngIf="!cargandoHistorial">
+        <table class="data-table">
+          <thead style="position: sticky; top:0; z-index:20; background:white;">
+            <tr>
+              <th>Fecha y Hora</th>
+              <th>Activo / Insumo</th>
+              <th>Operación</th>
+              <th>Cant.</th>
+              <th>Responsable / Nota</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let h of historial()">
+              <td style="font-weight:600; color:var(--color-text-muted); font-size:0.85rem;">{{ h.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td style="font-weight:800; color:var(--color-text);">{{ h.nombreInsumo || 'Insumo Crítico' }}</td>
+              <td>
+                <span class="badge-estado" 
+                      [class.badge-green]="h.tipoMovimiento === 'ENTRADA'" 
+                      [class.badge-red]="h.tipoMovimiento === 'SALIDA'">
+                  {{ h.tipoMovimiento }}
+                </span>
+              </td>
+              <td style="font-weight:900; color:var(--color-text);">{{ h.cantidad }}</td>
+              <td style="font-size:0.85rem; color:var(--color-text-muted); font-style:italic;">{{ h.observacion || 'Ajuste manual de stock' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </app-modal>
+
+</div>

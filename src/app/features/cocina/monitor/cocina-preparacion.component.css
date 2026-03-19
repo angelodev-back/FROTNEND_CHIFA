@@ -1,0 +1,107 @@
+/* Enterprise Cocina Sub-View Specific Styles */
+
+.kds-sub-page {
+    padding: 2rem;
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+.kds-sub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* Leveraging KDS Ticket Componentry from global or local monitor */
+.kds-ticket {
+    background: white;
+    border-radius: 24px;
+    padding: 1.5rem;
+    color: #0f172a;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-left: 6px solid #2563eb;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.kds-ticket:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08); }
+
+.kt-header { display: flex; justify-content: space-between; align-items: center; }
+.kt-id { font-family: 'Outfit'; font-weight: 950; font-size: 1.25rem; color: #1e293b; }
+
+.kt-meta-pills { display: flex; gap: 0.5rem; }
+.kt-pill-time { background: #eff6ff; color: #2563eb; font-weight: 800; font-size: 0.7rem; padding: 0.3rem 0.6rem; border-radius: 8px; }
+.kt-pill-type { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; padding: 0.3rem 0.6rem; border-radius: 8px; }
+
+.tp-salon { background: #f1f5f9; color: #475569; }
+.tp-llevar { background: #fef2f2; color: #ef4444; }
+.tp-delivery { background: #f0fdf4; color: #15803d; }
+
+.kt-context { display: flex; }
+.kt-mesa-badge {
+    background: #0f172a; color: white;
+    padding: 0.5rem 1rem; border-radius: 12px;
+    display: flex; flex-direction: column; align-items: center;
+}
+.mb-label { font-size: 0.6rem; font-weight: 900; opacity: 0.6; letter-spacing: 0.1em; }
+.mb-val { font-family: 'Outfit'; font-weight: 950; font-size: 1.5rem; line-height: 1; }
+
+.kt-items-interactive {
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 1rem;
+    display: flex; flex-direction: column; gap: 0.75rem;
+}
+
+.ktii-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.5rem; border-bottom: 1px dashed #e2e8f0; }
+.ktii-row:last-child { border-bottom: none; padding-bottom: 0; }
+.ktii-row.is-done .kti-name { text-decoration: line-through; opacity: 0.3; }
+.ktii-info { display: flex; align-items: center; gap: 0.75rem; flex: 1; }
+
+.kti-qty { background: #1e293b; color: white; padding: 0.1rem 0.4rem; border-radius: 4px; font-weight: 900; font-size: 0.85rem; }
+.kti-name { font-weight: 700; font-size: 0.95rem; color: #1e293b; flex: 1; }
+
+.ktii-chk {
+    width: 32px; height: 32px;
+    background: white; border: 2px solid #cbd5e1;
+    border-radius: 10px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #cbd5e1; transition: all 0.2s;
+}
+
+.ktii-chk:hover { border-color: #10b981; color: #10b981; transform: scale(1.1); }
+
+.ktii-done-mark {
+    width: 32px; height: 32px;
+    background: #dcfce7; color: #15803d;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.btn-kds-finish {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    color: white; border: none;
+    padding: 1.125rem; border-radius: 16px;
+    font-weight: 900; font-size: 0.95rem;
+    cursor: pointer; width: 100%;
+    margin-top: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.empty-state-enterprise {
+    padding: 8rem 2rem;
+    text-align: center;
+    background: white;
+    border: 1px solid #f1f5f9;
+    border-radius: 32px;
+    margin-top: 2rem;
+}
+
+.ese-artwork { font-size: 4rem; margin-bottom: 1.5rem; animation: ese-float 3s infinite ease-in-out; }
+@keyframes ese-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+.empty-state-enterprise h3 { font-family: 'Outfit'; font-weight: 900; font-size: 1.75rem; color: #0f172a; margin-bottom: 0.5rem; }
+.empty-state-enterprise p { color: #94a3b8; font-weight: 500; }

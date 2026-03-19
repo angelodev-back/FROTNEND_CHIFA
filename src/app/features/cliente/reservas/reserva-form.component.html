@@ -1,0 +1,91 @@
+<div class="registration-canvas section-padding">
+  
+  <div class="container registration-grid">
+    
+    <!-- Visual Brand Pillar -->
+    <div class="registration-visual anime-fade-in">
+        <div class="rv-overlay">
+            <h6 class="rv-tag">RESERVACIONES</h6>
+            <h2 class="rv-title">Un viaje de sabores le espera</h2>
+            <p class="rv-text">Asegure su mesa en Chifa Linda y disfrute de la perfecta fusión entre la milenaria tradición china y el corazón del Perú.</p>
+            
+            <div class="rv-features">
+                <div class="rv-feat">
+                    <span class="rv-feat-icon">🥢</span>
+                    <span class="rv-feat-txt">Mesas con Vista Premium</span>
+                </div>
+                <div class="rv-feat">
+                    <span class="rv-feat-icon">🥂</span>
+                    <span class="rv-feat-txt">Atención Personalizada</span>
+                </div>
+                <div class="rv-feat">
+                    <span class="rv-feat-icon">✨</span>
+                    <span class="rv-feat-txt">Ambiente de Lujo</span>
+                </div>
+            </div>
+        </div>
+        <div class="rv-mock-img">🍲</div>
+    </div>
+
+    <!-- Operational Form Portal -->
+    <div class="registration-form-portal animate-slide-in">
+        <div class="pfp-card">
+            <header class="pfp-header">
+                <h1 class="pfp-title">Reserva de Mesa</h1>
+                <p class="pfp-lead">Complete los detalles para su próxima visita gourmet.</p>
+            </header>
+
+            <form class="pfp-form" #f="ngForm">
+                <div class="pfp-grid-form">
+                    <div class="pfp-field">
+                        <label class="pfp-label">FECHA DE VISITA</label>
+                        <input type="date" class="pfp-control" name="fecha" [(ngModel)]="model.fecha" required>
+                    </div>
+
+                    <div class="pfp-field">
+                        <label class="pfp-label">HORARIO PREFERENTE</label>
+                        <select class="pfp-control pfp-select" name="hora" [(ngModel)]="model.hora" required>
+                            <option value="">Seleccione un horario</option>
+                            <option *ngFor="let h of horarios" [value]="h">{{ h }}</option>
+                        </select>
+                    </div>
+
+                    <div class="pfp-field">
+                        <label class="pfp-label">NÚMERO DE INVITADOS</label>
+                        <input type="number" class="pfp-control" name="personas" [(ngModel)]="model.cantidadPersonas" min="1" max="20" placeholder="Ej: 4" required>
+                    </div>
+
+                    <div class="pfp-field">
+                        <label class="pfp-label">PREFERENCIA DE UBICACIÓN</label>
+                        <select class="pfp-control pfp-select" name="mesa" [(ngModel)]="model.idMesa">
+                            <option [value]="null">Cualquier mesa disponible</option>
+                            <option *ngFor="let m of mesas" [value]="m.idMesa">Mesa {{ m.numero }} (Pax: {{ m.capacidad }})</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pfp-field full-width mt-6">
+                    <label class="pfp-label">SOLICITUDES ESPECIALES O NOTAS GASTRONÓMICAS</label>
+                    <textarea 
+                        class="pfp-textarea" 
+                        name="obs" 
+                        rows="4" 
+                        [(ngModel)]="model.observaciones"
+                        placeholder="Ej: Aniversario, mesa tranquila, alergias alimentarias..."></textarea>
+                </div>
+
+                <div class="pfp-policy-banner">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    <p>Su reserva será confirmada electrónicamente. Disponemos de una tolerancia de 15 minutos.</p>
+                </div>
+
+                <button type="button" class="btn-pfp-action" [disabled]="!f.valid" (click)="confirmar()">
+                    CONFIRMAR SOLICITUD DE RESERVA
+                </button>
+            </form>
+        </div>
+    </div>
+
+  </div>
+
+</div>

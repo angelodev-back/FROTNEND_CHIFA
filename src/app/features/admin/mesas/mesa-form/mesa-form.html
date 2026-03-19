@@ -1,0 +1,123 @@
+<div class="mesa-form-wrapper" [class.modal-view]="isModal">
+  <!-- Header Decorativo Premium (Solo en Modal) -->
+  <div *ngIf="isModal" class="form-decoration">
+     <div class="decoration-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 12h16M4 12l1-4h14l1 4M4 12v6M20 12v6M8 8V4h8v4M9 18v2M15 18v2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+     </div>
+     <div class="decoration-text">
+        <span class="decoration-tag">Sistema Chifa Linda</span>
+        <h2 class="decoration-title">{{ isEditMode ? 'Gestión de Mesa' : 'Nueva Mesa' }}</h2>
+     </div>
+  </div>
+
+  <header *ngIf="!isModal" class="form-header">
+    <div class="header-title-wrapper">
+      <button routerLink="/admin/mesas" class="btn-back">
+        <svg viewBox="0 0 24 24" class="icon-svg" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      </button>
+      <h1 class="page-title">
+        {{ isEditMode ? 'Editar Mesa' : 'Nueva Mesa' }}
+      </h1>
+    </div>
+  </header>
+
+  <div class="form-content" [class.card]="!isModal">
+    <form *ngIf="!showConfirmation" [formGroup]="mesaForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+        
+        <!-- Ilustración / Icono de Mesa Lateral -->
+        <div class="form-side-illustration hide-on-mobile">
+            <div class="illustration-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M4 12h16M4 12l1-4h14l1 4M4 12v6M20 12v6M8 8V4h8v4M9 18v2M15 18v2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </div>
+
+        <div class="form-main-inputs">
+            <!-- Número de Mesa (Solo Lectura) -->
+            <div class="form-group opacity-70">
+              <label class="form-label">
+                <svg viewBox="0 0 24 24" class="icon-svg" style="color: #64748b" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M4 12h16M4 12l1-4h14l1 4M4 12v6M20 12v6M8 8V4h8v4M9 18v2M15 18v2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Número de Mesa (Identificador)
+              </label>
+              <input type="number" formControlName="numeroMesa" class="form-input" readonly placeholder="ID Automático">
+            </div>
+
+        <!-- Capacidad -->
+        <div class="form-group">
+          <label class="form-label">
+            <svg viewBox="0 0 24 24" class="icon-svg" style="color: #3b82f6" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Capacidad (Personas) <span class="required">*</span>
+          </label>
+          <input type="number" formControlName="capacidad" class="form-input" placeholder="Ej: 4">
+        </div>
+
+            <!-- Estado Inicial -->
+            <div class="form-group" *ngIf="isEditMode">
+              <label class="form-label">
+                <svg viewBox="0 0 24 24" class="icon-svg" style="color: #10b981" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                Estado de Mesa <span class="required">*</span>
+              </label>
+              <select formControlName="estado" class="form-select">
+                <option value="DISPONIBLE">DISPONIBLE</option>
+                <option value="OCUPADA">OCUPADA</option>
+                <option value="RESERVADA">RESERVADA</option>
+                <option value="MANTENIMIENTO">MANTENIMIENTO</option>
+              </select>
+            </div>
+        </div>
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="form-actions">
+        <button type="button" (click)="isModal ? onCancel.emit() : null" [routerLink]="isModal ? null : '/admin/mesas'" class="btn-cancel">
+          Cancelar
+        </button>
+        <button type="submit" [disabled]="mesaForm.invalid || submitting" class="btn-save">
+          <span>{{ isEditMode ? 'Guardar Cambios' : 'Crear Mesa' }}</span>
+        </button>
+      </div>
+    </form>
+
+    <!-- Confirmation View -->
+    <div *ngIf="showConfirmation" class="confirmation-container animate-fade-in">
+        <div class="confirm-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+              <path d="M12 8v4M12 16h.01"/>
+            </svg>
+        </div>
+        <h3 class="confirm-title">{{ isEditMode ? '¿Confirmar Cambios?' : '¿Registrar Mesa?' }}</h3>
+        <p class="confirm-desc">Se guardarán los datos de la mesa de forma permanente en el sistema.</p>
+        
+        <div class="confirm-actions">
+            <button type="button" (click)="cancelarConfirmacion()" class="btn-secondary">
+              Volver
+            </button>
+            <button type="button" (click)="confirmar()" class="btn-primary-confirm">
+              {{ isEditMode ? 'Sí, Actualizar' : 'Sí, Crear Mesa' }}
+            </button>
+        </div>
+    </div>
+
+    <!-- Success Overlay -->
+    <div *ngIf="showSuccessOverlay" class="success-overlay animate-fade-in">
+        <div class="success-card scale-up">
+            <div class="success-icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+            </div>
+            <h2 class="success-title">{{ isEditMode ? '¡Mesa Actualizada!' : '¡Mesa Creada!' }}</h2>
+            <p class="success-tag">Operación Exitosa</p>
+        </div>
+    </div>
+  </div>
+</div>
+
+

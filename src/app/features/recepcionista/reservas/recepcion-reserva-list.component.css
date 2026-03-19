@@ -1,0 +1,107 @@
+/* Enterprise Reception Reservation List - Premium Soft UI */
+.admin-page { 
+    padding: 3rem 4rem; 
+    max-width: 100%; 
+    margin: 0; 
+    background-color: var(--color-bg);
+}
+
+.admin-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2.5rem !important;
+    background: var(--color-surface);
+    padding: 1.5rem 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-md);
+}
+
+.aph-left { display: flex; align-items: center; gap: 1.5rem; }
+
+.aph-title {
+    font-size: 2.5rem !important;
+    font-weight: 950;
+    letter-spacing: -0.04em;
+    color: var(--color-text);
+    line-height: 1;
+    margin: 0;
+}
+
+.aph-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 8px 16px rgba(79, 70, 229, 0.25);
+}
+
+.reserva-row { transition: var(--transition-fast); }
+.reserva-row:hover { background: var(--color-bg-alt); }
+
+.cliente-cell { display: flex; align-items: center; gap: 1.25rem; }
+.cliente-avatar {
+    width: 42px; height: 42px; border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 950; font-family: 'Outfit'; font-size: 1.1rem;
+}
+.cliente-info { display: flex; flex-direction: column; gap: 0.15rem; }
+.cliente-nombre { font-weight: 850; color: var(--color-text); font-family: 'Outfit'; font-size: 1rem; }
+.cliente-doc { font-size: 0.7rem; color: var(--color-text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.agenda-cell { display: flex; flex-direction: column; gap: 0.15rem; }
+.agenda-date { font-size: 0.9rem; font-weight: 850; color: var(--color-text); font-family: 'Outfit'; }
+.agenda-time { font-size: 0.8rem; font-weight: 900; color: var(--color-primary); letter-spacing: 0.05em; }
+
+.mesa-badge-premium {
+    background: var(--color-bg-alt);
+    border: 1.5px solid var(--color-border-light);
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 70px;
+}
+.mbp-label { font-size: 0.6rem; font-weight: 950; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+.mbp-val { font-family: 'Outfit'; font-weight: 950; font-size: 1.1rem; color: var(--color-text); line-height: 1; }
+
+.pax-badge {
+    background: var(--color-surface);
+    border: 1.5px solid var(--color-border-light);
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: 0.7rem;
+    font-weight: 950;
+    color: var(--color-text-muted);
+    display: inline-flex;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.kpis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.premium-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+    .admin-page { padding: 1.5rem; }
+    .kpis-grid { grid-template-columns: repeat(2, 1fr); }
+    .admin-page-header { flex-direction: column; align-items: stretch; gap: 1.5rem; }
+}

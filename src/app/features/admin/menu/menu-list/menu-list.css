@@ -1,0 +1,89 @@
+/* Enterprise Menu List - Premium Soft UI */
+.admin-page { 
+    padding: 3rem 4rem; 
+    max-width: 100%; 
+    margin: 0; 
+    background-color: var(--color-bg);
+}
+
+.admin-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2.5rem !important;
+    background: var(--color-surface);
+    padding: 1.5rem 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-md);
+}
+
+.aph-left { display: flex; align-items: center; gap: 1.5rem; }
+
+.aph-title {
+    font-size: 2.5rem !important;
+    font-weight: 950;
+    letter-spacing: -0.04em;
+    color: var(--color-text);
+    line-height: 1;
+    margin: 0;
+}
+
+.aph-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 8px 16px rgba(245, 158, 11, 0.25);
+}
+
+.p-img-box {
+    transition: var(--transition-spring);
+    border: 2px solid var(--color-surface);
+    box-shadow: var(--shadow-sm);
+}
+
+tr:hover .p-img-box {
+    transform: scale(1.2) rotate(4deg);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+    z-index: 10;
+}
+
+/* KPI Grid Layout */
+.kpis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.premium-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.td-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.user-cell-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@media (max-width: 1024px) {
+    .admin-page { padding: 1.5rem; }
+    .kpis-grid { grid-template-columns: 1fr; }
+    .admin-page-header { flex-direction: column; align-items: stretch; gap: 1.5rem; }
+}

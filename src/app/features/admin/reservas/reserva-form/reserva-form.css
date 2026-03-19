@@ -1,0 +1,105 @@
+.page-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    animation: formFadeIn 0.5s ease-out;
+}
+
+@keyframes formFadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.form-header-premium {
+    padding: 2rem 2.5rem;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.875rem 1.125rem;
+    background-color: var(--color-bg);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    color: var(--color-text);
+    transition: var(--transition-spring);
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    background-color: var(--color-surface);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(217, 70, 239, 0.1);
+    transform: translateY(-1px);
+}
+
+.placeholder-view {
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.btn-premium-save {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+    color: white;
+    padding: 0.875rem 2rem;
+    border-radius: var(--radius-md);
+    font-weight: 800;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-spring);
+    cursor: pointer;
+}
+
+.btn-premium-save:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-premium-cancel {
+    background: var(--color-bg);
+    color: var(--color-text-muted);
+    padding: 0.875rem 1.75rem;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    border: 1.5px solid var(--color-border);
+    transition: var(--transition-fast);
+}
+
+.btn-premium-cancel:hover {
+    background: var(--color-border-light);
+    color: var(--color-text);
+}
+
+.bg-transparent {
+    background: transparent !important;
+}
+
+.p-0 {
+    padding: 0 !important;
+}

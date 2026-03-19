@@ -1,0 +1,45 @@
+<nav class="guest-navbar" [class.is-scrolled]="scrolled()">
+    <div class="gn-container container">
+        
+        <!-- Brand Identity -->
+        <div class="gn-brand" routerLink="/cliente/home">
+            <div class="gn-logo">CL</div>
+            <span class="gn-logo-txt">CHIFA <span class="text-accent">LINDA</span></span>
+        </div>
+        
+        <!-- Core Navigation -->
+        <div class="gn-links">
+            <a routerLink="/cliente/home" routerLinkActive="is-active">INICIO</a>
+            <a routerLink="/cliente/menu" routerLinkActive="is-active">CARTA</a>
+            <a routerLink="/cliente/reservas" routerLinkActive="is-active">RESERVAS</a>
+            <a *ngIf="isLoggedIn()" routerLink="/cliente/mis-reservas" routerLinkActive="is-active">MIS PEDIDOS</a>
+            <a routerLink="/cliente/resenas" routerLinkActive="is-active">RESEÑAS</a>
+            <a routerLink="/cliente/contacto" routerLinkActive="is-active">CONTACTO</a>
+        </div>
+        
+        <!-- Utility Actions -->
+        <div class="gn-actions">
+            <!-- Digital Cart -->
+            <div class="gn-cart-trigger" routerLink="/cliente/checkout">
+                <div class="gnc-icon-box">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    <span class="gnc-badge" *ngIf="cartCount() > 0">{{ cartCount() }}</span>
+                </div>
+            </div>
+
+            <div class="gn-auth-portal">
+                <ng-container *ngIf="!isLoggedIn(); else userPortal">
+                    <button class="btn btn-primary btn-sm glass-btn" routerLink="/auth/login">INGRESAR</button>
+                </ng-container>
+                <ng-template #userPortal>
+                    <div class="gn-user-pill">
+                        <div class="gn-user-avatar">{{ userName().charAt(0) }}</div>
+                        <button class="btn-logout-minimal" (click)="logout()" title="Cerrar Sesión">
+                           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        </button>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</nav>

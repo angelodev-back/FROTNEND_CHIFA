@@ -1,0 +1,299 @@
+:host {
+    display: block;
+}
+
+.comp-container {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+}
+
+.state-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 4rem;
+    color: #64748b;
+}
+
+.spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #e2e8f0;
+    border-top-color: #f59e0b;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.error-card {
+    background: #fee2e2;
+    padding: 2rem;
+    border-radius: 12px;
+    color: #991b1b;
+    text-align: center;
+}
+
+/* Actions */
+.actions-bar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    justify-content: flex-end;
+}
+
+.btn-back {
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+    padding: .5rem 1.25rem;
+    border: none;
+    background: #f1f5f9;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #475569;
+    font-weight: 500;
+}
+
+.btn-back svg {
+    width: 16px;
+    height: 16px;
+}
+
+.btn-back:hover {
+    background: #e2e8f0;
+}
+
+.btn-print {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .5rem 1.25rem;
+    border: none;
+    background: #f59e0b;
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-print svg {
+    width: 16px;
+    height: 16px;
+}
+
+.btn-print:hover {
+    background: #d97706;
+}
+
+/* Recibo Card */
+.recibo-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .1);
+}
+
+/* Header */
+.recibo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.recibo-logo {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
+.logo-icon {
+    font-size: 2.5rem;
+}
+
+.restaurante-nombre {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0;
+}
+
+.restaurante-subtitulo {
+    font-size: .75rem;
+    color: #64748b;
+    margin: 0;
+}
+
+.recibo-title-block {
+    text-align: right;
+}
+
+.comp-tipo {
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: #64748b;
+    text-transform: uppercase;
+}
+
+.comp-numero {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #f59e0b;
+}
+
+.divider {
+    border: none;
+    border-top: 1.5px dashed #e2e8f0;
+    margin: 1.25rem 0;
+}
+
+/* Meta */
+.meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: .75rem;
+    margin-bottom: 1rem;
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+}
+
+.mi-label {
+    font-size: .7rem;
+    text-transform: uppercase;
+    color: #94a3b8;
+    font-weight: 700;
+}
+
+.mi-val {
+    font-size: .9rem;
+    color: #1e293b;
+    font-weight: 500;
+}
+
+/* Tabla */
+.items-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: .5rem 0;
+}
+
+.items-table th {
+    font-size: .75rem;
+    text-transform: uppercase;
+    color: #94a3b8;
+    font-weight: 700;
+    padding: .5rem .75rem;
+    border-bottom: 2px solid #f1f5f9;
+    text-align: left;
+}
+
+.th-desc {
+    width: 50%;
+}
+
+.th-right {
+    text-align: right;
+}
+
+.items-table td {
+    padding: .6rem .75rem;
+    font-size: .9rem;
+    color: #1e293b;
+    border-bottom: 1px solid #f8fafc;
+}
+
+.td-center {
+    text-align: center;
+    font-weight: 700;
+    color: #f59e0b;
+}
+
+.td-right {
+    text-align: right;
+}
+
+.item-nota {
+    color: #94a3b8;
+}
+
+.total-row td {
+    font-weight: 800;
+    font-size: 1rem;
+    padding-top: .75rem;
+    border-top: 2px solid #1e293b;
+}
+
+.total-val {
+    color: #f59e0b;
+    font-size: 1.2rem;
+}
+
+/* Footer */
+.recibo-footer {
+    text-align: center;
+    padding-top: .5rem;
+}
+
+.recibo-footer p {
+    margin: .2rem 0;
+    color: #475569;
+    font-size: .9rem;
+}
+
+.footer-sub {
+    color: #64748b;
+    font-size: .8rem;
+}
+
+.footer-date {
+    color: #94a3b8;
+    font-size: .75rem;
+}
+
+/* Print styles */
+@media print {
+    .no-print {
+        display: none;
+    }
+
+    .recibo-card {
+        box-shadow: none;
+    }
+
+    .comp-container {
+        padding: 0;
+        max-width: 100%;
+    }
+}
+
+.animate-in {
+    animation: fadeUp .3s ease;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px)
+    }
+
+    to {
+        opacity: 1;
+        transform: none
+    }
+}

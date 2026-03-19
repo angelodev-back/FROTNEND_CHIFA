@@ -1,0 +1,193 @@
+<div class="admin-page" *ngIf="resumen() as r">
+
+  <!-- Enterprise Header -->
+  <!-- Enterprise Header (Enhanced) -->
+  <!-- Standardized Header -->
+  <div class="admin-page-header">
+    <div class="aph-left">
+      <div class="aph-icon" style="background: linear-gradient(135deg, var(--color-text-muted), var(--color-text));">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <div>
+        <h1 class="aph-title">Caja y Finanzas</h1>
+      </div>
+    </div>
+    <div class="aph-right">
+      <button class="btn btn-danger" *ngIf="r.estado === 'ABIERTO'" style="box-shadow: var(--shadow-md);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; margin-right:8px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Cerrar Turno Actual
+      </button>
+      <button class="btn btn-primary" *ngIf="r.estado === 'CERRADO'" style="box-shadow: var(--shadow-md);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; margin-right:8px;"><path d="M21 12V7H5v10h10"/><path d="M16 11h6v6h-6z"/><path d="M20 14h.01"/></svg>
+        Aperturar Nueva Caja
+      </button>
+    </div>
+  </div>
+
+  <!-- High-Impact Arqueo Panel -->
+  <div class="premium-finance-banner" [class.banner-closed]="r.estado !== 'ABIERTO'">
+    <div class="pfb-overlay"></div>
+    <div class="pfb-content">
+      <div class="pfb-top">
+        <div class="turno-badge">TURNO #{{ r.idCaja }}</div>
+        <div class="status-indicator">
+          <span class="status-pulse"></span>
+          {{ r.estado }}
+        </div>
+      </div>
+      <div class="pfb-body">
+        <div class="pfb-info">
+          <h2 class="pfb-title">Saldo en Arqueo (Efectivo)</h2>
+          <div class="pfb-meta">
+            <span>Apertura: <strong>{{ r.fechaApertura | date:'dd/MM/yyyy HH:mm' }}</strong></span>
+            <span class="meta-sep"></span>
+            <span>Fondo Inicial: <strong>S/ {{ r.montoApertura.toFixed(2) }}</strong></span>
+          </div>
+        </div>
+        <div class="pfb-balance">
+          <span class="balance-label">DISPONIBLE AHORA</span>
+          <h2 class="balance-val">S/ {{ saldoActual.toFixed(2) }}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Finance Stats (Premium Grid) -->
+  <div class="kpis-grid">
+    <app-kpi-card 
+      titulo="Ingresos Totales" 
+      [valor]="totalIngresos" 
+      prefijo="S/ "
+      icono="ventas" 
+      color="green" 
+      tendencia="up"
+      tendenciaLabel="entradas registradas">
+    </app-kpi-card>
+
+    <app-kpi-card 
+      titulo="Egresos Totales" 
+      [valor]="totalEgresos" 
+      prefijo="S/ "
+      icono="rating" 
+      color="red" 
+      tendencia="down"
+      tendenciaLabel="retiros de caja">
+    </app-kpi-card>
+
+    <app-kpi-card 
+      titulo="Saldo Neto" 
+      [valor]="saldoActual" 
+      prefijo="S/ "
+      icono="ventas" 
+      color="blue" 
+      tendencia="neutral"
+      tendenciaLabel="balance actual">
+    </app-kpi-card>
+
+    <app-kpi-card 
+      titulo="Operaciones" 
+      [valor]="movimientos().length" 
+      icono="pedidos" 
+      color="orange" 
+      tendencia="neutral"
+      tendenciaLabel="movimientos de turno">
+    </app-kpi-card>
+  </div>
+
+  <!-- Transactions Asset -->
+  <div class="premium-card">
+    <div class="premium-card-header">
+       <h3 class="premium-card-title">Auditoría de Movimientos</h3>
+       <div class="flex items-center gap-4">
+          <label class="text-sm font-bold text-slate-500">Mostrar:</label>
+          <select [ngModel]="pageSize()" (change)="onPageSizeChange($event)" class="form-input text-sm py-1 px-3 rounded-lg border-slate-200">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+          <button class="btn btn-outline" style="padding: 0.5rem 1rem; border-radius: var(--radius-sm); font-size: 0.8rem;">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:6px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nuevo Movimiento Manual
+          </button>
+       </div>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Concepto / Descripción</th>
+          <th>Importe</th>
+          <th>Cronología</th>
+          <th style="text-align: right;">Usuario</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let m of paginatedMovimientos()">
+          <td>
+            <span class="badge-estado" [class.badge-green]="m.tipo === 'INGRESO'" [class.badge-red]="m.tipo === 'EGRESO'">
+              {{ m.tipo === 'INGRESO' ? '↑ Ingreso' : '↓ Egreso' }}
+            </span>
+          </td>
+          <td>
+            <span style="font-weight: 700; color: var(--color-text);">{{ m.concepto }}</span>
+          </td>
+          <td>
+            <span style="font-family: 'Outfit'; font-weight: 900; font-size: 1.05rem;" [style.color]="m.tipo === 'INGRESO' ? 'var(--color-success)' : 'var(--color-danger)'">
+              {{ m.tipo === 'INGRESO' ? '+' : '-' }} S/ {{ m.monto.toFixed(2) }}
+            </span>
+          </td>
+          <td>
+             <div style="display:flex; flex-direction:column;">
+                <span style="font-weight:600; color:var(--color-text-muted); font-size:0.85rem;">{{ m.fechaMovimiento | date:'shortTime' }}</span>
+                <span style="font-size:0.75rem; color:var(--color-text-muted);">{{ m.fechaMovimiento | date:'dd/MM/yyyy' }}</span>
+             </div>
+          </td>
+          <td style="text-align: right; font-weight: 700; color: var(--color-text-muted);">
+            {{ m.usuarioNombre }}
+          </td>
+        </tr>
+        <tr *ngIf="movimientos().length === 0">
+          <td colspan="5" class="td-empty" style="padding:4rem 0;">
+            <div style="font-size: 2rem; margin-bottom: 1rem;">🧾</div>
+            <p style="font-weight:700; color:var(--color-text-muted);">No se han registrado operaciones en el turno actual.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Table Footer with Pagination Controls -->
+    <div class="admin-pagination" *ngIf="movimientos().length > 0" style="padding: 1rem 1.5rem; border-top: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center;">
+      <div class="admin-pagination-info" style="font-size: 0.85rem; color: var(--color-text-muted); font-weight: 500;">
+        Mostrando <span>{{ (currentPage() - 1) * pageSize() + 1 }}</span> a <span>{{ Math.min(currentPage() * pageSize(), movimientos().length) }}</span> de <span>{{ movimientos().length }}</span> movimientos
+      </div>
+      <div class="admin-pagination-controls" style="display: flex; align-items: center; gap: 1rem;">
+        <button class="admin-pagination-btn"
+                [disabled]="currentPage() === 1"
+                (click)="prevPage()"
+                style="padding: 0.5rem 1rem; border-radius: var(--radius-sm); border: 1.5px solid var(--color-border); background: var(--color-surface); cursor: pointer; font-weight: 700; font-size: 0.8rem; transition: var(--transition-normal);">
+          Anterior
+        </button>
+        <div class="admin-pagination-page" style="font-size: 0.85rem; font-weight: 800; color: var(--color-text);">
+          Página {{ currentPage() }} de {{ totalPages() }}
+        </div>
+        <button class="admin-pagination-btn"
+                [disabled]="currentPage() >= totalPages()"
+                (click)="nextPage()"
+                style="padding: 0.5rem 1rem; border-radius: var(--radius-sm); border: 1.5px solid var(--color-border); background: var(--color-surface); cursor: pointer; font-weight: 700; font-size: 0.8rem; transition: var(--transition-normal);">
+          Siguiente
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="empty-state-enterprise" *ngIf="!resumen()">
+    <div class="empty-icon-box">🏧</div>
+    <h2 class="empty-title">Turno de Caja No Iniciado</h2>
+    <p class="empty-desc">Para comenzar a operar, debe realizar la apertura formal del turno. Esto permitirá el rastreo de ventas y flujos de efectivo.</p>
+    <button class="btn btn-primary px-10 py-4 shadow-xl shadow-blue-500/30" style="font-size: 1.1rem;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:20px; margin-right:8px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Abrir Turno de Caja Ahora
+    </button>
+</div>

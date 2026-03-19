@@ -1,0 +1,125 @@
+<div class="admin-page anime-fade-in">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Detalle de Reserva</h1>
+      <p class="page-subtitle">Información detallada y seguimiento de la reserva</p>
+    </div>
+    <div class="page-header-actions">
+      <button class="btn btn-secondary" routerLink="/recepcion/reservas">Volver</button>
+      <button class="btn btn-primary" *ngIf="reserva()?.idReserva" [routerLink]="['/recepcion/reservas/editar', reserva()?.idReserva]">
+         Editar
+      </button>
+    </div>
+  </div>
+
+  <div class="detail-layout" *ngIf="reserva()">
+    <div class="detail-main">
+      <div class="card shadow-md border-0">
+        <div class="card-header border-b px-6 py-4">
+          <div class="res-status-header">
+            <span class="res-id">RESERVA #{{ reserva()?.idReserva }}</span>
+            <span class="badge badge-lg" [ngClass]="'badge-' + reserva()?.estado?.toLowerCase()">{{ reserva()?.estado }}</span>
+          </div>
+        </div>
+        <div class="card-body px-6 py-6">
+          <div class="detail-grid mb-6">
+            <div class="dg-item">
+              <span class="dg-label">Fecha / Hora</span>
+              <span class="dg-val text-indigo-700 font-bold">{{ reserva()?.fechaHoraReserva | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+            <div class="dg-item">
+              <span class="dg-label">Personas</span>
+              <span class="dg-val">{{ reserva()?.cantidadPersonas }} <span class="text-sm font-normal text-slate-500">pers.</span></span>
+            </div>
+            <div class="dg-item">
+              <span class="dg-label">Mesa Asignada</span>
+              <span class="dg-val">{{ reserva()?.numeroMesa ? 'Mesa ' + reserva()?.numeroMesa : 'No asignada aún' }}</span>
+            </div>
+          </div>
+
+          <div class="detail-section mt-8">
+            <h4 class="section-title">Observaciones</h4>
+            <div class="observation-box">
+              {{ reserva()?.observaciones || 'Sin observaciones registradas.' }}
+            </div>
+          </div>
+
+          <div class="detail-section mt-8">
+            <h4 class="section-title">Timeline de Seguimiento</h4>
+            <div class="timeline">
+              <div class="tl-item completed">
+                <div class="tl-dot"></div>
+                <div class="tl-content">
+                  <div class="tl-title">Reserva Creada</div>
+                  <div class="tl-meta">Sistema Resturante · Chifa Linda</div>
+                </div>
+              </div>
+              <div class="tl-item" [class.completed]="reserva()?.estado !== 'PENDIENTE'">
+                <div class="tl-dot"></div>
+                <div class="tl-content">
+                  <div class="tl-title">Reserva Confirmada</div>
+                  <div class="tl-meta" *ngIf="reserva()?.estado !== 'PENDIENTE'">Registro Actualizado</div>
+                  <div class="tl-meta" *ngIf="reserva()?.estado === 'PENDIENTE'">Esperando confirmación</div>
+                </div>
+              </div>
+              <div class="tl-item" [class.completed]="reserva()?.estado === 'COMPLETADA'">
+                <div class="tl-dot"></div>
+                <div class="tl-content">
+                  <div class="tl-title">Cliente en Salón</div>
+                  <div class="tl-meta" *ngIf="reserva()?.estado === 'COMPLETADA'">Entrada registrada</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-side">
+      <div class="card card-indigo border-0 shadow-md">
+        <div class="card-header indigo-header px-6 py-4">
+          <h3 class="card-title text-white font-bold m-0 text-lg">Información del Cliente</h3>
+        </div>
+        <div class="card-body px-6 py-8">
+          <div class="client-detail">
+            <div class="cd-avatar">{{ (reserva()?.nombreCliente || '?').charAt(0) }}</div>
+            <div class="cd-name">{{ reserva()?.nombreCliente || 'Cliente Anónimo' }}</div>
+            <div class="cd-dni">DNI: {{ reserva()?.dniCliente || 'S/N' }}</div>
+            
+            <div class="cd-contact mt-6">
+              <div class="cdc-item mb-2">
+                <span class="c-icon mr-2">📞</span>
+                <span class="font-medium">{{ reserva()?.telefonoCliente || 'No registrado' }}</span>
+              </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-indigo-400 opacity-90 w-full text-left">
+              <span class="text-xs text-indigo-200 uppercase tracking-wider font-bold block mb-2">Resumen</span>
+              <div class="flex-between text-white">
+                <div>
+                  <div class="font-bold text-xl">1</div>
+                  <div class="text-xs opacity-80 uppercase font-medium">Reservas Históricas</div>
+                </div>
+                <div>
+                  <div class="font-bold text-xl text-emerald-300">Buena</div>
+                  <div class="text-xs opacity-80 uppercase font-medium">Reputación</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-6">
+         <button class="btn btn-outline-primary w-full text-center py-4 text-base font-bold shadow-sm">
+            🖨️ Imprimir Comprobante
+         </button>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="isLoading()" class="card p-12 text-center mt-6">
+     <div class="loader mx-auto mb-4"></div>
+     <p class="text-slate-500 font-medium">Cargando información exhaustiva de la reserva...</p>
+  </div>
+</div>

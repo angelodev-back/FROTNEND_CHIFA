@@ -1,0 +1,86 @@
+<div class="admin-page">
+  <!-- Standardized Header -->
+  <div class="admin-page-header">
+    <div class="aph-left">
+      <div class="aph-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div>
+        <h1 class="aph-title">Gestión de Clientes</h1>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)" placeholder="Buscar por nombre, apellido o DNI/Documento..." class="search-input" />
+    </div>
+  </div>
+
+  <!-- Modern Data Table -->
+  <div class="premium-card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 100px;">ID</th>
+          <th>Cliente</th>
+          <th>Identificación</th>
+          <th>Contacto</th>
+          <th style="text-align: right;">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of clientes()" class="admin-row">
+          <td class="td-id">#{{ c.idUsuario }}</td>
+          <td>
+            <div class="cliente-cell">
+              <div class="c-avatar">{{ (c.nombres || '')[0] }}{{ (c.apellidos || '')[0] }}</div>
+              <div class="c-info">
+                <span class="c-name">{{ c.nombres }} {{ c.apellidos }}</span>
+                <span class="c-type">Cliente Registrado</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="id-wrap">
+              <span class="id-dni">{{ c.dni || '---' }}</span>
+              <span class="id-email">{{ c.email }}</span>
+            </div>
+          </td>
+          <td>
+            <div class="contact-wrap">
+              <span class="c-phone">{{ c.celular }}</span>
+            </div>
+          </td>
+          <td class="td-actions" style="justify-content: flex-end;">
+            <button class="btn-icon-sm" title="Ver Historial">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </td>
+        </tr>
+        
+        <tr *ngIf="clientes().length === 0 && !isLoading()">
+          <td colspan="5" class="td-empty">
+            <div class="empty-state-box">
+              <span class="empty-icon">👥</span>
+              <p class="empty-title">No se encontraron clientes</p>
+              <p class="empty-desc">Intenta ajustar tu búsqueda o criterios de filtro.</p>
+            </div>
+          </td>
+        </tr>
+
+        <tr *ngIf="isLoading()">
+           <td colspan="5" class="td-empty">
+             <div class="loading-state">
+               <div class="spinner"></div>
+               <span>Recuperando base de datos de clientes...</span>
+             </div>
+           </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

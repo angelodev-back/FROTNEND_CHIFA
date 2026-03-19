@@ -1,0 +1,260 @@
+/* Enterprise Menu Form Styles (Soft UI Bento) */
+
+.enterprise-form-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 2rem;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .enterprise-form-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.form-main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-section {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-normal);
+}
+
+.form-section:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    margin-bottom: 1.75rem;
+}
+
+.section-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--color-bg);
+    color: var(--color-primary);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.section-icon svg { width: 20px; height: 20px; }
+
+.section-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 850;
+    font-size: 1.25rem;
+    color: var(--color-text);
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.col-span-2 { grid-column: span 2; }
+
+/* Sticky Preview */
+.sticky-preview {
+    position: sticky;
+    top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.preview-title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0;
+}
+
+.product-preview-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-lg);
+    transition: var(--transition-normal);
+}
+
+.preview-img-container {
+    height: 220px;
+    position: relative;
+    background: var(--color-bg);
+}
+
+.preview-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.preview-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 6px 12px;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(8px);
+    border-radius: var(--radius-sm);
+    font-size: 0.7rem;
+    font-weight: 850;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    box-shadow: var(--shadow-sm);
+}
+
+.preview-body {
+    padding: 1.5rem;
+}
+
+.pb-name {
+    font-family: 'Outfit';
+    font-weight: 850;
+    font-size: 1.4rem;
+    color: var(--color-text);
+    margin: 0 0 0.5rem;
+    line-height: 1.2;
+}
+
+.pb-desc {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.pb-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--color-border-light);
+}
+
+.pb-price {
+    font-family: 'Outfit';
+    font-weight: 900;
+    color: var(--color-text);
+    font-size: 1.3rem;
+}
+
+.pb-stock {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--color-success);
+    background: var(--color-success-bg);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+}
+
+.pb-stock.low { background: var(--color-danger-bg); color: var(--color-danger); }
+
+.preview-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--color-text-muted);
+    border: 1.5px solid var(--color-border);
+}
+
+.btn-ghost:hover {
+    background: var(--color-bg);
+    color: var(--color-text);
+    border-color: var(--color-text-muted);
+}
+
+.field-hint {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-top: 0.5rem;
+    font-weight: 500;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 850;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+.form-error {
+    font-size: 0.78rem;
+    color: var(--color-danger);
+    font-weight: 600;
+    margin-top: 0.4rem;
+}
+
+.required { color: var(--color-danger); }
+
+.is-modal .admin-page-compact { padding: 0; }
+.is-modal .enterprise-form-layout { gap: 1.5rem; }
+
+/* Custom Toggle */
+.estado-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    background: var(--color-bg);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--color-border);
+    transition: var(--transition-normal);
+}
+
+.estado-toggle.toggle-on {
+    border-color: var(--color-primary);
+    background: var(--color-surface);
+}
+
+.toggle-knob {
+    width: 16px;
+    height: 16px;
+    background: var(--color-border);
+    border-radius: 50%;
+    transition: var(--transition-normal);
+}
+
+.toggle-on .toggle-knob {
+    background: var(--color-primary);
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(217, 70, 239, 0.4);
+}
+
+.toggle-label {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--color-text-muted);
+}
+
+.toggle-on .toggle-label {
+    color: var(--color-text);
+}

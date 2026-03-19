@@ -1,0 +1,158 @@
+<div class="mozo-dashboard admin-page">
+
+  <!-- Enterprise Header Adaptado para Mozo -->
+  <div class="admin-page-header">
+    <div class="aph-left">
+      <div class="aph-icon" style="background: linear-gradient(135deg, #4f46e5, #3730a3);">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="aph-title">Panel de Atención Personal</h1>
+      </div>
+    </div>
+    <div class="aph-right">
+      <button class="btn btn-primary shadow-lg shadow-indigo-500/20" routerLink="/mozo/mesas" style="padding: 0.85rem 1.75rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:18px; margin-right:8px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nueva Atención
+      </button>
+    </div>
+  </div>
+
+  <!-- Operational Health Grid (Premium) -->
+  <div class="kpis-grid" *ngIf="summary()">
+    <app-kpi-card 
+      titulo="En Cocina" 
+      [valor]="summary()?.pedidosPendientes || 0" 
+      icono="pedidos" 
+      color="blue" 
+      tendencia="neutral"
+      tendenciaLabel="Pedidos en cola">
+    </app-kpi-card>
+
+    <app-kpi-card 
+      titulo="Listos para Servir" 
+      [valor]="summary()?.pedidosListos || 0" 
+      icono="rating" 
+      color="orange" 
+      [tendencia]="summary()?.pedidosListos! > 0 ? 'up' : 'neutral'"
+      [tendenciaPct]="summary()?.pedidosListos! > 0 ? 100 : 0"
+      [tendenciaLabel]="summary()?.pedidosListos! > 0 ? 'Acción Requerida' : 'Bandeja vacía'">
+    </app-kpi-card>
+
+    <app-kpi-card 
+      titulo="Servidos Hoy" 
+      [valor]="summary()?.pedidosServidos || 0" 
+      icono="ventas" 
+      color="green" 
+      tendencia="neutral"
+      tendenciaLabel="Órdenes despachadas">
+    </app-kpi-card>
+
+    <app-kpi-card 
+      titulo="Mesas Gestionadas" 
+      [valor]="summary()?.mesasAtendidas || 0" 
+      icono="mesas" 
+      color="purple" 
+      tendencia="neutral"
+      tendenciaLabel="Capacidad de salón">
+    </app-kpi-card>
+  </div>
+
+  <div class="dashboard-split-layout">
+    
+    <!-- Sidebar / Delivery Column -->
+    <div class="delivery-alerts-column">
+      <div class="premium-card" *ngIf="pedidosListos().length > 0">
+        <div class="premium-card-header">
+           <div class="ch-urgent-label">
+             <div class="urgent-pulse"></div>
+             <h3 class="premium-card-title">Por Entregar</h3>
+           </div>
+           <span class="counter-badge">{{ pedidosListos().length }}</span>
+        </div>
+        <div class="delivery-list">
+          <div class="delivery-item" *ngFor="let p of pedidosListos()">
+            <div class="d-table-box">{{ p.numeroMesa }}</div>
+            <div class="d-info">
+              <span class="d-id">Órden #{{ p.idPedido }}</span>
+              <span class="d-total">S/ {{ p.total?.toFixed(2) }}</span>
+            </div>
+            <button class="btn-delivery-action" routerLink="/mozo/listos">
+              Servir
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mozo-help-card">
+        <div class="help-icon">💡</div>
+        <h4>Soporte Operativo</h4>
+        <p>Si un pedido demora más de 15 minutos, contacta a cocina.</p>
+        <button class="btn btn-ghost btn-xs-text" routerLink="/mozo/pedidos">Ver Historial</button>
+      </div>
+    </div>
+
+    <!-- Main Active Orders Column -->
+    <div class="active-orders-column">
+      <div class="premium-card">
+        <div class="premium-card-header">
+           <h3 class="premium-card-title">Atenciones en Curso / Mis Mesas</h3>
+           <a routerLink="/mozo/pedidos" class="view-all-link">Mis registros operativos →</a>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Ubicación</th>
+                <th>Estado de Producción</th>
+                <th>Total parcial</th>
+                <th style="text-align: right;">Operaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of misPedidos()">
+                <td>
+                  <div class="table-ident">
+                    <span class="ti-main">Mesa {{ p.numeroMesa }}</span>
+                    <span class="ti-sub">Zona Salón A</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge-estado"
+                        [class.badge-green]="p.estado === 'LISTO'"
+                        [class.badge-yellow]="p.estado === 'PREPARANDO'"
+                        [class.badge-blue]="p.estado === 'PENDIENTE'">
+                    {{ p.estado === 'PENDIENTE' ? 'En Preparación' : p.estado }}
+                  </span>
+                </td>
+                <td style="font-family:'Outfit'; font-weight:900; font-size:1.1rem; color:#0f172a;">
+                   S/ {{ p.total?.toFixed(2) }}
+                </td>
+                <td class="td-actions" style="justify-content: flex-end;">
+                  <button class="btn-icon-sm btn-edit-order" [routerLink]="['/mozo/tomar-pedido', p.idMesa]" title="Ir a POS / Adicionar">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                  </button>
+                  <button class="btn-icon-sm btn-request-bill" routerLink="/mozo/cuenta" title="Generar Pre-Cuenta">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="misPedidos().length === 0">
+                <td colspan="4" class="td-empty" style="padding: 6rem 0;">
+                  <div style="font-size:3rem; margin-bottom:1.5rem;">🍽️</div>
+                  <p style="font-weight:800; color:#0f172a; font-size:1.2rem; margin-bottom:0.5rem;">No tienes mesas activas</p>
+                  <p style="color:#94a3b8; font-weight:600;">Pulsa "Nueva Atención" para asignar un pedido.</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

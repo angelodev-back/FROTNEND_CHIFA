@@ -1,0 +1,66 @@
+<div class="guest-layout-canvas">
+    
+    <!-- Premium Navigation Portal -->
+    <header class="guest-nav-sticky">
+        <app-navbar-client></app-navbar-client>
+    </header>
+    
+    <!-- Core Guest Experience Area -->
+    <main class="guest-experience-viewport">
+        <router-outlet></router-outlet>
+    </main>
+
+    <!-- Gourmet Brand Footer -->
+    <footer class="gourmet-footer">
+        <div class="container gf-content">
+            <div class="gf-brand-block">
+                <div class="gf-logo-box">
+                    <span class="gf-logo-txt">Chifa Linda</span>
+                </div>
+                <p class="gf-brand-lead">Elevando la tradición culinaria china-peruana a una experiencia de lujo contemporáneo desde 1995.</p>
+                <div class="gf-socials">
+                   <div class="gf-s-icon">FB</div>
+                   <div class="gf-s-icon">IG</div>
+                   <div class="gf-s-icon">TK</div>
+                </div>
+            </div>
+
+            <div class="gf-links-block">
+                <h4 class="gf-title">Descubra</h4>
+                <ul class="gf-list">
+                    <li><a routerLink="/cliente/home">Inico de Experiencia</a></li>
+                    <li><a routerLink="/cliente/menu">Nuestra Carta</a></li>
+                    <li><a routerLink="/cliente/reservas">Reservaciones</a></li>
+                    <li><a href="#">Galería Gourmet</a></li>
+                </ul>
+            </div>
+
+            <div class="gf-contact-block">
+                <h4 class="gf-title">Atención Directa</h4>
+                <div class="gf-c-item">
+                    <span class="gf-c-icon">📍</span>
+                    <span class="gf-c-val">Av. Gastronomía 450, San Isidro, Lima</span>
+                </div>
+                <div class="gf-c-item">
+                    <span class="gf-c-icon">📞</span>
+                    <span class="gf-c-val">(+511) 485-9620</span>
+                </div>
+                <div class="gf-c-item">
+                    <span class="gf-c-icon">✉️</span>
+                    <span class="gf-c-val">experiencia@chifalinda.com.pe</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="gf-bottom-bar">
+            <div class="container gfb-flex">
+                <p class="gfb-copy">&copy; 2026 Chifa Linda Restaurante-Pollería. Excelencia en cada detalle.</p>
+                <div class="gfb-legal">
+                    <a href="#">Términos de Servicio</a>
+                    <span class="gfb-sep">|</span>
+                    <a href="#">Privacidad de Datos</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>

@@ -1,0 +1,74 @@
+<div class="turno-wrapper">
+  <div class="header">
+    <h1>💼 Gestión de Caja</h1>
+    <p>Control de turnos y flujos financieros</p>
+  </div>
+
+  <div *ngIf="loading" class="loader">Verificando estado de caja...</div>
+
+  <div *ngIf="!loading">
+    <!-- Estado: CAJA CERRADA -->
+    <div *ngIf="!resumenActual || resumenActual.estado === 'CERRADA'" class="apertura-panel">
+      <div class="icon">🔓</div>
+      <h2>Apertura de Turno</h2>
+      <p>La caja se encuentra cerrada actualmente. Por favor, ingrese el monto base para comenzar.</p>
+      
+      <div class="form-group">
+        <label>Monto Base (Soles):</label>
+        <input type="number" [(ngModel)]="montoApertura" class="input-monto">
+      </div>
+      
+      <button (click)="abrirCaja()" class="btn-abrir">ABRIR CAJA</button>
+    </div>
+
+    <!-- Estado: CAJA ABIERTA -->
+    <div *ngIf="resumenActual && resumenActual.estado === 'ABIERTA'" class="estado-panel">
+      <div class="status-header">
+        <span class="badge active">CAJA ABIERTA</span>
+        <p>Apertura: {{ resumenActual.fechaApertura | date:'dd/MM HH:mm' }}</p>
+      </div>
+
+      <div class="resumen-grid">
+        <div class="resumen-card">
+          <span>VENTAS TOTALES</span>
+          <strong>S/ {{ resumenActual.totalVentas | number:'1.2-2' }}</strong>
+        </div>
+        <div class="resumen-card">
+          <span>SALDO CALCULADO</span>
+          <strong>S/ {{ resumenActual.montoCierreCalculado | number:'1.2-2' }}</strong>
+        </div>
+        <div class="resumen-card">
+          <span>EFECTIVO</span>
+          <strong>S/ {{ resumenActual.ingresosEfectivo | number:'1.2-2' }}</strong>
+        </div>
+        <div class="resumen-card">
+          <span>TARJETA / APP</span>
+          <strong>S/ {{ (resumenActual.ingresosTarjeta + resumenActual.ingresosYapePlin) | number:'1.2-2' }}</strong>
+        </div>
+      </div>
+
+      <div class="info-footer">
+          <p>Cajero: <strong>{{ resumenActual.usuarioCajero }}</strong></p>
+      </div>
+
+      <button (click)="cerrarCaja()" class="btn-cerrar">CERRAR CAJA Y TURNO</button>
+
+      <!-- SECCIÓN DE COBRO (Solo si caja abierta) -->
+      <div class="checkout-section">
+        <h3>📝 Cuentas Pendientes por Cobrar</h3>
+        <div class="caja-mesa-grid">
+          <ng-container *ngFor="let pedido of pedidosPorCobrar">
+            <div class="caja-mesa-card" [routerLink]="['/caja/checkout', pedido.idPedido]">
+              <span class="mesa-label">Pedido #{{ pedido.idPedido }} - Mesa {{ pedido.numeroMesa || 'Delivery' }}</span>
+              <span class="view-btn">💰 Ir a Cobrar</span>
+            </div>
+          </ng-container>
+          
+          <div *ngIf="pedidosPorCobrar.length === 0" class="no-pending">
+              No hay cuentas pendientes por ahora.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

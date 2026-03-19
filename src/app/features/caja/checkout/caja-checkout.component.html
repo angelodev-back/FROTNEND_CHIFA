@@ -1,0 +1,107 @@
+<div class="checkout-container">
+
+  <!-- Loading -->
+  <div *ngIf="isLoading()" class="state-center">
+    <div class="spinner"></div>
+    <p>Cargando pedido...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMsg() && !isLoading()" class="error-card">
+    {{ errorMsg() }}
+    <button (click)="volver()" class="btn-back">← Volver</button>
+  </div>
+
+  <!-- Pago Exitoso -->
+  <div *ngIf="pagoExitoso()" class="success-card animate-in">
+    <div class="success-icon">✅</div>
+    <h2>¡Pago registrado!</h2>
+    <p>El pedido <strong>#{{ pedido()?.idPedido }}</strong> ha sido marcado como PAGADO.</p>
+    <button (click)="volver()" class="btn-primary">Volver a Caja</button>
+  </div>
+
+  <!-- CHECKOUT FORM -->
+  <div *ngIf="!isLoading() && !errorMsg() && !pagoExitoso() && pedido()" class="checkout-content animate-in">
+
+    <!-- Header -->
+    <div class="checkout-header">
+      <button (click)="volver()" class="btn-icon-back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+        Volver
+      </button>
+      <h1 class="page-title">Checkout — Pedido #{{ pedido()!.idPedido }}</h1>
+    </div>
+
+    <div class="checkout-grid">
+      <!-- Panel izquierdo: Detalle del pedido -->
+      <div class="card pedido-card">
+        <div class="pedido-meta">
+          <div class="meta-row">
+            <span class="meta-label">Mesa</span>
+            <span class="meta-val">{{ pedido()!.numeroMesa ? 'Mesa ' + pedido()!.numeroMesa : 'Sin mesa' }}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Tipo</span>
+            <span class="meta-val">{{ pedido()!.tipoPedido }}</span>
+          </div>
+          <div class="meta-row" *ngIf="pedido()!.nombreMozo">
+            <span class="meta-label">Mozo</span>
+            <span class="meta-val">{{ pedido()!.nombreMozo }}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Estado</span>
+            <span class="meta-val badge" [class]="getEstadoBadge(pedido()!.estado ?? '')">{{ pedido()!.estado }}</span>
+          </div>
+        </div>
+
+        <h3 class="detalles-title">Productos</h3>
+        <div class="detalles-list">
+          <div *ngFor="let d of pedido()!.detalles" class="detalle-row">
+            <span class="det-qty">{{ d.cantidad }}x</span>
+            <span class="det-name">{{ d.nombreProducto }}</span>
+            <span class="det-subtotal">S/ {{ d.subtotal | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <div class="total-row">
+          <span>Total a Pagar</span>
+          <span class="total-monto">S/ {{ pedido()!.total | number:'1.2-2' }}</span>
+        </div>
+      </div>
+
+      <!-- Panel derecho: Selección de pago -->
+      <div class="card pago-card">
+        <h2 class="card-title">Método de Pago</h2>
+
+        <div class="metodos-grid">
+          <button
+            *ngFor="let m of getMetodosDisponibles()"
+            class="metodo-opt"
+            [class.selected]="metodoPago() === m"
+            (click)="setMetodo(m)">
+            <span class="metodo-icon">
+              <ng-container *ngIf="m === 'EFECTIVO'">💵</ng-container>
+              <ng-container *ngIf="m === 'TARJETA'">💳</ng-container>
+              <ng-container *ngIf="m === 'YAPE'">📱</ng-container>
+              <ng-container *ngIf="m === 'PLIN'">📱</ng-container>
+            </span>
+            <span>{{ m }}</span>
+          </button>
+        </div>
+
+        <div class="resumen-pago">
+          <div class="rp-row"><span>Subtotal</span><span>S/ {{ pedido()!.total | number:'1.2-2' }}</span></div>
+          <div class="rp-row total-final"><span>Total</span><span>S/ {{ pedido()!.total | number:'1.2-2' }}</span></div>
+        </div>
+
+        <button
+          class="btn-confirmar"
+          [disabled]="isSubmitting()"
+          (click)="confirmarPago()">
+          <span *ngIf="!isSubmitting()">Confirmar Pago con {{ metodoPago() }}</span>
+          <span *ngIf="isSubmitting()">Procesando...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

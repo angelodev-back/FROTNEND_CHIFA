@@ -1,0 +1,108 @@
+<div class="admin-page">
+  
+  <!-- Premium Page Header -->
+  <div class="admin-page-header">
+    <div class="aph-left">
+      <div class="aph-icon" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div>
+        <h1 class="aph-title">Excelencia al Cliente</h1>
+      </div>
+    </div>
+    
+    <div class="aph-right">
+       <button class="btn btn-primary glass-btn shadow-indigo-500/20" routerLink="/recepcion/reservas/nuevo" style="padding: 0.85rem 1.75rem;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:8px;"><path d="M12 5v14M5 12h14"/></svg>
+          Nueva Reserva
+       </button>
+    </div>
+  </div>
+
+  <!-- Filter & Search Bar -->
+  <div class="filter-bar">
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Buscar por DNI, nombre o celular..." 
+             class="search-input" [(ngModel)]="searchTerm" (input)="filterClientes()" />
+    </div>
+    <div class="filter-chips">
+      <button class="chip chip-active">Todos los Clientes</button>
+      <button class="chip">Con Reserva Hoy</button>
+      <button class="chip">Clientes VIP</button>
+    </div>
+  </div>
+
+  <!-- Cliente Data Table -->
+  <div class="premium-card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Identidad del Cliente</th>
+          <th>Canales de Contacto</th>
+          <th>Estado de Mesa / Reserva</th>
+          <th style="text-align: right;">Gestión Inmediata</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of filteredList()" class="client-row">
+          <td>
+            <div class="cliente-cell">
+              <div class="cliente-avatar" style="background: linear-gradient(135deg, #6366f1, #818cf8);">
+                {{ item.cliente.nombres.charAt(0) }}{{ item.cliente.apellidos.charAt(0) }}
+              </div>
+              <div class="cliente-info">
+                <span class="cliente-nombre">{{ item.cliente.nombres }} {{ item.cliente.apellidos }}</span>
+                <span class="cliente-doc">DOC ID: {{ item.cliente.dni || 'No asignado' }}</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="contact-pill-box">
+              <div class="contact-pill">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                {{ item.cliente.email }}
+              </div>
+              <div class="contact-pill">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                {{ item.cliente.celular || 'Sin Celular' }}
+              </div>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="item.reservaActiva" class="reserva-status-card">
+              <div class="rsc-header">
+                <span class="pulse-indicator"></span>
+                RESERVA #{{ item.reservaActiva.idReserva }}
+              </div>
+              <div class="rsc-body">
+                <span>📅 {{ item.reservaActiva.fechaHoraReserva | date:'dd/MM HH:mm' }}</span>
+                <span>🪑 Mesa {{ item.reservaActiva.numeroMesa }}</span>
+              </div>
+            </div>
+            <div *ngIf="!item.reservaActiva" class="badge-estado" style="background: #f1f5f9; color: #64748b;">
+               Sin Reservas Activas
+            </div>
+          </td>
+          <td class="td-actions" style="justify-content: flex-end; gap: 0.75rem;">
+            <button *ngIf="item.reservaActiva" (click)="cancelarReserva(item.reservaActiva)" 
+                    class="btn-icon-sm btn-icon-red" title="Anular Reserva">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+            <button *ngIf="!item.reservaActiva" (click)="nuevaReserva(item.cliente)" 
+                    class="btn btn-outline btn-sm" style="font-weight:800; border-radius:10px;">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:4px;"><path d="M12 5v14M5 12h14"/></svg>
+              RESERVAR
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredList().length === 0">
+          <td colspan="4" class="td-empty">
+            <div class="empty-icon">👥</div>
+            <p>No se encontraron clientes que coincidan con la búsqueda</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

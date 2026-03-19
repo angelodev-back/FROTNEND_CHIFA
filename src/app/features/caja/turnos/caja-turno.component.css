@@ -1,0 +1,140 @@
+.turno-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.header h1 {
+    font-size: 2.2rem;
+    margin: 0;
+}
+
+.header p {
+    color: #666;
+}
+
+.apertura-panel {
+    background: white;
+    padding: 3rem;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.apertura-panel .icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.input-monto {
+    padding: 1rem;
+    font-size: 1.5rem;
+    width: 200px;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.btn-abrir {
+    background: #4caf50;
+    color: white;
+    border: none;
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(76, 175, 80, 0.2);
+}
+
+.estado-panel {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+}
+
+.badge.active {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    font-weight: 800;
+}
+
+.resumen-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.resumen-card {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.resumen-card span {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #777;
+    margin-bottom: 0.5rem;
+}
+
+.resumen-card strong {
+    font-size: 1.8rem;
+    color: #1a1a1a;
+}
+
+.btn-cerrar {
+    width: 100%;
+    padding: 1.2rem;
+    background: #1a1a1a;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.success {
+    color: #4caf50;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.error {
+    color: #f44336;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 1rem;
+}

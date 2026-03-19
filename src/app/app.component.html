@@ -1,0 +1,32 @@
+<app-navbar *ngIf="authService.isAuthenticated() && authService.getNormalizedRole() !== 'CLIENTE'"></app-navbar>
+
+<!-- Global Notification Hub -->
+<div class="global-notification-hub">
+  <div *ngFor="let toast of toastService.toasts()" 
+       class="premium-toast anime-slide-right" 
+       [ngClass]="'toast-' + toast.type"
+       (click)="toastService.remove(toast.id)">
+    <div class="toast-visual-indicator">
+      <span *ngIf="toast.type === 'success'">✅</span>
+      <span *ngIf="toast.type === 'error'">❌</span>
+      <span *ngIf="toast.type === 'warning'">⚠️</span>
+      <span *ngIf="toast.type === 'info'">ℹ️</span>
+    </div>
+    <div class="toast-content">
+      <p class="toast-message">{{ toast.message }}</p>
+    </div>
+    <div class="toast-progress-bar"></div>
+  </div>
+</div>
+
+<!-- Global Liquid Loading Interface -->
+<div *ngIf="loadingService.isLoading()" class="liquid-loader-canvas">
+  <div class="loader-portal">
+    <div class="loader-liquid"></div>
+    <span class="loader-brand">CHIFA LINDA</span>
+  </div>
+</div>
+
+<main [class.main-container]="authService.isAuthenticated()">
+  <router-outlet></router-outlet>
+</main>

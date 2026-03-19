@@ -1,0 +1,25 @@
+<div class="empty-state-canvas anime-fade-in" [class.is-loading]="loading">
+    
+    <div class="empty-state-portal">
+        <!-- Visual Anchor -->
+        <div class="empty-state-icon-box">
+            <span class="empty-state-icon" *ngIf="!loading">{{ icon }}</span>
+            <div class="premium-loader" *ngIf="loading"></div>
+        </div>
+
+        <!-- Narrative Content -->
+        <div class="empty-state-content">
+            <h3 class="empty-state-title">{{ loading ? 'Sincronizando Datos...' : title }}</h3>
+            <p class="empty-state-description" *ngIf="!loading">{{ description }}</p>
+            <p class="empty-state-description" *ngIf="loading">Por favor, espera un momento mientras preparamos la información.</p>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="empty-state-actions" *ngIf="actionLabel && !loading">
+            <button class="btn-empty-action" (click)="executeAction()">
+                {{ actionLabel }}
+            </button>
+        </div>
+    </div>
+
+</div>

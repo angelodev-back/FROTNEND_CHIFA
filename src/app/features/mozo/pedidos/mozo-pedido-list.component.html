@@ -1,0 +1,86 @@
+<div class="mozo-page admin-page">
+  
+  <!-- Premium Orders Header -->
+  <div class="admin-page-header">
+    <div class="aph-left">
+      <div class="aph-icon" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      </div>
+      <div>
+        <h1 class="aph-title">Mis Registros Operativos</h1>
+      </div>
+    </div>
+    <div class="aph-right">
+       <div class="order-tabs-enterprise">
+          <button class="ot-btn" [class.is-active]="filtro === 'PREPARANDO'" (click)="setFiltro('PREPARANDO')">En Cocina</button>
+          <button class="ot-btn" [class.is-active]="filtro === 'LISTO'" (click)="setFiltro('LISTO')">Por Servir</button>
+          <button class="ot-btn" [class.is-active]="filtro === 'SERVIDO'" (click)="setFiltro('SERVIDO')">Historial</button>
+       </div>
+    </div>
+  </div>
+
+  <div class="orders-enterprise-grid" *ngIf="pedidos().length > 0">
+    <div class="order-premium-card" *ngFor="let p of pedidos()">
+      <div class="opc-enterprise-header">
+        <div class="opc-mesa-ident">
+           <span class="mi-label">Mesa</span>
+           <span class="mi-num">{{ p.numeroMesa }}</span>
+        </div>
+        <div class="opc-status-badge" 
+              [ngClass]="{
+                'os-prep': filtro === 'PREPARANDO', 
+                'os-ready': filtro === 'LISTO', 
+                'os-done': filtro === 'SERVIDO'
+              }">
+          <span class="os-dot"></span>
+          {{ p.estado || 'PENDIENTE' }}
+        </div>
+      </div>
+      
+      <div class="opc-enterprise-body">
+        <div class="opc-meta-row">
+          <div class="omr-item">
+             <span class="omr-label">ORDEN</span>
+             <span class="omr-value">#{{ p.idPedido }}</span>
+          </div>
+          <div class="omr-item">
+             <span class="omr-label">PRODUCTOS</span>
+             <span class="omr-value">{{ p.detalles.length }} u.</span>
+          </div>
+        </div>
+        
+        <div class="opc-total-section">
+           <span class="ots-label">IMPORTE TOTAL</span>
+           <span class="ots-value">S/ {{ p.total.toFixed(2) }}</span>
+        </div>
+      </div>
+
+      <div class="opc-enterprise-footer">
+        <!-- Action for ready orders -->
+        <button *ngIf="p.estado === 'LISTO'" class="btn btn-primary btn-block glass-btn" (click)="servir(p.idPedido)">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:8px;"><path d="M5 13l4 4L19 7"></path></svg>
+          DESPACHAR A MESA
+        </button>
+        
+        <!-- Status messages -->
+        <div *ngIf="p.estado !== 'LISTO'" class="opc-status-msg">
+           <span *ngIf="p.estado === 'PREPARANDO'" class="msg-working">
+              <span class="msg-spinner"></span> Sincronizando con Cocina...
+           </span>
+           <span *ngIf="p.estado === 'SERVIDO'" class="msg-complete">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg>
+              Servicio Finalizado
+           </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enterprise Empty State -->
+  <div class="empty-state-enterprise" *ngIf="pedidos().length === 0">
+    <div class="ese-icon">📂</div>
+    <h3>Sin registros en esta sección</h3>
+    <p>No se encontraron órdenes propias con el estado <strong>{{ filtro | lowercase }}</strong>.</p>
+    <button class="btn btn-outline btn-sm mt-4" routerLink="/mozo/mesas">Iniciar Atención</button>
+  </div>
+</div>

@@ -1,0 +1,164 @@
+.mesas-container {
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.mesas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 1rem;
+}
+
+.page-title {
+  color: #1e293b;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 0.25rem;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.mesas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.mesa-card {
+  background: white;
+  border-radius: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%;
+}
+
+.mesa-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Indicador de color en la parte superior */
+.card-top-indicator {
+  height: 6px;
+  width: 100%;
+  background: #cbd5e1;
+  /* default */
+}
+
+/* Modificadores por estado de Mesa (aplicados por ngClass) */
+.badge-disponible .card-top-indicator {
+  background: #10b981;
+}
+
+.badge-disponible .badge-status {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #047857;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.badge-ocupada .card-top-indicator {
+  background: #ef4444;
+}
+
+.badge-ocupada .badge-status {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #b91c1c;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.badge-reservada .card-top-indicator {
+  background: #f59e0b;
+}
+
+.badge-reservada .badge-status {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.badge-en-pago .card-top-indicator {
+  background: #f97316; /* Naranja intenso */
+}
+
+.badge-en-pago .badge-status {
+  background-color: rgba(249, 115, 22, 0.1);
+  color: #c2410c;
+  border: 1px solid rgba(249, 115, 22, 0.2);
+}
+
+.badge-mantenimiento .card-top-indicator {
+  background: #64748b;
+}
+
+.badge-mantenimiento .badge-status {
+  background-color: rgba(100, 116, 139, 0.1);
+  color: #334155;
+  border: 1px solid rgba(100, 116, 139, 0.2);
+}
+
+/* Si es mi mesa, brilla un poco el borde */
+.mesa-mi-mesa {
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
+}
+
+.mesa-body {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.mesa-numero {
+  color: #0f172a;
+}
+
+.custom-badge {
+  display: block;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+.mozo-avatar {
+  width: 36px;
+  height: 36px;
+  font-size: 1.2rem;
+}
+
+.mesa-footer {
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+.mesa-footer button {
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  transition: all 0.2s;
+}
+
+.empty-state i {
+  font-size: 5rem;
+}
+
+/* Utilities */
+.tracking-wide {
+  letter-spacing: 0.025em;
+}

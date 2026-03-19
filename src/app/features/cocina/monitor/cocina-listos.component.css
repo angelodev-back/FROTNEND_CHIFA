@@ -1,0 +1,115 @@
+/* Enterprise Cocina Outbound - Premium Soft UI */
+.kds-sub-page { 
+    padding: 3rem 4rem; 
+    max-width: 100%; 
+    margin: 0; 
+    background-color: var(--color-bg);
+}
+
+.kds-outbound-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.outbound-ticket {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-spring);
+}
+
+.outbound-ticket:hover {
+    transform: translateX(12px);
+    border-color: var(--color-success);
+    box-shadow: var(--shadow-lg);
+}
+
+.ot-main { flex: 1; display: flex; flex-direction: column; gap: 1.25rem; }
+
+.ot-ident { display: flex; align-items: center; gap: 2.5rem; }
+
+.ot-id { 
+    font-family: 'Outfit'; 
+    font-weight: 950; 
+    color: var(--color-text-muted); 
+    font-size: 0.85rem; 
+    letter-spacing: 0.1em; 
+}
+
+.ot-mesa-pill {
+    display: flex; 
+    align-items: center; 
+    gap: 0.85rem;
+    background: #1e293b; 
+    color: white;
+    padding: 0.5rem 1.25rem; 
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+}
+.ot-mesa-label { font-size: 0.65rem; font-weight: 950; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.1em; }
+.ot-mesa-val { font-family: 'Outfit'; font-weight: 950; font-size: 1.5rem; line-height: 1; }
+
+.ot-composition { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+.ot-item-pill {
+    background: var(--color-success-bg); 
+    color: var(--color-success); 
+    border: 1px solid var(--color-success);
+    padding: 0.4rem 0.85rem; 
+    border-radius: var(--radius-sm); 
+    font-weight: 850; 
+    font-size: 0.9rem;
+    font-family: 'Outfit';
+}
+.oti-qty { font-weight: 950; margin-right: 0.5rem; color: var(--color-success); }
+
+.ot-actions { margin-left: 3rem; }
+
+.empty-state-enterprise {
+    padding: 8rem 4rem;
+    text-align: center;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    margin-top: 3rem;
+    box-shadow: var(--shadow-md);
+}
+
+.ese-artwork { 
+    font-size: 5rem; 
+    margin-bottom: 2rem; 
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+}
+
+.empty-state-enterprise h3 { 
+    font-family: 'Outfit'; 
+    font-weight: 950; 
+    font-size: 2rem; 
+    color: var(--color-text); 
+    margin-bottom: 0.75rem; 
+    letter-spacing: -0.02em;
+}
+.empty-state-enterprise p { 
+    color: var(--color-text-muted); 
+    font-weight: 600; 
+    max-width: 500px; 
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+    .kds-sub-page { padding: 1.5rem; }
+    .outbound-ticket { flex-direction: column; align-items: stretch; gap: 2rem; }
+    .ot-actions { margin-left: 0; }
+    .ot-actions .btn { width: 100%; }
+}

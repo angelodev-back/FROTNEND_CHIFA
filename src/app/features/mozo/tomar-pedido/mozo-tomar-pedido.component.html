@@ -1,0 +1,182 @@
+<div class="pos-container admin-page">
+  
+  <!-- POS Navigation & Context Header -->
+  <div class="admin-page-header pos-integrated-header">
+    <div class="aph-left">
+      <button class="btn btn-ghost btn-sm" (click)="regresar()" style="padding: 0.5rem 0.75rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:16px;"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <div class="pos-context">
+        <h1 class="aph-title">{{ pedidoExistente() ? 'Adición a Mesa' : 'Nueva Orden' }}</h1>
+      </div>
+    </div>
+    <div class="aph-right">
+       <div class="pos-clock-status">
+          <span class="status-indicator">En Línea</span>
+          <div class="staff-bubble">M</div>
+       </div>
+    </div>
+  </div>
+
+  <app-empty-state 
+    *ngIf="isLoading()"
+    [loading]="true"
+    title="Sincronizando la Carta Digital"
+    description="Estamos preparando los sabores más exclusivos para ti.">
+  </app-empty-state>
+
+  <!-- The Operational Grid -->
+  <div class="pos-grid-system" *ngIf="!isLoading()">
+    
+    <!-- Left: Product Navigation -->
+    <div class="pos-explorer">
+      
+      <div class="pos-category-scroller">
+        <button class="cat-pill" [class.is-active]="categoriaActiva() === null" (click)="filtrarC(null)">
+          ✨ Especialidades
+        </button>
+        <button class="cat-pill"
+          *ngFor="let c of categorias()"
+          [class.is-active]="categoriaActiva() === c.idCategoria"
+          (click)="filtrarC(c.idCategoria)">
+          {{ c.nombre }}
+        </button>
+      </div>
+
+      <div class="pos-products-shelf">
+        <app-empty-state 
+          *ngIf="productosFiltrados().length === 0"
+          icon="📦"
+          title="La vitrina está vacía"
+          description="Incluso nuestros chefs más rápidos necesitan un momento. Prueba otra categoría.">
+        </app-empty-state>
+
+        <div class="products-canvas">
+          <div class="product-premium-tile"
+            *ngFor="let p of productosFiltrados()"
+            [class.is-exhausted]="p.stock <= 0"
+            (click)="add(p)">
+            
+            <div class="tile-image-container">
+              <img *ngIf="p.imagenUrl" [src]="p.imagenUrl" [alt]="p.nombre" class="tile-img">
+              <div class="tile-img-placeholder" *ngIf="!p.imagenUrl">🍱</div>
+              <div class="exhausted-overlay" *ngIf="p.stock <= 0">Agotado</div>
+              <div class="tile-price-tag">S/ {{ p.precio | number:'1.2-2' }}</div>
+            </div>
+            
+            <div class="tile-info">
+              <h3 class="tile-name">{{ p.nombre }}</h3>
+              <div class="tile-meta">
+                <span class="tile-stock" [class.stock-warning]="p.stock > 0 && p.stock <= 10">
+                  Disp: {{ p.stock }}
+                </span>
+                <div class="tile-add-icon">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Command Center (Cart) -->
+    <div class="pos-command-center">
+      <div class="command-header">
+        <div class="ch-info">
+           <h2>Resumen de Comanda</h2>
+           <p>Items seleccionados para envío</p>
+        </div>
+        <span class="command-counter">{{ carrito().length }}</span>
+      </div>
+
+      <div class="command-body">
+        
+        <!-- Legacy items (Sent to kitchen) -->
+        <div class="legacy-section" *ngIf="pedidoExistente() && pedidoExistente().detalles?.length > 0">
+           <div class="section-label">Procesándose en Cocina</div>
+           <div class="legacy-card">
+              <div class="legacy-item-row" *ngFor="let det of pedidoExistente().detalles">
+                <span class="lr-qty">{{ det.cantidad }}x</span>
+                <span class="lr-name">{{ det.nombreProducto }}</span>
+                <span class="lr-status" [ngClass]="'st-' + det.estadoCocina.toLowerCase()">{{ det.estadoCocina }}</span>
+              </div>
+           </div>
+        </div>
+
+        <!-- Working cart -->
+        <div class="working-cart-section">
+          <div class="section-label" *ngIf="pedidoExistente() && carrito().length > 0">Nuevas Adiciones</div>
+          
+          <app-empty-state 
+            *ngIf="carrito().length === 0"
+            icon="🛒"
+            title="Bandeja Lista"
+            description="Agrega platos de la vitrina para iniciar la comanda.">
+          </app-empty-state>
+
+          <div class="working-items-list">
+            <div class="working-item-card animate-slide-in" *ngFor="let item of carrito(); let i = index">
+              <div class="wic-top">
+                <div class="wic-info">
+                  <h4 class="wic-name">{{ item.producto.nombre }}</h4>
+                  <span class="wic-unit">Precio unitario: S/ {{ item.producto.precio | number:'1.2-2' }}</span>
+                </div>
+                <div class="wic-subtotal">S/ {{ item.subtotal | number:'1.2-2' }}</div>
+              </div>
+              
+              <div class="wic-controls">
+                <div class="stepper-pos">
+                  <button (click)="changeQty(i, -1)" [disabled]="isSubmitting()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+                  <span class="stepper-val">{{ item.cantidad }}</span>
+                  <button (click)="changeQty(i, 1)" [disabled]="isSubmitting()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+                </div>
+                <div class="note-input-wrapper">
+                  <input type="text" [ngModel]="item.nota" (ngModelChange)="updateNote(i, $event)" placeholder="Notas (Ej. Sin cebolla)">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="command-footer" *ngIf="carrito().length > 0">
+        <textarea class="pos-obs-box" [ngModel]="observacionesGenerales()" (ngModelChange)="observacionesGenerales.set($event)" placeholder="Instrucciones generales para esta orden..."></textarea>
+        
+        <div class="summary-line">
+          <span class="sl-label">RECAUDACIÓN ESTIMADA</span>
+          <span class="sl-value">S/ {{ totalCarrito() | number:'1.2-2' }}</span>
+        </div>
+
+        <div class="action-grid">
+          <button class="btn-pos-clear" [disabled]="isSubmitting()" (click)="clear()" title="Vaciar bandeja">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:20px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
+          <button class="btn-pos-submit" [disabled]="isSubmitting()" (click)="enviar()">
+            <span *ngIf="!isSubmitting()">{{ pedidoExistente() ? 'CONFIRMAR ADICIÓN' : 'ENVIAR A PRODUCCIÓN' }}</span>
+            <span *ngIf="isSubmitting()" class="loader-inline">PROCESANDO...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Success Overlay -->
+  <div class="pos-success-overlay animate-fade-in" *ngIf="showSuccess()">
+    <div class="success-card">
+      <div class="success-icon">🚀</div>
+      <h2 class="success-title">Enviado a Cocina</h2>
+      <p class="success-msg">La comanda ha sido enviada con éxito. ¿Deseas agregar más productos a esta mesa?</p>
+      
+      <div class="success-actions">
+        <button class="btn-success-primary" (click)="continuarAgregando()">
+          Agregar Pedido
+        </button>
+        <button class="btn-success-secondary" (click)="regresar()">
+          Ir a Mesas
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

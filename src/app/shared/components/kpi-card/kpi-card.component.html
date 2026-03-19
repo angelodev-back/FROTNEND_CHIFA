@@ -1,0 +1,49 @@
+<div class="kpi-card" role="status" [attr.aria-label]="titulo + ': ' + displayValue">
+  <div class="kpi-top">
+    <div class="kpi-icon" [class]="colorClass" aria-hidden="true">
+      <!-- Pedidos -->
+      <svg *ngIf="icono === 'pedidos'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+      <!-- Ventas -->
+      <svg *ngIf="icono === 'ventas'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+      </svg>
+      <!-- Mesas -->
+      <svg *ngIf="icono === 'mesas'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg>
+      <!-- Clientes -->
+      <svg *ngIf="icono === 'clientes'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+      </svg>
+      <!-- Rating -->
+      <svg *ngIf="icono === 'rating'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+      <!-- Tiempo -->
+      <svg *ngIf="icono === 'tiempo'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+    </div>
+    <div class="kpi-info">
+      <span class="kpi-titulo">{{ titulo }}</span>
+      <span class="kpi-valor">{{ prefijo }}{{ displayValue | number }}{{ unidad }}</span>
+    </div>
+  </div>
+
+  <div class="kpi-trend" [class]="tendenciaClass" *ngIf="tendencia !== 'neutral'">
+    <!-- Trend icon -->
+    <svg *ngIf="tendencia === 'up'" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+    </svg>
+    <svg *ngIf="tendencia === 'down'" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+    </svg>
+    <span>{{ tendenciaPct }}% {{ tendenciaLabel }}</span>
+  </div>
+  <div class="kpi-trend trend-neutral" *ngIf="tendencia === 'neutral'">
+    <span aria-hidden="true">— </span>
+    <span>{{ tendenciaLabel }}</span>
+  </div>
+</div>

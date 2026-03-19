@@ -1,0 +1,124 @@
+<div class="admin-page">
+
+  <!-- Standardized Header -->
+  <div class="admin-page-header">
+    <div class="aph-left">
+      <div class="aph-icon" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <div>
+        <h1 class="aph-title">Análisis y Reportes Maestro</h1>
+      </div>
+    </div>
+    <div class="aph-right">
+      <div class="report-filters">
+        <div class="rf-group">
+          <label>Alcance Desde</label>
+          <input type="date" [ngModel]="fechaInicio()" (ngModelChange)="fechaInicio.set($event)" class="form-input">
+        </div>
+        <div class="rf-group">
+          <label>Hasta</label>
+          <input type="date" [ngModel]="fechaFin()" (ngModelChange)="fechaFin.set($event)" class="form-input">
+        </div>
+      </div>
+      <div class="export-actions">
+        <button (click)="exportarPDF()" class="btn btn-outline" title="Exportar Documento PDF">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px; margin-right:6px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          PDF
+        </button>
+        <button (click)="exportarExcel()" class="btn btn-primary" title="Exportar Dataset Excel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px; margin-right:6px;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Excel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="cargando()" class="loading-state-enterprise">
+    <div class="spinner-enterprise"></div>
+    <p>Sincronizando base de datos comercial...</p>
+  </div>
+
+  <div *ngIf="!cargando()" class="anime-fade-in">
+    
+    <!-- Analytics High-Level KPIs (Premium) -->
+    <div class="kpis-grid" *ngIf="resumen()">
+      <app-kpi-card 
+        titulo="Recaudación Hoy" 
+        [valor]="resumen()?.ingresosHoy || 0" 
+        icono="ventas" 
+        color="blue" 
+        prefijo="S/ "
+        tendencia="up"
+        [tendenciaPct]="12"
+        tendenciaLabel="vs Ayer">
+      </app-kpi-card>
+
+      <app-kpi-card 
+        titulo="Órdenes Procesadas" 
+        [valor]="resumen()?.pedidosHoy || 0" 
+        icono="pedidos" 
+        color="green" 
+        tendencia="neutral"
+        tendenciaLabel="Flujo estable">
+      </app-kpi-card>
+
+      <app-kpi-card 
+        titulo="Staff en Línea" 
+        [valor]="resumen()?.usuariosActivos || 0" 
+        icono="clientes" 
+        color="purple" 
+        tendencia="neutral"
+        tendenciaLabel="Personal activo">
+      </app-kpi-card>
+
+      <app-kpi-card 
+        titulo="Alertas de Stock" 
+        [valor]="resumen()?.productosStockBajo || 0" 
+        icono="rating" 
+        color="red" 
+        tendencia="down"
+        tendenciaLabel="Acción requerida">
+      </app-kpi-card>
+    </div>
+
+    <!-- Data Visualization Area -->
+    <div class="charts-dashboard-grid">
+      
+      <!-- Linear Growth Chart -->
+      <div class="premium-card chart-asset">
+        <div class="premium-card-header">
+           <div>
+             <h3 class="premium-card-title">Curva de Crecimiento Económico</h3>
+             <p style="font-size:0.75rem; color:#94a3b8; font-weight:600;">Evolución de ingresos mensuales acumulados</p>
+           </div>
+        </div>
+        <div class="chart-canvas-wrapper">
+          <canvas baseChart
+            [data]="lineChartData"
+            [options]="lineChartOptions"
+            [type]="'line'">
+          </canvas>
+        </div>
+      </div>
+
+      <!-- Component Distribution -->
+      <div class="premium-card chart-asset">
+        <div class="premium-card-header">
+           <div>
+             <h3 class="premium-card-title">Mezcla de Ventas</h3>
+             <p style="font-size:0.75rem; color:#94a3b8; font-weight:600;">Distribución de demanda por producto</p>
+           </div>
+        </div>
+        <div class="chart-canvas-wrapper dc-wrapper">
+          <canvas baseChart
+            [data]="doughnutChartData"
+            [options]="doughnutChartOptions"
+            [type]="doughnutChartType">
+          </canvas>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

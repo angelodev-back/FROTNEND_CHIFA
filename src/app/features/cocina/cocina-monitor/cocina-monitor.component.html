@@ -1,0 +1,190 @@
+<div class="kds-container admin-page">
+  
+  <!-- KDS Performance Header -->
+  <div class="kds-header">
+    <div class="kh-left">
+      <div class="kh-status">
+        <span class="status-pulse"></span>
+        LIVE KDS ENGINE
+      </div>
+      <div class="kh-context">
+        <h1 class="kh-title">Monitor de Producción</h1>
+        <p class="kh-sub">Sincronización de comanda centralizada</p>
+      </div>
+    </div>
+    
+    <div class="kh-center">
+      <div class="kh-stat stat-pending">
+        <span class="khs-val">{{ pendientes().length }}</span>
+        <span class="khs-lbl">PENDIENTES</span>
+      </div>
+      <div class="kh-stat stat-cooking">
+        <span class="khs-val">{{ enPreparacion().length }}</span>
+        <span class="khs-lbl">EN FUEGO</span>
+      </div>
+      <div class="kh-stat stat-ready">
+        <span class="khs-val">{{ listos().length }}</span>
+        <span class="khs-lbl">POR SERVIR</span>
+      </div>
+    </div>
+
+    <div class="kh-right">
+      <div class="kh-clock">{{ horaActual() }}</div>
+    </div>
+  </div>
+
+  <!-- Operational Kanban -->
+  <div class="kds-grid">
+    
+    <!-- Zone 1: Entry Queue (Amber) -->
+    <section class="kds-zone zone-pending">
+      <div class="zone-header">
+        <div class="zh-info">
+          <span class="zh-dot"></span>
+          <h2>COLA DE ENTRADA</h2>
+        </div>
+        <span class="zh-count">{{ pendientes().length }}</span>
+      </div>
+
+      <div class="zone-body">
+        <div class="kds-ticket ticket-entry animate-slide-in" *ngFor="let p of pendientes()">
+          <div class="kt-header">
+            <span class="kt-id">#{{ p.idPedido }}</span>
+            <span class="kt-time">{{ p.fechaPedido | date:'HH:mm' }}</span>
+          </div>
+          
+          <div class="kt-context">
+            <div class="kt-mesa" *ngIf="p.numeroMesa">MESA {{ p.numeroMesa }}</div>
+            <div class="kt-mesa" *ngIf="!p.numeroMesa">{{ p.tipoPedido }}</div>
+            <span class="kt-type-tag" [ngClass]="'tp-' + p.tipoPedido.toLowerCase()">{{ p.tipoPedido }}</span>
+          </div>
+
+          <div class="kt-items">
+            <div class="kti-row" *ngFor="let d of p.detalles">
+              <span class="kti-qty">x{{ d.cantidad }}</span>
+              <span class="kti-name">{{ d.nombreProducto }}</span>
+            </div>
+          </div>
+
+          <div class="kt-actions">
+            <button class="btn btn-kds-start" (click)="iniciarPreparacion(p)">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="margin-right:8px;"><path d="M8 5v14l11-7z"/></svg>
+              INICIAR PRODUCCIÓN
+            </button>
+          </div>
+        </div>
+
+        <div class="kds-empty-state" *ngIf="pendientes().length === 0">
+          <div class="kes-icon">🧤</div>
+          <p>Cola despejada</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Zone 2: Active Cooking (Blue) -->
+    <section class="kds-zone zone-active">
+      <div class="zone-header">
+        <div class="zh-info">
+          <span class="zh-dot"></span>
+          <h2>EN EL FUEGO</h2>
+        </div>
+        <span class="zh-count">{{ enPreparacion().length }}</span>
+      </div>
+
+      <div class="zone-body">
+        <div class="kds-ticket ticket-active animate-slide-in" *ngFor="let p of enPreparacion()">
+          <div class="kt-header">
+            <span class="kt-id">#{{ p.idPedido }}</span>
+            <span class="kt-timer pink-pulse">⏱ {{ p.fechaPedido | date:'HH:mm' }}</span>
+          </div>
+          
+          <div class="kt-context">
+            <div class="kt-mesa">MESA {{ p.numeroMesa || 'EXT' }}</div>
+          </div>
+
+          <div class="kt-items-interactive">
+            <div class="ktii-row" *ngFor="let d of p.detalles" [class.is-done]="d.estadoCocina === 'LISTO'">
+              <div class="ktii-info">
+                 <span class="kti-qty">x{{ d.cantidad }}</span>
+                 <span class="kti-name">{{ d.nombreProducto }}</span>
+              </div>
+              <button class="ktii-chk" (click)="marcarDetalle(d, 'LISTO')" *ngIf="d.estadoCocina !== 'LISTO'">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+              <div class="ktii-done-mark" *ngIf="d.estadoCocina === 'LISTO'">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="4"><path d="M20 6L9 17L4 12"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="kt-actions">
+            <button class="btn btn-kds-finish" (click)="finalizarPedido(p)">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:8px;"><polyline points="20 6 9 17 4 12"/></svg>
+              COMPLETAR ORDEN
+            </button>
+          </div>
+        </div>
+
+        <div class="kds-empty-state" *ngIf="enPreparacion().length === 0">
+          <div class="kes-icon">🥢</div>
+          <p>Cocina libre</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Zone 3: Outbound/Service (Green) -->
+    <section class="kds-zone zone-outbound">
+      <div class="zone-header">
+        <div class="zh-info">
+          <span class="zh-dot"></span>
+          <h2>EXPEDICIÓN / SALIDA</h2>
+        </div>
+        <span class="zh-count">{{ listos().length }}</span>
+      </div>
+
+      <div class="zone-body">
+        <div class="kds-ticket ticket-ready animate-slide-in" *ngFor="let p of listos()">
+          <div class="kt-header">
+            <span class="kt-id">#{{ p.idPedido }}</span>
+            <span class="kt-badge-ready">LISTO</span>
+          </div>
+          
+          <div class="kt-context">
+            <div class="kt-mesa">MESA {{ p.numeroMesa || 'EXT' }}</div>
+          </div>
+
+          <div class="kt-summary">
+            <div class="kts-item" *ngFor="let d of p.detalles">
+               <span class="kts-qty">{{ d.cantidad }}x</span> {{ d.nombreProducto }}
+            </div>
+          </div>
+
+          <div class="kt-actions">
+            <button class="btn btn-kds-ship" (click)="entregar(p)">
+              DESPACHAR
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" style="margin-left:8px;"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="kds-empty-state" *ngIf="listos().length === 0">
+          <div class="kes-icon">🛎️</div>
+          <p>Esperando platos</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Splash Feedback System -->
+  <div class="kds-feedback-portal" *ngIf="showSplash()">
+    <div class="kds-splash-card">
+      <div class="ks-icon-container">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h2 class="ks-message">{{ splashMessage() }}</h2>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,166 @@
+<div class="home-wrapper" *ngIf="info()">
+  <!-- Premium Hero Section -->
+  <section class="hero-canvas">
+    <div class="hero-video-overlay"></div>
+    <div class="hero-content anime-pop">
+      <div class="hero-badge">GASTRONOMÍA FUSIÓN PREMIUM</div>
+      <h1 class="hero-title">
+        <span class="text-gradient">{{ info()?.nombre }}</span> <br/>
+        Sabor Ancestral.
+      </h1>
+      <p class="hero-subtitle">Experimente la convergencia magistral entre la tradición milenaria china y la riqueza inigualable de la costa peruana.</p>
+      
+      <div class="hero-actions">
+        <button class="btn btn-primary btn-xl glass-btn" routerLink="/cliente/reservas">
+          RESERVAR EXPERIENCIA
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" style="margin-left:12px;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <button class="btn btn-outline-white btn-xl" routerLink="/cliente/menu">
+          EXPLORAR LA CARTA
+        </button>
+      </div>
+    </div>
+    
+    <div class="hero-scroll-hint">
+       <span class="scroll-dot"></span>
+    </div>
+  </section>
+
+  <!-- Statistics Banner -->
+  <section class="metric-banner">
+    <div class="metric-grid container">
+      <div class="metric-item">
+        <span class="m-val">25+</span>
+        <span class="m-lab">Años de Maestría</span>
+      </div>
+      <div class="metric-item">
+        <span class="m-val">10k+</span>
+        <span class="m-lab">Paladares Deleitados</span>
+      </div>
+      <div class="metric-item">
+        <span class="m-val">12</span>
+        <span class="m-lab">Chefs Especialistas</span>
+      </div>
+      <div class="metric-item">
+        <span class="m-val">4.9</span>
+        <span class="m-lab">Puntuación Gourmet</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story & Heritage -->
+  <section class="heritage-section container section-padding">
+    <div class="heritage-layout">
+      <div class="heritage-visual">
+         <div class="visual-orb"></div>
+         <div class="visual-card">
+            <div class="vc-img-mock">🥢</div>
+         </div>
+         <div class="visual-exp-badge">
+            <span class="veb-num">SINCE</span>
+            <span class="veb-txt">1995</span>
+         </div>
+      </div>
+      
+      <div class="heritage-content">
+        <h6 class="section-tag">NUESTRA HERENCIA</h6>
+        <h2 class="section-display">Un Legado de Sabor que <span class="text-underline">Traspasa Fronteras</span></h2>
+        <p class="section-lead">
+          {{ info()?.nombre }} nace de la unión de dos mundos. Nuestra cocina es el resultado de décadas de perfeccionamiento del arte del Wok, fusionado con la frescura explosiva de la biodiversidad peruana.
+        </p>
+        <p class="section-body">
+          Ubicados en el corazón de {{ info()?.direccion }}, cada uno de nuestros platos cuenta una historia de migración, adaptación y, sobre todo, pasión por la excelencia gastronómica.
+        </p>
+        
+        <div class="heritage-traits">
+          <div class="trait-card">
+             <div class="tc-icon">🔥</div>
+             <span class="tc-label">Fuego Vivo</span>
+          </div>
+          <div class="trait-card">
+             <div class="tc-icon">🥬</div>
+             <span class="tc-label">Huerta Local</span>
+          </div>
+          <div class="trait-card">
+             <div class="tc-icon">🍱</div>
+             <span class="tc-label">Arte Chifa</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Specialties: The Gourmet Selection -->
+  <section class="specialty-showcase section-padding bg-slate">
+    <div class="container">
+      <div class="showcase-header text-center">
+        <h6 class="section-tag">SELECCIÓN DEL CHEF</h6>
+        <h2 class="section-display">Especialidades de la Casa</h2>
+        <p class="section-lead mx-auto" style="max-width: 600px;">Descubra nuestras creaciones más icónicas, preparadas al momento con técnicas ancestrales.</p>
+      </div>
+
+      <div class="showcase-grid mt-12">
+        <div class="gourmet-card" *ngFor="let p of especialidades()">
+          <div class="gc-image-wrap">
+             <div class="gc-mock-img">🍲</div>
+             <div class="gc-price-overlay">S/ {{ p.precio.toFixed(2) }}</div>
+          </div>
+          <div class="gc-content">
+            <h3 class="gc-title">{{ p.nombre }}</h3>
+            <p class="gc-desc">{{ p.descripcion }}</p>
+            <button class="btn btn-ghost btn-sm" routerLink="/cliente/menu">DESCUBRIR MÁS</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center mt-12">
+         <button class="btn btn-outline btn-xl" routerLink="/cliente/menu">VER CARTA COMPLETA</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact & Schedule: The Final Invitation -->
+  <section class="invitation-section section-padding">
+    <div class="container invitation-layout">
+      <div class="inv-card card-contact">
+        <h3 class="inv-title">Encuéntrenos</h3>
+        <p class="inv-text">Venga a disfrutar de una velada inolvidable en nuestras instalaciones de diseño contemporáneo.</p>
+        
+        <div class="inv-details">
+          <div class="id-row">
+            <div class="id-icon">📍</div>
+            <div class="id-info">
+               <span class="id-label">DIRECCIÓN</span>
+               <span class="id-val">{{ info()?.direccion }}</span>
+            </div>
+          </div>
+          <div class="id-row">
+            <div class="id-icon">📞</div>
+            <div class="id-info">
+               <span class="id-label">TELÉFONO</span>
+               <span class="id-val">{{ info()?.telefono }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="inv-card card-schedule">
+        <div class="schedule-header">
+           <h3 class="inv-title">Horarios</h3>
+           <div class="live-status">ABIERTO AHORA</div>
+        </div>
+        
+        <div class="schedule-list">
+           <div class="sl-row" *ngFor="let h of splitHorario(info()?.horario)">
+              <span class="sl-day">{{ h.label }}</span>
+              <span class="sl-time">{{ h.time }}</span>
+           </div>
+        </div>
+        
+        <div class="inv-cta-box mt-8">
+           <button class="btn btn-primary btn-xl w-full" routerLink="/cliente/reservas">ASEGURAR MI MESA</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

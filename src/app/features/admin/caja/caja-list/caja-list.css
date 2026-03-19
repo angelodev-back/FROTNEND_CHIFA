@@ -1,0 +1,200 @@
+/* Enterprise Caja List - Premium Soft UI */
+.admin-page { 
+    padding: 3rem 4rem; 
+    max-width: 100%; 
+    margin: 0; 
+    background-color: var(--color-bg);
+}
+
+.admin-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2.5rem !important;
+    background: var(--color-surface);
+    padding: 1.5rem 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-md);
+}
+
+.aph-left { display: flex; align-items: center; gap: 1.5rem; }
+
+.aph-title {
+    font-size: 2.5rem !important;
+    font-weight: 950;
+    letter-spacing: -0.04em;
+    color: var(--color-text);
+    line-height: 1;
+    margin: 0;
+}
+
+.aph-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 8px 16px rgba(100, 116, 139, 0.25);
+}
+
+.premium-finance-banner {
+    position: relative;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+    color: white;
+    overflow: hidden;
+    margin-bottom: 3rem;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pfb-overlay {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background-image: radial-gradient(circle at top right, rgba(79, 70, 229, 0.15), transparent 60%);
+    pointer-events: none;
+}
+
+.pfb-content { position: relative; z-index: 1; }
+
+.pfb-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
+.turno-badge {
+    padding: 0.5rem 1.25rem;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 900;
+    color: #94a3b8;
+    letter-spacing: 0.05em;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 950;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--radius-full);
+}
+
+.status-pulse {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.pfb-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.pfb-title {
+    font-family: 'Outfit';
+    font-size: 2rem;
+    font-weight: 900;
+    margin: 0 0 0.75rem;
+    letter-spacing: -0.02em;
+    color: white;
+}
+
+.pfb-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.meta-sep {
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+}
+
+.pfb-balance { text-align: right; }
+
+.balance-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 950;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.balance-val {
+    font-family: 'Outfit';
+    font-size: 4rem;
+    font-weight: 950;
+    line-height: 1;
+    margin: 0;
+    background: linear-gradient(to bottom, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+}
+
+.banner-closed { 
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
+    filter: grayscale(0.5);
+}
+
+/* KPI Grid Layout */
+.kpis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.premium-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.premium-card-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--color-border-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.premium-card-title {
+    font-family: 'Outfit';
+    font-weight: 900;
+    color: var(--color-text);
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+@media (max-width: 1024px) {
+    .admin-page { padding: 1.5rem; }
+    .pfb-body { flex-direction: column; align-items: flex-start; gap: 2.5rem; }
+    .pfb-balance { text-align: left; }
+    .balance-val { font-size: 3rem; }
+    .admin-page-header { flex-direction: column; align-items: stretch; gap: 1.5rem; }
+}

@@ -1,0 +1,146 @@
+.kpi-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
+    cursor: default;
+    transition: var(--transition-normal);
+    animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.kpi-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-border);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Top row */
+.kpi-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Icon box */
+.kpi-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.kpi-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Color variants - using semantic variables */
+.icon-blue {
+    background: var(--color-bg);
+    color: var(--color-info);
+}
+
+.icon-green {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.icon-orange {
+    background: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+.icon-purple {
+    background: var(--color-bg);
+    color: var(--color-primary);
+}
+
+.icon-red {
+    background: var(--color-danger-bg);
+    color: var(--color-danger);
+}
+
+.icon-teal {
+    background: var(--color-bg);
+    color: #0ea5e9;
+}
+
+/* Info */
+.kpi-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.kpi-titulo {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.kpi-valor {
+    display: block;
+    font-size: 1.85rem;
+    font-weight: 900;
+    color: var(--color-text);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: -0.02em;
+}
+
+/* Trend */
+.kpi-trend {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+}
+
+.kpi-trend svg {
+    width: 14px;
+    height: 14px;
+}
+
+.trend-up {
+    color: var(--color-success);
+    background: var(--color-success-bg);
+}
+
+.trend-down {
+    color: var(--color-danger);
+    background: var(--color-danger-bg);
+}
+
+.trend-neutral {
+    color: var(--color-text-muted);
+    background: var(--color-bg);
+    font-weight: 700;
+}

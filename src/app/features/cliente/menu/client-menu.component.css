@@ -1,0 +1,253 @@
+/* Private Guest Experience: Menu Canvas Styles */
+
+.menu-page-canvas {
+    background: white;
+    min-height: 100vh;
+}
+
+.menu-display-title {
+    font-family: 'Outfit';
+    font-weight: 950;
+    font-size: 4rem;
+    color: #0f172a;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.03em;
+}
+
+.menu-lead {
+    font-size: 1.2rem;
+    color: #64748b;
+    max-width: 700px;
+    font-weight: 500;
+}
+
+/* FILTERS & SEARCH */
+.menu-controls-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 4rem 0;
+    background: #f8fafc;
+    padding: 1rem 2rem;
+    border-radius: 24px;
+    border: 1px solid #f1f5f9;
+    gap: 2rem;
+}
+
+.category-navigation {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding: 0.25rem 0;
+}
+
+.cat-premium-chip {
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    border: 1.5px solid #e2e8f0;
+    background: white;
+    color: #475569;
+    font-weight: 850;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.cat-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    transition: 0.3s;
+}
+
+.cat-premium-chip:hover {
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
+}
+
+.cat-premium-chip.is-active {
+    background: #0f172a;
+    color: white;
+    border-color: #0f172a;
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15);
+}
+
+.cat-premium-chip.is-active .cat-dot {
+    background: #6366f1;
+    box-shadow: 0 0 10px #6366f1;
+}
+
+.menu-search-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    border: 1.5px solid #e2e8f0;
+    padding: 0.75rem 1.5rem;
+    border-radius: 14px;
+    width: 350px;
+    transition: 0.3s;
+}
+
+.menu-search-box:focus-within {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+
+.menu-search-box svg { color: #94a3b8; }
+
+.menu-search-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    flex: 1;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* PRODUCT GRID */
+.menu-grid-display {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 3rem;
+}
+
+.product-premium-card {
+    background: white;
+    border-radius: 32px;
+    overflow: hidden;
+    border: 1.5px solid #f1f5f9;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.product-premium-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.1);
+    border-color: #e2e8f0;
+}
+
+.ppc-visual {
+    height: 280px;
+    background: #f8fafc;
+    position: relative;
+}
+
+.ppc-mock-img {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+}
+
+.ppc-badge-popular {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: #0f172a;
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    font-weight: 900;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+}
+
+.ppc-price-tag {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    background: white;
+    padding: 0.6rem 1.25rem;
+    border-radius: 12px;
+    font-family: 'Outfit';
+    font-weight: 950;
+    font-size: 1.25rem;
+    color: #4f46e5;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.ppc-content { padding: 2.25rem; }
+
+.ppc-meta { margin-bottom: 0.75rem; }
+.ppc-category {
+    font-size: 0.65rem;
+    font-weight: 950;
+    color: #6366f1;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: #e0e7ff;
+    padding: 0.3rem 0.75rem;
+    border-radius: 6px;
+}
+
+.ppc-title {
+    font-family: 'Outfit';
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: #0f172a;
+    margin-bottom: 1rem;
+}
+
+.ppc-description {
+    font-size: 0.9rem;
+    color: #64748b;
+    line-height: 1.6;
+    height: 2.8rem;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.ppc-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1.5px solid #f8fafc;
+    padding-top: 1.5rem;
+}
+
+.ppc-stat { display: flex; flex-direction: column; }
+.ppc-stat-val { font-weight: 900; font-size: 0.9rem; color: #1e293b; }
+.ppc-stat-lab { font-size: 0.6rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; }
+
+.btn-ppc-action {
+    width: 48px;
+    height: 48px;
+    background: #f1f5f9;
+    color: #0f172a;
+    border: none;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-ppc-action:hover {
+    background: #0f172a;
+    color: white;
+    transform: rotate(90deg);
+}
+
+/* EMPTY STATE */
+.menu-empty-canvas {
+    text-align: center;
+    padding: 10rem 0;
+}
+
+.mec-artwork { font-size: 5rem; margin-bottom: 2rem; }
+.mec-title { font-family: 'Outfit'; font-weight: 950; font-size: 2.5rem; color: #01172a; margin-bottom: 1rem; }
+.mec-text { font-size: 1.1rem; color: #64748b; font-weight: 500; }
+
+@media (max-width: 900px) {
+    .menu-controls-wrapper { flex-direction: column; align-items: stretch; border-radius: 32px; }
+    .menu-search-box { width: 100%; }
+    .menu-display-title { font-size: 3rem; }
+}

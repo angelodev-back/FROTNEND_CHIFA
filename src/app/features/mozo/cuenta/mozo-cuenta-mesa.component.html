@@ -1,0 +1,166 @@
+<div class="mozo-page admin-page">
+  
+  <!-- Premium Ticket Header -->
+  <div class="admin-page-header">
+    <div class="aph-left">
+      <div class="aph-icon" style="background: linear-gradient(135deg, #1e293b, #0f172a);">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div>
+        <h1 class="aph-title">Gestión de Cuentas</h1>
+      </div>
+    </div>
+    <div class="aph-right">
+       <button class="btn btn-outline" routerLink="/mozo/dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px; margin-right:8px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Panel Principal
+       </button>
+    </div>
+  </div>
+
+  <div class="billing-grid">
+    
+    <!-- Sidebar: Active Ledger -->
+    <aside class="ledger-sidebar">
+      <div class="premium-card ls-card">
+        <div class="premium-card-header">
+           <h3 class="premium-card-title">Mesas con Consumo</h3>
+        </div>
+        
+        <div class="ls-search">
+           <input #searchInput
+                  type="text" 
+                  placeholder="Buscar número de mesa..." 
+                  (input)="searchTerm.set(searchInput.value)"
+                  class="form-input pos-search">
+        </div>
+
+        <div class="ls-pagination">
+          <span class="rs-label">MOSTRAR:</span>
+          <div class="rs-pills">
+            <button *ngFor="let size of [5, 10, 15, 20]" (click)="cambiarPageSize(size)" [class.is-active]="pageSize() === size">{{ size }}</button>
+          </div>
+        </div>
+
+        <div class="ls-items">
+           <div class="ls-item-btn" 
+                *ngFor="let m of mesasMostradas()" 
+                [class.is-active]="mesaSeleccionada()?.idMesa === m.idMesa"
+                (click)="seleccionarMesa(m)">
+             <div class="ls-item-icon">M{{ m.numeroMesa }}</div>
+             <div class="ls-item-info">
+                <span class="ls-item-name">Atención Activa</span>
+                <span class="ls-item-sub">Esperando cierre</span>
+             </div>
+             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" class="ls-arrow"><path d="M9 18l6-6-6-6"/></svg>
+           </div>
+           
+           <div *ngIf="mesasConConsumo().length === 0" class="ls-empty">
+              <div class="ls-empty-icon">🈳</div>
+              <p>No hay consumos pendientes</p>
+           </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main: High Fidelity Ticket -->
+    <main class="ticket-display">
+       <div class="ticket-premium-wrapper animate-slide-up" *ngIf="mesaSeleccionada()">
+          
+          <div class="ticket-core shadow-2xl">
+             <!-- Header -->
+             <div class="ticket-head">
+                <div class="ticket-brand">CHIFA LINDA</div>
+                <div class="ticket-divider-line"></div>
+                <div class="ticket-meta">
+                   <div class="tm-row"><span>EMISIÓN:</span> <span>{{ currentDate | date:'dd/MM/yyyy HH:mm' }}</span></div>
+                   <div class="tm-row"><span>MESA:</span> <span>#{{ mesaSeleccionada()?.numeroMesa }}</span></div>
+                   <div class="tm-row"><span>TICKET:</span> <span>#{{ mesaSeleccionada()?.idMesa }}TX</span></div>
+                </div>
+             </div>
+             
+             <!-- Items -->
+             <div class="ticket-body">
+                <div class="tb-header">
+                  <span class="tbh-qty">CNT</span>
+                  <span class="tbh-name">DESCRIPCIÓN</span>
+                  <span class="tbh-total">TOTAL</span>
+                </div>
+                <div class="tb-items-list">
+                  <ng-container *ngFor="let grupo of itemsAgrupados()">
+                    <!-- Header for additional orders -->
+                    <div class="tb-group-header" *ngIf="grupo.nro > 1">
+                       <span class="tbgh-label">{{ grupo.label }}</span>
+                       <div class="tbgh-line"></div>
+                    </div>
+
+                    <div class="tb-item" *ngFor="let item of grupo.items">
+                       <span class="tbi-qty">{{ item.cantidad }}x</span>
+                       <span class="tbi-name">{{ item.nombreProducto }}</span>
+                       <span class="tbi-price">S/ {{ (item.precioUnitario * item.cantidad).toFixed(2) }}</span>
+                    </div>
+                  </ng-container>
+                </div>
+             </div>
+             
+             <!-- Footer Calculations -->
+             <div class="ticket-foot">
+                <div class="tf-calc-row">
+                   <span>SUBTOTAL (EXENT.)</span>
+                   <span>S/ {{ (total() / 1.18).toFixed(2) }}</span>
+                </div>
+                <div class="tf-calc-row">
+                   <span>I.G.V. (18.00%)</span>
+                   <span>S/ {{ (total() - (total() / 1.18)).toFixed(2) }}</span>
+                </div>
+                <div class="tf-grand-total">
+                   <span>TOTAL A PAGAR</span>
+                   <span>S/ {{ total().toFixed(2) }}</span>
+                </div>
+                <div class="ticket-brand-footer">*** GRACIAS POR SU PREFERENCIA ***</div>
+             </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="ticket-control-panel">
+             <!-- Case 1: Order is ready/served, waiter requests to start payment process -->
+             <button *ngIf="mesaSeleccionada().estado !== 'EN_PAGO'" 
+                     class="btn btn-primary btn-xl glass-btn shadow-indigo-500/30" 
+                     (click)="solicitarPago()">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="3"><rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                GENERAR PRE-CUENTA
+             </button>
+
+             <!-- Case 2: Order is already EN_PAGO, waiter confirms the final payment -->
+             <div *ngIf="mesaSeleccionada().estado === 'EN_PAGO'" class="payment-actions">
+                <p class="payment-prompt">Selecciona el método de pago para cerrar:</p>
+                <div class="payment-buttons">
+                   <button class="btn btn-success" (click)="confirmarPago('EFECTIVO')">
+                      💵 EFECTIVO
+                   </button>
+                   <button class="btn btn-indigo" (click)="confirmarPago('TARJETA')">
+                      💳 TARJETA / POS
+                   </button>
+                   <button class="btn btn-info" (click)="confirmarPago('YAPE_PLIN')">
+                      📱 YAPE / PLIN
+                   </button>
+                </div>
+             </div>
+
+             <button class="btn btn-ghost btn-lg" routerLink="/mozo/dashboard">
+                REGRESAR AL PANEL
+             </button>
+             <p class="ac-notif-hint" *ngIf="mesaSeleccionada().estado !== 'EN_PAGO'">⚠️ Esta acción bloqueará la mesa y la pondrá en estado de pago.</p>
+             <p class="ac-notif-hint" *ngIf="mesaSeleccionada().estado === 'EN_PAGO'">⚠️ Confirmar el pago cerrará el pedido y liberará la mesa automáticamente.</p>
+          </div>
+       </div>
+
+       <!-- Account View Selection Placeholder -->
+       <div class="ticket-selection-placeholder animate-fade-in" *ngIf="!mesaSeleccionada()">
+          <div class="tsp-artwork">🧾</div>
+          <h3>Emisión de Pre-Cuenta</h3>
+          <p>Selecciona una mesa de la bitácora lateral para generar el reporte de consumo y procesar el cierre.</p>
+       </div>
+    </main>
+  </div>
+</div>
