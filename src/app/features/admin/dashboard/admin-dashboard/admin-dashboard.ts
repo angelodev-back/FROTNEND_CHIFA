@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ReporteService, DashboardData } from '../../../../core/services/reporte.service';
 import { MesaService } from '../../../../core/services/mesa.service';
 import { PedidoService } from '../../../../core/services/pedido.service';
+import { WsService } from '../../../../core/services/ws.service';
 import { forkJoin } from 'rxjs';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
@@ -19,6 +20,7 @@ export class AdminDashboard implements OnInit {
     private reporteService = inject(ReporteService);
     private mesaService = inject(MesaService);
     private pedidoService = inject(PedidoService);
+    private wsService = inject(WsService);
 
     today = new Date();
     data = signal<DashboardData | null>(null);
@@ -56,15 +58,39 @@ export class AdminDashboard implements OnInit {
         plugins: { legend: { position: 'bottom' } }
     };
 
+    // Chart Configuration: Ventas por Método (Pie)
+    public pieChartData: ChartData<'pie'> = {
+        labels: [],
+        datasets: [{ data: [] }]
+    };
+    public pieChartOptions: ChartConfiguration<'pie'>['options'] = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' } }
+    };
+
     ngOnInit(): void {
         console.log("[ADMIN][Dashboard] Inicializando componente de dashboard...");
         this.cargarDatos();
+        this.setupWebSocket();
+    }
+
+    setupWebSocket() {
+        this.wsService.subscribe('/topic/dashboard/stats').subscribe({
+            next: () => this.cargarDatos()
+        });
+        this.wsService.subscribe('/topic/pedidos/estado').subscribe({
+            next: () => this.cargarDatos()
+        });
+        this.wsService.subscribe('/topic/mesas').subscribe({
+            next: () => this.cargarDatos()
+        });
     }
 
     cargarDatos() {
         console.log("[ADMIN][Dashboard][cargarDatos] Solicitando datos consolidados para el dashboard (forkJoin)...");
         forkJoin({
-            dashboard: this.reporteService.getDashboardData(),
+            dashboard: this.reporteService.getSummary(),
             mesas: this.mesaService.getAll(),
             pedidos: this.pedidoService.getActivos()
         }).subscribe({
@@ -94,6 +120,13 @@ export class AdminDashboard implements OnInit {
             this.doughnutChartLabels = dashboard.productosTop.map(p => p.nombre);
             this.doughnutChartData.labels = this.doughnutChartLabels;
             this.doughnutChartData.datasets[0].data = dashboard.productosTop.map(p => p.cantidad);
+        }
+
+        // Update Pie Chart (Ventas por Método)
+        if (dashboard.ventasPorMetodo) {
+            const methods = Object.keys(dashboard.ventasPorMetodo);
+            this.pieChartData.labels = methods;
+            this.pieChartData.datasets[0].data = methods.map(m => dashboard.ventasPorMetodo[m]);
         }
     }
 

@@ -7,6 +7,8 @@ import { UsuarioService } from '../../../../core/services/usuario.service';
 import { Usuario } from '../../../../core/models/usuario.model';
 import { ReservaService } from '../../../../core/services/reserva.service';
 import { PedidoService } from '../../../../core/services/pedido.service';
+import { WsService } from '../../../../core/services/ws.service';
+import { CajaService } from '../../../../core/services/caja.service';
 import { FormsModule } from '@angular/forms';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
@@ -23,6 +25,8 @@ export class RecepcionistaMesaListComponent implements OnInit {
   private usuarioService = inject(UsuarioService);
   private reservaService = inject(ReservaService);
   private pedidoService = inject(PedidoService);
+  private wsService = inject(WsService);
+  private cajaService = inject(CajaService);
 
   mesas: Mesa[] = [];
   allClientes: Usuario[] = [];
@@ -67,6 +71,16 @@ export class RecepcionistaMesaListComponent implements OnInit {
     this.cargarMesas();
     this.cargarClientes();
     this.cargarDatosOcupacion();
+    this.setupWebSocket();
+  }
+
+  setupWebSocket(): void {
+    this.wsService.subscribe('/topic/mesas').subscribe({
+      next: () => this.cargarMesas()
+    });
+    this.wsService.subscribe('/topic/pedidos/estado').subscribe({
+      next: () => this.cargarDatosOcupacion()
+    });
   }
 
   cargarClientes(): void {
@@ -254,5 +268,37 @@ export class RecepcionistaMesaListComponent implements OnInit {
 
   toggleVisibility(): void {
     this.showOnlyAvailable.set(!this.showOnlyAvailable());
+  }
+
+  confirmarPago(mesa: any): void {
+    if (!mesa) return;
+    
+    // Buscar pedido activo para esta mesa
+    this.pedidoService.getActivoPorMesa(mesa.idMesa || mesa.id).subscribe({
+      next: (pedido: any) => {
+        if (!pedido) {
+          alert("No se encontró un pedido activo para esta mesa");
+          return;
+        }
+
+        const metodo = prompt("Ingrese método de pago (EFECTIVO, TARJETA, YAPE, PLIN):", "EFECTIVO");
+        if (!metodo) return;
+
+        this.isSaving.set(true);
+        this.pedidoService.confirmarPago(pedido.idPedido, metodo.toUpperCase()).subscribe({
+          next: () => {
+            alert("Pago procesado con éxito y mesa liberada");
+            this.isSaving.set(false);
+            this.cargarMesas();
+          },
+          error: (err: any) => {
+            console.error("Error al procesar pago:", err);
+            alert("Error al procesar pago: " + (err.error?.message || 'Error desconocido'));
+            this.isSaving.set(false);
+          }
+        });
+      },
+      error: (err: any) => alert("Error al buscar pedido: " + err.message)
+    });
   }
 }

@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProductoService } from '../../../../core/services/producto.service';
 import { CategoriaService } from '../../../../core/services/categoria.service';
+import { WsService } from '../../../../core/services/ws.service';
 import { ProductoDTO } from '../../../../core/models/producto.model';
 import { CategoriaDTO } from '../../../../core/models/categoria.model';
 import { ToastService } from '../../../../core/services/toast.service';
@@ -22,6 +23,7 @@ import { KpiCardComponent } from '../../../../shared/components/kpi-card/kpi-car
 export class AdminMenuList implements OnInit {
   private productoService = inject(ProductoService);
   private categoriaService = inject(CategoriaService);
+  private wsService = inject(WsService);
   private toastService = inject(ToastService);
 
   searchQuery = signal('');
@@ -44,6 +46,13 @@ export class AdminMenuList implements OnInit {
   ngOnInit() {
     console.log("[ADMIN][MenuList] Inicializando componente de menú...");
     this.cargar();
+    this.setupWebSocket();
+  }
+
+  setupWebSocket() {
+    this.wsService.subscribe('/topic/productos').subscribe({
+      next: () => this.cargar()
+    });
   }
 
   cargar() {

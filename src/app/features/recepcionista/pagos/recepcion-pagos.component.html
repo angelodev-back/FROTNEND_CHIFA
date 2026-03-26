@@ -1,0 +1,136 @@
+<div class="pagos-container-premium">
+  <!-- Header -->
+  <div class="pagos-header">
+    <div class="header-info">
+      <div class="header-icon">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+      </div>
+      <div>
+        <h1>Gestión de Pagos</h1>
+        <p>Pedidos con precuenta generada esperando confirmación</p>
+      </div>
+    </div>
+    <div class="header-status">
+      <div class="status-live">
+        <span class="live-dot"></span>
+        MONITOR EN VIVO
+      </div>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Consultando pedidos en caja...</p>
+    </div>
+  } @else {
+    <div class="pagos-grid">
+      @for (p of pedidos(); track p.idPedido) {
+        <div class="pago-card animate-in" [style.animation-delay]="$index * 0.1 + 's'">
+          <div class="card-top">
+            <span class="ticket-badge">#{{ p.idPedido }}</span>
+            <span class="time-badge">{{ p.fechaPedido | date:'shortTime' }}</span>
+          </div>
+          
+          <div class="card-main">
+            <div class="location-info">
+              <div class="location-icon" [class.delivery]="p.tipoPedido === 'DELIVERY'">
+                {{ p.numeroMesa ? 'M' : 'D' }}
+              </div>
+              <div class="location-details">
+                <h3>{{ p.numeroMesa ? 'Mesa ' + p.numeroMesa : 'DELIVERY' }}</h3>
+                <span class="mozo-name">{{ p.nombreMozo || 'Sistema' }}</span>
+              </div>
+            </div>
+
+            <div class="client-box" *ngIf="p.nombreCliente">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <span>{{ p.nombreCliente }}</span>
+            </div>
+
+            <div class="items-summary">
+                <span class="items-count">{{ p.detalles.length }} productos</span>
+                <div class="items-preview">
+                    @for (d of p.detalles | slice:0:2; track $index) {
+                        <span>{{ d.cantidad }}x {{ d.nombreProducto }}</span>
+                    }
+                    @if (p.detalles.length > 2) {
+                        <span class="more">...</span>
+                    }
+                </div>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <div class="total-box">
+              <span class="total-label">TOTAL A COBRAR</span>
+              <span class="total-amount">S/ {{ p.total | number:'1.2-2' }}</span>
+            </div>
+            <button class="btn-confirm" (click)="abrirConfirmacion(p)">
+              CONFIRMAR PAGO
+            </button>
+          </div>
+        </div>
+      } @empty {
+        <div class="empty-state">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" width="60" height="60" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          </div>
+          <h2>No hay pagos pendientes</h2>
+          <p>Los pedidos aparecerán aquí cuando el mozo solicite la precuenta desde la mesa.</p>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- Modal de Confirmación de Pago -->
+@if (selectedPedido()) {
+  <div class="modal-overlay" (click)="cerrarModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title">
+          <h3>Confirmar Ticket #{{ selectedPedido()?.idPedido }}</h3>
+          <p>{{ selectedPedido()?.numeroMesa ? 'Mesa ' + selectedPedido()?.numeroMesa : 'PEDIDO DELIVERY' }}</p>
+        </div>
+        <button class="btn-close" (click)="cerrarModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="amount-display">
+          <span class="label">MONTO TOTAL</span>
+          <span class="value">S/ {{ selectedPedido()?.total | number:'1.2-2' }}</span>
+        </div>
+
+        <div class="payment-methods">
+          <label class="section-label">MÉTODO DE PAGO</label>
+          <div class="methods-grid">
+            <button class="method-btn" [class.active]="metodoPago() === 'EFECTIVO'" (click)="metodoPago.set('EFECTIVO')">
+              <span class="icon">💵</span>
+              <span class="name">Efectivo</span>
+            </button>
+            <button class="method-btn" [class.active]="metodoPago() === 'TARJETA'" (click)="metodoPago.set('TARJETA')">
+              <span class="icon">💳</span>
+              <span class="name">Tarjeta</span>
+            </button>
+            <button class="method-btn" [class.active]="metodoPago() === 'YAPE'" (click)="metodoPago.set('YAPE')">
+              <span class="icon">📱</span>
+              <span class="name">Yape</span>
+            </button>
+            <button class="method-btn" [class.active]="metodoPago() === 'PLIN'" (click)="metodoPago.set('PLIN')">
+              <span class="icon">💎</span>
+              <span class="name">Plin</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn-submit" [disabled]="procesando()" (click)="confirmarPago()">
+          {{ procesando() ? 'PROCESANDO...' : 'FINALIZAR Y LIBERAR MESA' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

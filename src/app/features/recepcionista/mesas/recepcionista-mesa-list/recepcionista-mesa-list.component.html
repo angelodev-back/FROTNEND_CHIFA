@@ -198,9 +198,18 @@
          </div>
       </div>
 
-      <div style="margin-top:2.5rem; display:flex; justify-content:center;">
+      <div style="margin-top:2.5rem; display:flex; justify-content:center; gap: 1.5rem;">
          <button class="btn btn-primary glass-btn btn-xl" (click)="cerrarDetailModal()">
             CERRAR FICHA TÉCNICA
+         </button>
+         
+         <!-- Botón de Pago Directo (reemplaza Caja) -->
+         <button *ngIf="m.estado === 'OCUPADA' || m.estado === 'EN_PAGO'" 
+                 class="btn btn-success glass-btn btn-xl animate-pulse" 
+                 style="background: #10b981; border-color: #059669;"
+                 (click)="confirmarPago(m)">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:8px;"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            CONFIRMAR PAGO Y LIBERAR
          </button>
       </div>
     </div>

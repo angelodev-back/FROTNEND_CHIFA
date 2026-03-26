@@ -403,5 +403,96 @@
 .td-empty p { margin: 0; font-size: 0.95rem; font-weight: 500; }
 
 @media (max-width: 1024px) {
-    .dashboard-grid-2 { grid-template-columns: 1fr; }
+    .dashboard-grid-2, .dashboard-grid-3 { grid-template-columns: 1fr; }
+    .col-span-2 { grid-column: span 1 !important; }
 }
+
+/* ── New Stats & Highlights ── */
+.icon-indigo  { background: #eef2ff; color: #4f46e5; }
+.card-highlight {
+    border: 2px solid var(--color-success);
+    box-shadow: 0 10px 25px -5px rgba(34, 197, 94, 0.15);
+}
+
+/* ── Dashboard Grid 3 ── */
+.dashboard-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+}
+.col-span-2 { grid-column: span 2; }
+
+/* ── Chart Sizing ── */
+.chart-container-lg { padding: 1.5rem; height: 380px; width: 100%; position: relative; }
+.chart-container-md { padding: 1.5rem; height: 280px; width: 100%; position: relative; }
+.chart-container-sm { padding: 1.5rem; height: 200px; width: 100%; position: relative; }
+
+/* ── Payment Method List ── */
+.payment-method-list {
+    padding: 0 2rem 1.5rem;
+}
+.pm-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-bottom: 1px dotted var(--color-border-light);
+    color: var(--color-text);
+}
+.pm-label { color: var(--color-text-muted); }
+.pm-val { font-weight: 800; font-family: 'Outfit', sans-serif; }
+
+/* ── Ranking List ── */
+.ranking-list {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1rem;
+}
+.ranking-item {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.15rem 2rem;
+    border-bottom: 1px solid var(--color-border-light);
+    transition: background 0.2s;
+}
+.ranking-item:hover { background: var(--color-bg); }
+.rank-pos {
+    width: 32px;
+    height: 32px;
+    background: var(--color-bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    color: var(--color-primary);
+    font-size: 0.85rem;
+    border: 1px solid var(--color-border-light);
+}
+.rank-info { flex: 1; display: flex; flex-direction: column; gap: 0.1rem; }
+.rank-name { font-weight: 750; color: var(--color-text); font-size: 0.95rem; }
+.rank-sub { font-size: 0.75rem; color: var(--color-text-muted); font-weight: 500; }
+.rank-total { font-weight: 900; color: var(--color-text); font-family: 'Outfit', sans-serif; }
+
+/* ── Stock Alerts ── */
+.stock-alerts-list { display: flex; flex-direction: column; padding-bottom: 1rem; }
+.stock-alert-item {
+    padding: 1.15rem 2rem;
+    border-bottom: 1px solid var(--color-border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+.sa-info { display: flex; flex-direction: column; gap: 0.1rem; flex: 1; }
+.sa-name { font-weight: 750; color: var(--color-text); font-size: 0.95rem; }
+.sa-cat { font-size: 0.7rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.sa-status { text-align: right; min-width: 120px; }
+.sa-stock { font-size: 0.8rem; font-weight: 800; display: block; margin-bottom: 0.4rem; }
+.sa-bar { height: 6px; background: var(--color-bg); border-radius: 3px; overflow: hidden; }
+.sa-bar-fill { height: 100%; background: var(--color-primary); border-radius: 3px; transition: width 0.5s ease; width: 0; }
+.text-red-600 { color: #dc2626 !important; }
+.bg-red-500 { background-color: #ef4444 !important; }

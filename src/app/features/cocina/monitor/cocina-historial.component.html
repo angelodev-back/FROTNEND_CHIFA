@@ -1,70 +1,148 @@
-<div class="kds-sub-page admin-page">
-  
-  <!-- History Header -->
-  <div class="admin-page-header">
-    <div class="aph-left">
-      <div class="aph-icon" style="background: linear-gradient(135deg, #64748b, #475569);">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+<div class="historial-container-enterprise">
+  <div class="h-header">
+    <div class="h-title-box">
+      <div class="h-icon-wrapper">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
       </div>
       <div>
-        <h1 class="aph-title">Bitácora de Cocina</h1>
-        <p class="aph-sub">Audit trail of finished production tickets and serves</p>
+        <h2>Bitácora de Cocina</h2>
+        <p>Registro histórico de producción y despachos</p>
       </div>
     </div>
-    <div class="aph-right">
-       <button class="btn btn-outline" routerLink="/cocina/monitor">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:8px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          Monitor General
-       </button>
+    <div class="h-actions">
+      <button class="btn-refresh" (click)="refreshHistorial()" title="Actualizar historial">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+        Actualizar
+      </button>
+      <button class="btn-back" [routerLink]="['/cocina/monitor']">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Monitor General
+      </button>
     </div>
   </div>
 
-  <!-- Historical Data Table -->
-  <div class="premium-card mt-8">
-    <table class="data-table">
+  <div class="table-container-premium">
+    <table class="enterprise-table">
       <thead>
         <tr>
-          <th>Ticket</th>
-          <th>Ubicación</th>
-          <th>Composición de Orden</th>
-          <th style="text-align: right;">Estado de Despacho</th>
+          <th style="width: 120px;">TICKET</th>
+          <th style="width: 250px;">UBICACIÓN / MOZO</th>
+          <th>COMPOSICIÓN DE ORDEN</th>
+          <th style="text-align: right; width: 180px;">ESTADO</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let p of historial()">
-          <td class="ht-num"><span class="td-id">#{{ p.idPedido }}</span></td>
-          <td>
-            <div class="cliente-cell">
-              <span class="cliente-avatar" style="background: #1e293b; color: white; font-weight: 850;">M</span>
-              <span style="font-weight: 700; color: #1e293b;">Mesa {{ p.numeroMesa }}</span>
-            </div>
-          </td>
-          <td>
-            <div class="ht-platos">
-              <span *ngFor="let d of p.detalles" class="plato-chip-enterprise">
-                <span class="pce-qty">{{ d.cantidad }}x</span>
-                <span class="pce-name">{{ d.nombreProducto }}</span>
-              </span>
-            </div>
-          </td>
-          <td style="text-align: right;">
-            <span class="badge-estado badge-green">
-               <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="4" style="margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg>
-               DESPACHADO
-            </span>
-          </td>
-        </tr>
-        
-        <tr *ngIf="historial().length === 0">
-          <td colspan="4">
-             <div class="empty-state-enterprise" style="padding: 4rem; border: none;">
-                <div class="ese-artwork" style="font-size: 2.5rem;">📂</div>
-                <h3>Sin historial reciente</h3>
-                <p>No se han registrado cierres de producción en el turno actual.</p>
-             </div>
-          </td>
-        </tr>
+        @for (p of historial(); track p.idPedido) {
+          <tr class="premium-row">
+            <td class="ht-num">
+              <div class="ticket-id-badge">#{{ p.idPedido }}</div>
+              <div class="ticket-time">{{ p.fechaPedido | date:'shortTime' }}</div>
+            </td>
+            <td>
+              <div class="cliente-cell">
+                <div class="avatar-wrapper">
+                  <span class="cliente-avatar" [style.background]="p.numeroMesa ? '#1e293b' : '#6366f1'">
+                    {{ p.numeroMesa ? 'M' : 'D' }}
+                  </span>
+                  <div class="avatar-pulse" *ngIf="p.estado === 'SERVIDO' || p.estado === 'PAGADO'"></div>
+                </div>
+                <div>
+                  <span class="location-name">{{ p.numeroMesa ? 'Mesa ' + p.numeroMesa : 'DELIVERY' }}</span>
+                  <div class="mozo-name" *ngIf="p.nombreMozo">{{ p.nombreMozo }}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="ticket-summary-box clickable" (click)="verDetalle(p)" title="Click para ver detalle completo">
+                <div class="tsb-header">
+                  <span class="tsb-id">Comanda #{{ p.idPedido }}</span>
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </div>
+                <div class="tsb-items">
+                  @for (d of p.detalles | slice:0:3; track $index) {
+                    <div class="ticket-item-row">
+                      <span class="ti-qty">{{ d.cantidad }}</span>
+                      <span class="ti-name">{{ d.nombreProducto }}</span>
+                    </div>
+                  }
+                  @if (p.detalles.length > 3) {
+                    <div class="ticket-more">
+                      <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                      {{ p.detalles.length - 3 }} productos adicionales...
+                    </div>
+                  }
+                  @if (p.detalles.length === 0) {
+                    <div class="ti-empty">Sin detalles registrados</div>
+                  }
+                </div>
+              </div>
+            </td>
+            <td style="text-align: right;">
+              <div [ngClass]="{
+                'badge-estado badge-green': p.estado === 'SERVIDO' || p.estado === 'PAGADO',
+                'badge-estado badge-orange': p.estado === 'LISTO',
+                'badge-estado badge-red': p.estado === 'CANCELADO'
+              }">
+                 <svg *ngIf="p.estado === 'SERVIDO' || p.estado === 'PAGADO'" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="4" style="margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg>
+                 {{ p.estado === 'PAGADO' ? 'FINALIZADO' : (p.estado === 'SERVIDO' ? 'DESPACHADO' : p.estado) }}
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" style="text-align: center; padding: 4rem; color: #94a3b8;">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity: 0.3;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                <span>No hay pedidos registrados en el historial para hoy.</span>
+              </div>
+            </td>
+          </tr>
+        }
       </tbody>
     </table>
   </div>
 </div>
+
+<!-- Modal Detalle de Pedido (Premium) -->
+@if (selectedPedido()) {
+  <div class="modal-overlay" (click)="cerrarDetalle()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Comanda #{{ selectedPedido()?.idPedido }}</h3>
+        <button class="close-btn" (click)="cerrarDetalle()" title="Cerrar">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="order-info">
+          <p><strong>Ubicación</strong> <span>{{ selectedPedido()?.numeroMesa ? 'Mesa ' + selectedPedido()?.numeroMesa : 'DELIVERY' }}</span></p>
+          <p><strong>Atendido por</strong> <span>{{ selectedPedido()?.nombreMozo || 'Sistema' }}</span></p>
+          <p><strong>Hora Pedido</strong> <span>{{ selectedPedido()?.fechaPedido | date:'shortTime' }}</span></p>
+          @if (selectedPedido()?.observaciones) {
+            <p style="flex-direction: column; align-items: flex-start; gap: 0.25rem; margin-top: 1rem;">
+              <strong>Notas Generales</strong>
+              <span style="color: #475569; font-style: italic;">{{ selectedPedido()?.observaciones }}</span>
+            </p>
+          }
+        </div>
+
+        <div class="ticket-list-large">
+          @for (d of selectedPedido()?.detalles; track $index) {
+            <div class="ticket-item-row-large">
+              <span class="til-qty">{{ d.cantidad }}</span>
+              <div class="til-info">
+                <span class="til-name">{{ d.nombreProducto }}</span>
+                @if (d.nota) {
+                  <span class="til-note">{{ d.nota }}</span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary-modal" (click)="cerrarDetalle()">
+          Cerrar Detalle
+        </button>
+      </div>
+    </div>
+  </div>
+}

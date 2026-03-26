@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MesaService } from '../../../../core/services/mesa.service';
+import { WsService } from '../../../../core/services/ws.service';
 import { MesaDTO } from '../../../../core/models/mesa.model';
 import { ToastService } from '../../../../core/services/toast.service';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
@@ -17,6 +18,7 @@ import { AdminMesaForm } from '../mesa-form/mesa-form';
 })
 export class AdminMesaList implements OnInit {
   private mesaService = inject(MesaService);
+  private wsService = inject(WsService);
   private toastService = inject(ToastService);
 
   searchQuery = signal('');
@@ -32,6 +34,16 @@ export class AdminMesaList implements OnInit {
   ngOnInit() {
     console.log("[ADMIN][MesaList] Inicializando componente de gestión de mesas...");
     this.cargar();
+    this.setupWebSocket();
+  }
+
+  setupWebSocket() {
+    this.wsService.subscribe('/topic/mesas').subscribe({
+      next: (data) => {
+        console.log("[ADMIN][MesaList][WS] Actualización de mesa recibida:", data);
+        this.cargar();
+      }
+    });
   }
 
   cargar() {

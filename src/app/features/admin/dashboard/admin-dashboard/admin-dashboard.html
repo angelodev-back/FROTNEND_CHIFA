@@ -35,89 +35,126 @@
       </div>
       <div class="stat-info">
         <span class="stat-val">{{ data()?.totalUsuarios || 0 }}</span>
-        <span class="stat-label">Total Usuarios</span>
+        <span class="stat-label">Usuarios Totales</span>
       </div>
       <div class="stat-trend trend-up">
-        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-        {{ data()?.usuariosActivos || 0 }} activos
+        {{ data()?.usuariosActivos || 0 }} activos ahora
       </div>
     </div>
     
-    <div class="stat-card">
+    <div class="stat-card card-highlight">
       <div class="stat-icon icon-green">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
       </div>
       <div class="stat-info">
-        <span class="stat-val">S/ {{ data()?.ingresosHoy?.toFixed(2) || '0.00' }}</span>
-        <span class="stat-label">Ingresos de Hoy</span>
+        <span class="stat-val">S/ {{ data()?.ventasTotalesHoy?.toFixed(2) || '0.00' }}</span>
+        <span class="stat-label">Ventas del Día</span>
       </div>
       <div class="stat-trend trend-neutral">
-        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-        {{ data()?.pedidosHoy || 0 }} pedidos
+        Cobrado: S/ {{ data()?.ingresosHoy?.toFixed(2) || '0.00' }}
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon icon-indigo">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12V8H6a2 2 0 01-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 00-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
+      </div>
+      <div class="stat-info">
+        <span class="stat-val">S/ {{ data()?.ticketPromedio?.toFixed(2) || '0.00' }}</span>
+        <span class="stat-label">Ticket Promedio</span>
+      </div>
+      <div class="stat-trend trend-up">
+        Consumo por cliente
       </div>
     </div>
 
     <div class="stat-card">
       <div class="stat-icon icon-amber">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10H3M21 6H3M21 14H3M21 18H3"/></svg>
       </div>
       <div class="stat-info">
-        <span class="stat-val">{{ data()?.totalMesas || 0 }}</span>
-        <span class="stat-label">Mesas Registradas</span>
+        <span class="stat-val">{{ data()?.totalReservas || 0 }}</span>
+        <span class="stat-label">Reservas Totales</span>
       </div>
       <div class="stat-trend trend-neutral">
-        Infraestructura
-      </div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-icon icon-red">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-      </div>
-      <div class="stat-info">
-        <span class="stat-val">{{ data()?.productosStockBajo || 0 }}</span>
-        <span class="stat-label">Alertas de Stock</span>
-      </div>
-      <div class="stat-trend trend-down">
-        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-        Requiere atención
+        {{ data()?.reservasHoy || 0 }} para hoy
       </div>
     </div>
   </div>
 
   <!-- Charts Section -->
-  <div class="dashboard-grid-2">
+  <div class="dashboard-grid-3">
     <!-- Chart: Ingresos Mensuales -->
-    <div class="card premium-card">
+    <div class="card premium-card col-span-2">
       <div class="card-header">
-        <h2 class="card-title">Tendencia de Ingresos (S/)</h2>
-        <span class="badge-estado badge-blue">Mensual</span>
+        <h2 class="card-title">Tendencia de Ingresos Históricos</h2>
+        <span class="badge-estado badge-blue">Recaudación Mensual</span>
       </div>
-      <div class="chart-container">
+      <div class="chart-container-lg">
         <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="'line'"></canvas>
       </div>
     </div>
 
-    <!-- Chart: Productos Top -->
+    <!-- Chart: Métodos de Pago -->
     <div class="card premium-card">
       <div class="card-header">
-        <h2 class="card-title">Distribución de Ventas</h2>
-        <span class="badge-estado badge-green">Top 5</span>
+        <h2 class="card-title">Medios de Pago (Hoy)</h2>
+        <span class="badge-estado badge-indigo">Cierre Parcial</span>
       </div>
-      <div class="chart-container d-flex-center">
-        <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [options]="doughnutChartOptions" [type]="doughnutChartType"></canvas>
+      <div class="chart-container-sm">
+        <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" [type]="'pie'"></canvas>
+      </div>
+      <div class="payment-method-list mt-3">
+         <div class="pm-item" *ngFor="let m of pieChartData.labels; let i = index">
+            <span class="pm-label">{{ m }}</span>
+            <span class="pm-val">S/ {{ pieChartData.datasets[0].data[i] }}</span>
+         </div>
       </div>
     </div>
   </div>
 
-  <!-- Bottom Grid: Tables & Orders -->
+  <div class="dashboard-grid-2">
+    <!-- Chart: Productos Top -->
+    <div class="card premium-card">
+      <div class="card-header">
+        <h2 class="card-title">Platos más Vendidos</h2>
+        <span class="badge-estado badge-green">Top Rendimiento</span>
+      </div>
+      <div class="chart-container-md">
+        <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [options]="doughnutChartOptions" [type]="doughnutChartType"></canvas>
+      </div>
+    </div>
+
+    <!-- Ranking de Mozos -->
+    <div class="card premium-card">
+      <div class="card-header">
+        <h2 class="card-title">Ranking de Mozos</h2>
+        <span class="badge-estado badge-amber">Productividad Hoy</span>
+      </div>
+      <div class="ranking-list">
+         <div class="ranking-item" *ngFor="let m of data()?.rankingMozos; let i = index">
+            <div class="rank-pos">{{ i + 1 }}</div>
+            <div class="rank-info">
+               <span class="rank-name">{{ m.nombre }}</span>
+               <span class="rank-sub">{{ m.cantidadPedidos }} pedidos atendidos</span>
+            </div>
+            <div class="rank-total">S/ {{ m.totalVentas?.toFixed(2) }}</div>
+         </div>
+         <div *ngIf="!data()?.rankingMozos?.length" class="td-empty py-4">
+            Sin actividad de mozos hoy
+         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Grid: Tables & Alerts -->
   <div class="dashboard-grid-2">
 
     <!-- Recent Pedidos -->
     <div class="card premium-card">
       <div class="card-header">
         <h2 class="card-title">Actividad Reciente</h2>
-        <a routerLink="/admin/pedidos" class="link-ver-todos">Historial →</a>
+        <a routerLink="/admin/pedidos" class="link-ver-todos">Ver Todo →</a>
       </div>
       <div class="activity-list">
         <div class="activity-item" *ngFor="let p of pedidosRecientes()">
@@ -130,8 +167,8 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           </div>
           <div class="activity-info">
-            <span class="activity-title">Pedido #{{ p.idPedido }} · M.{{ p.numeroMesa || '?' }}</span>
-            <span class="activity-sub">{{ p.fechaPedido | date:'shortTime' }} · Total: <span class="fw-800 text-slate-900">S/ {{ p.total?.toFixed(2) }}</span></span>
+            <span class="activity-title">Mesa {{ p.numeroMesa || 'D' }} · Pedido #{{ p.idPedido }}</span>
+            <span class="activity-sub">{{ p.fechaPedido | date:'shortTime' }} · <span class="fw-800 text-slate-900">S/ {{ p.total?.toFixed(2) }}</span></span>
           </div>
           <span class="badge-estado" [ngClass]="{
               'badge-green': p.estado === 'LISTO' || p.estado === 'PAGADO',
@@ -145,32 +182,30 @@
       </div>
     </div>
 
-    <!-- Quick Info / Status Summary -->
+    <!-- Detailed Stock Alerts -->
     <div class="card premium-card">
         <div class="card-header">
-          <h2 class="card-title">Resumen Operativo</h2>
+          <h2 class="card-title">Alertas de Inventario</h2>
+          <span class="badge-estado badge-red">{{ data()?.productosStockBajo || 0 }} Críticos</span>
         </div>
-        <div class="summary-list">
-            <div class="summary-item">
-                <span class="summary-label">Reservas para hoy</span>
-                <span class="summary-value badge-estado badge-blue">{{ data()?.reservasHoy || 0 }} Activas</span>
-            </div>
-            <div class="summary-item">
-                <span class="summary-label">Total de Reservas</span>
-                <span class="summary-value fw-700">{{ data()?.totalReservas || 0 }} Histórico</span>
-            </div>
-            <div class="summary-item">
-                <span class="summary-label">Catálogo Activo</span>
-                <span class="summary-value fw-700">{{ data()?.totalProductos || 0 }} Platos</span>
-            </div>
-            <div class="summary-item">
-                <span class="summary-label">Total Transacciones</span>
-                <span class="summary-value fw-700">{{ data()?.totalPedidos || 0 }} Acumulado</span>
-            </div>
+        <div class="stock-alerts-list">
+           <div class="stock-alert-item" *ngFor="let s of data()?.listaProductosBajoStock">
+              <div class="sa-info">
+                 <span class="sa-name">{{ s.nombre }}</span>
+                 <span class="sa-cat">{{ s.categoria }}</span>
+              </div>
+              <div class="sa-status">
+                 <span class="sa-stock" [class.text-red-600]="s.stock < 5">{{ s.stock }} unidades</span>
+                 <div class="sa-bar"><div class="sa-bar-fill" [style.width.%]="s.stock * 10" [class.bg-red-500]="s.stock < 5"></div></div>
+              </div>
+           </div>
+           <div *ngIf="!data()?.listaProductosBajoStock?.length" class="td-empty py-4">
+              ✅ Inventario saludable
+           </div>
         </div>
         <div class="card-footer sync-footer">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.92-10.26l5.37-5.37"/></svg>
-            Sincronizado en tiempo real con Chifa Linda Core
+            Sincronizado con almacén central
         </div>
     </div>
   </div>

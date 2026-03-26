@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -23,8 +23,13 @@ export interface DashboardData {
     totalReservas: number;
     reservasHoy: number;
     totalPedidos: number;
+    ventasTotalesHoy: number;
     pedidosHoy: number;
     ingresosHoy: number;
+    ticketPromedio: number;
+    ventasPorMetodo: { [key: string]: number };
+    rankingMozos: any[];
+    listaProductosBajoStock: any[];
     ingresosMensuales: { [key: string]: number };
     productosTop: any[];
     pedidosRecientes: any[];
@@ -38,8 +43,15 @@ export class ReporteService {
 
     constructor(private http: HttpClient) { }
 
-    getDashboardData(): Observable<DashboardData> {
-        return this.http.get<DashboardData>(`${this.apiUrl}/dashboard`);
+    getDashboardData(inicio?: string, fin?: string): Observable<DashboardData> {
+        let params = new HttpParams();
+        if (inicio) params = params.set('fechaInicio', inicio);
+        if (fin) params = params.set('fechaFin', fin);
+        return this.http.get<DashboardData>(`${this.apiUrl}/dashboard`, { params });
+    }
+
+    getSummary(): Observable<DashboardData> {
+        return this.http.get<DashboardData>(`${environment.apiUrl}/dashboard/resumen`);
     }
 
     getRecentSales(): Observable<VentaDTO[]> {

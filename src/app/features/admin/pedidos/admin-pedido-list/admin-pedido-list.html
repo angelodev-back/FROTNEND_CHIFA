@@ -44,7 +44,6 @@
     <app-kpi-card 
       titulo="Cancelados" 
       [valor]="stats().cancelados" 
-      icono="rating" 
       color="red" 
       tendencia="down"
       tendenciaLabel="Órdenes Anuladas">
@@ -210,9 +209,18 @@
             <span style="font-size:0.95rem; font-weight:800; color:#0f172a;">{{ p.nombreMozo || 'Atención en Recepción' }}</span>
           </div>
         </div>
-        <button (click)="cerrarDetalle()" class="btn-outline">
-          Cerrar Reporte
-        </button>
+        <div style="display:flex; gap: 1rem;">
+          <button *ngIf="p.estado !== 'PAGADO' && p.estado !== 'CANCELADO'" 
+                  (click)="confirmarPago(p)" 
+                  class="btn-success glass-btn" 
+                  style="background: #10b981; border: none; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 800; color: white; display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            CONFIRMAR PAGO
+          </button>
+          <button (click)="cerrarDetalle()" class="btn-outline" style="padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 700;">
+            Cerrar Reporte
+          </button>
+        </div>
       </div>
     </div>
   </app-modal>

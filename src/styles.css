@@ -55,7 +55,21 @@
   /* Layout Variables */
   --sidebar-width: 280px;
   --header-height: 72px;
-  --container-max: 1400px;
+  --container-max: 1700px;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.section-padding {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
 }
 
 * {
@@ -263,7 +277,7 @@ h4,
 .admin-page {
   padding: 2.5rem 3rem;
   width: 100%;
-  max-width: 1600px;
+  max-width: 1700px;
   margin: 0 auto;
   box-sizing: border-box;
   animation: dashFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;

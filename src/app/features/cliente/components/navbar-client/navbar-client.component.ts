@@ -2,7 +2,6 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
-import { CartService } from '../../../../core/services/cart.service';
 
 @Component({
     selector: 'app-navbar-client',
@@ -13,10 +12,8 @@ import { CartService } from '../../../../core/services/cart.service';
 })
 export class NavbarClientComponent {
     private authService = inject(AuthService);
-    private cartService = inject(CartService);
 
     userName = signal(this.authService.getCurrentUser()?.nombre || 'Usuario');
-    cartCount = this.cartService.count;
     scrolled = signal(false);
 
     constructor() {

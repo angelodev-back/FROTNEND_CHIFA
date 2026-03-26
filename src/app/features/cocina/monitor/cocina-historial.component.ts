@@ -14,18 +14,32 @@ import { PedidoDTO } from '../../../core/models/pedido.model';
 export class CocinaHistorialComponent implements OnInit {
   private pedidoService = inject(PedidoService);
   historial = signal<PedidoDTO[]>([]);
+  selectedPedido = signal<PedidoDTO | null>(null);
 
   ngOnInit() {
     console.log("[COCINA][Historial] Inicializando historial de pedidos servidos...");
-    this.pedidoService.getActivos().subscribe({
+    this.refreshHistorial();
+  }
+
+  refreshHistorial() {
+    this.pedidoService.getHistorialCocina().subscribe({
       next: (data) => {
-        const hist = data.filter(p => p.estado === 'SERVIDO' || p.estado === 'PAGADO');
-        console.log("[COCINA][Historial] Pedidos servidos hoy cargados:", hist.length);
-        this.historial.set(hist);
+        console.log("[COCINA][Historial] Historial cargado:", data.length);
+        this.historial.set(data);
       },
       error: (err) => {
         console.error("[COCINA][Historial] Error al cargar historial:", err);
       }
     });
+  }
+
+  verDetalle(p: PedidoDTO) {
+    console.log("[COCINA][Historial] Ver detalle de pedido:", p.idPedido);
+    this.selectedPedido.set(p);
+  }
+
+  cerrarDetalle() {
+    console.log("[COCINA][Historial] Cerrando detalle");
+    this.selectedPedido.set(null);
   }
 }

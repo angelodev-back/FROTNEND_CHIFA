@@ -2,86 +2,116 @@
   
   <div class="container registration-grid">
     
-    <!-- Visual Brand Pillar -->
+    <!-- Visual Brand Pillar: Gastronomic Invitation -->
     <div class="registration-visual anime-fade-in">
+        <div class="rv-background-blur"></div>
         <div class="rv-overlay">
-            <h6 class="rv-tag">RESERVACIONES</h6>
-            <h2 class="rv-title">Un viaje de sabores le espera</h2>
-            <p class="rv-text">Asegure su mesa en Chifa Linda y disfrute de la perfecta fusión entre la milenaria tradición china y el corazón del Perú.</p>
+            <h6 class="rv-tag">RESERVACIONES EXCLUSIVAS</h6>
+            <h2 class="rv-title">Reserve su <span class="text-underline">Experiencia Ancestral</span></h2>
+            <p class="rv-text">Asegure su lugar en la convergencia magistral entre la tradición milenaria china y la riqueza inigualable de la costa peruana.</p>
             
             <div class="rv-features">
                 <div class="rv-feat">
-                    <span class="rv-feat-icon">🥢</span>
-                    <span class="rv-feat-txt">Mesas con Vista Premium</span>
+                    <div class="rv-feat-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                    <div>
+                        <span class="rv-feat-txt">Ubicación Privilegiada</span>
+                        <p class="rv-feat-sub">Mesas con diseño contemporáneo y vista premium.</p>
+                    </div>
                 </div>
                 <div class="rv-feat">
-                    <span class="rv-feat-icon">🥂</span>
-                    <span class="rv-feat-txt">Atención Personalizada</span>
+                    <div class="rv-feat-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div>
+                        <span class="rv-feat-txt">Protocolo de Excelencia</span>
+                        <p class="rv-feat-sub">Atención personalizada y hospitalidad garantizada.</p>
+                    </div>
                 </div>
                 <div class="rv-feat">
-                    <span class="rv-feat-icon">✨</span>
-                    <span class="rv-feat-txt">Ambiente de Lujo</span>
+                    <div class="rv-feat-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    </div>
+                    <div>
+                        <span class="rv-feat-txt">Ambiente Sensorial</span>
+                        <p class="rv-feat-sub">Música ambiental y aromas de fusión selectos.</p>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="rv-mock-img">🍲</div>
+        <div class="rv-decorative-orb"></div>
     </div>
 
     <!-- Operational Form Portal -->
     <div class="registration-form-portal animate-slide-in">
         <div class="pfp-card">
             <header class="pfp-header">
+                <span class="pfp-uptitle">SOLICITUD EN LÍNEA</span>
                 <h1 class="pfp-title">Reserva de Mesa</h1>
-                <p class="pfp-lead">Complete los detalles para su próxima visita gourmet.</p>
+                <p class="pfp-lead">Personalice los detalles de su próxima visita gourmet.</p>
             </header>
 
             <form class="pfp-form" #f="ngForm">
                 <div class="pfp-grid-form">
                     <div class="pfp-field">
                         <label class="pfp-label">FECHA DE VISITA</label>
-                        <input type="date" class="pfp-control" name="fecha" [(ngModel)]="model.fecha" required>
+                        <div class="pfp-control-wrap">
+                            <input type="date" class="pfp-control" name="fecha" [(ngModel)]="model.fecha" required>
+                        </div>
                     </div>
 
                     <div class="pfp-field">
                         <label class="pfp-label">HORARIO PREFERENTE</label>
-                        <select class="pfp-control pfp-select" name="hora" [(ngModel)]="model.hora" required>
-                            <option value="">Seleccione un horario</option>
-                            <option *ngFor="let h of horarios" [value]="h">{{ h }}</option>
-                        </select>
+                        <div class="pfp-control-wrap">
+                            <select class="pfp-control pfp-select" name="hora" [(ngModel)]="model.hora" required>
+                                <option value="">Seleccione un horario</option>
+                                <option *ngFor="let h of horarios" [value]="h">{{ h }}</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="pfp-field">
                         <label class="pfp-label">NÚMERO DE INVITADOS</label>
-                        <input type="number" class="pfp-control" name="personas" [(ngModel)]="model.cantidadPersonas" min="1" max="20" placeholder="Ej: 4" required>
+                        <div class="pfp-control-wrap">
+                            <input type="number" class="pfp-control" name="personas" [(ngModel)]="model.cantidadPersonas" min="1" max="20" placeholder="Ej: 4" required>
+                        </div>
                     </div>
 
                     <div class="pfp-field">
                         <label class="pfp-label">PREFERENCIA DE UBICACIÓN</label>
-                        <select class="pfp-control pfp-select" name="mesa" [(ngModel)]="model.idMesa">
-                            <option [value]="null">Cualquier mesa disponible</option>
-                            <option *ngFor="let m of mesas" [value]="m.idMesa">Mesa {{ m.numero }} (Pax: {{ m.capacidad }})</option>
-                        </select>
+                        <div class="pfp-control-wrap">
+                            <select class="pfp-control pfp-select" name="mesa" [(ngModel)]="model.idMesa">
+                                <option [value]="null">Cualquier mesa disponible</option>
+                                <option *ngFor="let m of mesas" [value]="m.idMesa">Mesa {{ m.numero }} (Pax: {{ m.capacidad }})</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <div class="pfp-field full-width mt-6">
+                <div class="pfp-field full-width mt-8">
                     <label class="pfp-label">SOLICITUDES ESPECIALES O NOTAS GASTRONÓMICAS</label>
                     <textarea 
                         class="pfp-textarea" 
                         name="obs" 
                         rows="4" 
                         [(ngModel)]="model.observaciones"
-                        placeholder="Ej: Aniversario, mesa tranquila, alergias alimentarias..."></textarea>
+                        placeholder="Ej: Aniversario, mesa tranquila, requerimientos dietéticos..."></textarea>
                 </div>
 
-                <div class="pfp-policy-banner">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                    <p>Su reserva será confirmada electrónicamente. Disponemos de una tolerancia de 15 minutos.</p>
-                </div>
+                <div class="pfp-footer-info">
+                    <div class="pfp-policy-banner">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        <p>Su reserva está sujeta a confirmación inmediata por correo electrónico. Contamos con una tolerancia de 15 minutos.</p>
+                    </div>
 
-                <button type="button" class="btn-pfp-action" [disabled]="!f.valid" (click)="confirmar()">
-                    CONFIRMAR SOLICITUD DE RESERVA
-                </button>
+                    <button type="button" class="btn-pfp-action" [disabled]="!f.valid" (click)="confirmar()">
+                        CONFIRMAR SOLICITUD DE RESERVA
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                    
+                    <p class="pfp-terms">Al solicitar, acepta nuestra política de privacidad y servicios gourment.</p>
+                </div>
             </form>
         </div>
     </div>

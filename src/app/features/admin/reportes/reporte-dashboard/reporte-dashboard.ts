@@ -57,9 +57,14 @@ export class AdminReporteDashboard implements OnInit {
     this.cargarDatos();
   }
 
+  // Se llama desde el HTML cuando cambian las fechas
+  onFilterChange() {
+    this.cargarDatos();
+  }
+
   cargarDatos() {
     this.cargando.set(true);
-    this.reporteService.getDashboardData().subscribe({
+    this.reporteService.getDashboardData(this.fechaInicio(), this.fechaFin()).subscribe({
       next: (data) => {
         this.resumen.set(data);
         this.updateCharts(data);

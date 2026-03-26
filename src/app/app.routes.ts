@@ -20,7 +20,6 @@ export const routes: Routes = [
             { path: 'usuarios', loadComponent: () => import('@app/features/admin/usuarios/usuario-list/usuario-list').then(m => m.UsuarioList) },
             { path: 'usuarios/nuevo', loadComponent: () => import('@app/features/admin/usuarios/usuario-form/usuario-form').then(m => m.UsuarioForm) },
             { path: 'usuarios/editar/:id', loadComponent: () => import('@app/features/admin/usuarios/usuario-form/usuario-form').then(m => m.UsuarioForm) },
-            { path: 'inventario', loadComponent: () => import('@app/features/admin/inventario/inventario-list/inventario-list').then(m => m.InventarioList) },
             { path: 'menu', loadComponent: () => import('@app/features/admin/menu/menu-list/menu-list').then(m => m.AdminMenuList) },
             { path: 'menu/nuevo', loadComponent: () => import('@app/features/admin/menu/menu-form/menu-form').then(m => m.AdminMenuForm) },
             { path: 'menu/editar/:id', loadComponent: () => import('@app/features/admin/menu/menu-form/menu-form').then(m => m.AdminMenuForm) },
@@ -33,7 +32,6 @@ export const routes: Routes = [
             { path: 'pedidos', loadComponent: () => import('@app/features/admin/pedidos/admin-pedido-list/admin-pedido-list').then(m => m.AdminPedidoList) },
             { path: 'reportes', loadComponent: () => import('@app/features/admin/reportes/reporte-dashboard/reporte-dashboard').then(m => m.AdminReporteDashboard) },
             { path: 'configuracion', loadComponent: () => import('@app/features/admin/configuracion/configuracion').then(m => m.AdminConfiguracion) },
-            { path: 'caja', loadComponent: () => import('@app/features/admin/caja/caja-list/caja-list').then(m => m.AdminCajaList) },
             { path: 'auditoria', loadComponent: () => import('@app/features/audit/audit-logs/audit-logs.component').then(m => m.AuditLogsComponent) },
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
         ]
@@ -79,7 +77,7 @@ export const routes: Routes = [
         data: { roles: ['ADMIN', 'RECEPCIONISTA'] },
         children: [
             { path: 'dashboard', loadComponent: () => import('@app/features/recepcionista/dashboard/recepcion-dashboard.component').then(m => m.RecepcionDashboardComponent) },
-            { path: 'mesas', loadComponent: () => import('@app/features/recepcionista/mesas/recepcionista-mesa-list/recepcionista-mesa-list.component').then(m => m.RecepcionistaMesaListComponent) },
+            { path: 'pagos', loadComponent: () => import('@app/features/recepcionista/pagos/recepcion-pagos.component').then(c => c.RecepcionPagosComponent) }, 
             { path: 'reservas', loadComponent: () => import('@app/features/recepcionista/reservas/recepcion-reserva-list.component').then(m => m.RecepcionReservaListComponent) },
             { path: 'reservas/nuevo', loadComponent: () => import('@app/features/recepcionista/reservas/recepcion-reserva-form.component').then(m => m.RecepcionReservaFormComponent) },
             { path: 'reservas/editar/:id', loadComponent: () => import('@app/features/recepcionista/reservas/recepcion-reserva-form.component').then(m => m.RecepcionReservaFormComponent) },
@@ -99,9 +97,7 @@ export const routes: Routes = [
                 path: 'reservas',
                 canActivate: [roleGuard],
                 data: { roles: ['CLIENTE'] },
-                children: [
-                    { path: 'solicitar', loadComponent: () => import('@app/features/cliente/reservas/reserva-form.component').then(m => m.ReservaFormComponent) },
-                ]
+                loadComponent: () => import('@app/features/cliente/reservas/reserva-form.component').then(m => m.ReservaFormComponent)
             },
             {
                 path: 'mis-reservas',

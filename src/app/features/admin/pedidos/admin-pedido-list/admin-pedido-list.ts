@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { PedidoService } from '../../../../core/services/pedido.service';
+import { WsService } from '../../../../core/services/ws.service';
 import { PedidoDTO } from '../../../../core/models/pedido.model';
 import { ToastService } from '../../../../core/services/toast.service';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
@@ -17,6 +18,7 @@ import { KpiCardComponent } from '../../../../shared/components/kpi-card/kpi-car
 })
 export class AdminPedidoList implements OnInit {
     private pedidoService = inject(PedidoService);
+    private wsService = inject(WsService);
     private toastService = inject(ToastService);
 
     searchQuery = signal('');
@@ -36,6 +38,16 @@ export class AdminPedidoList implements OnInit {
     ngOnInit() {
         console.log("[ADMIN][PedidoList] Inicializando componente de listado de pedidos...");
         this.cargar();
+        this.setupWebSocket();
+    }
+
+    setupWebSocket() {
+        this.wsService.subscribe('/topic/pedidos/estado').subscribe({
+            next: () => this.cargar()
+        });
+        this.wsService.subscribe('/topic/mesas').subscribe({
+            next: () => this.cargar()
+        });
     }
 
     cargar() {
@@ -105,11 +117,28 @@ export class AdminPedidoList implements OnInit {
 
     stats = computed(() => {
         const all = this.pedidos();
+        // Usar fecha local para evitar desfase de zona horaria (UTC)
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth();
+        const day = today.getDate();
+        
+        const todayPedidos = all.filter(p => {
+            if (!p.fechaPedido) return false;
+            const pDate = new Date(p.fechaPedido);
+            return pDate.getFullYear() === year && 
+                   pDate.getMonth() === month && 
+                   pDate.getDate() === day;
+        });
+
+        const estadosDeVenta = ['PAGADO', 'EN_PAGO'];
+
         return {
             activos: all.filter(p => p.estado && !['PAGADO', 'CANCELADO'].includes(p.estado)).length,
-            pagados: all.filter(p => p.estado === 'PAGADO').length,
-            totalVentas: all.filter(p => p.estado === 'PAGADO').reduce((acc, p) => acc + (p.total || 0), 0).toFixed(2),
-            cancelados: all.filter(p => p.estado === 'CANCELADO').length
+            pagados: todayPedidos.filter(p => p.estado && estadosDeVenta.includes(p.estado)).length,
+            totalVentas: todayPedidos.filter(p => p.estado && estadosDeVenta.includes(p.estado))
+                           .reduce((acc, p) => acc + (p.total || 0), 0).toFixed(2),
+            cancelados: todayPedidos.filter(p => p.estado === 'CANCELADO').length
         };
     });
 
@@ -133,5 +162,24 @@ export class AdminPedidoList implements OnInit {
     cerrarDetalle() {
         this.showModal.set(false);
         this.selectedPedido.set(null);
+    }
+
+    confirmarPago(pedido: PedidoDTO) {
+        if (!pedido || !pedido.idPedido) return;
+
+        const metodo = prompt("Ingrese método de pago (EFECTIVO, TARJETA, YAPE, PLIN):", "EFECTIVO");
+        if (!metodo) return;
+
+        this.pedidoService.confirmarPago(pedido.idPedido, metodo.toUpperCase()).subscribe({
+            next: () => {
+                this.toastService.success("Pago confirmado exitosamente");
+                this.cerrarDetalle();
+                this.cargar();
+            },
+            error: (err) => {
+                console.error("Error al confirmar pago:", err);
+                this.toastService.error("No se pudo confirmar el pago");
+            }
+        });
     }
 }

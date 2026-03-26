@@ -14,11 +14,11 @@
       <div class="report-filters">
         <div class="rf-group">
           <label>Alcance Desde</label>
-          <input type="date" [ngModel]="fechaInicio()" (ngModelChange)="fechaInicio.set($event)" class="form-input">
+          <input type="date" [ngModel]="fechaInicio()" (ngModelChange)="fechaInicio.set($event); onFilterChange()" class="form-input">
         </div>
         <div class="rf-group">
           <label>Hasta</label>
-          <input type="date" [ngModel]="fechaFin()" (ngModelChange)="fechaFin.set($event)" class="form-input">
+          <input type="date" [ngModel]="fechaFin()" (ngModelChange)="fechaFin.set($event); onFilterChange()" class="form-input">
         </div>
       </div>
       <div class="export-actions">
@@ -44,7 +44,7 @@
     <!-- Analytics High-Level KPIs (Premium) -->
     <div class="kpis-grid" *ngIf="resumen()">
       <app-kpi-card 
-        titulo="Recaudación Hoy" 
+        titulo="Ingresos Periodo" 
         [valor]="resumen()?.ingresosHoy || 0" 
         icono="ventas" 
         color="blue" 
@@ -55,7 +55,7 @@
       </app-kpi-card>
 
       <app-kpi-card 
-        titulo="Órdenes Procesadas" 
+        titulo="Órdenes Periodo" 
         [valor]="resumen()?.pedidosHoy || 0" 
         icono="pedidos" 
         color="green" 

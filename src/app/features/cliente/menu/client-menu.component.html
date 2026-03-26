@@ -28,28 +28,49 @@
 
   <!-- Product Digital Canvas -->
   <div class="menu-grid-display">
-    <div class="product-premium-card animate-slide-in" *ngFor="let p of filteredProducts()">
+    <div class="product-premium-card" 
+         *ngFor="let p of filteredProducts(); let i = index"
+         [style.animation-delay]="i * 0.1 + 's'">
+      
       <div class="ppc-visual">
+         <div class="ppc-visual-overlay"></div>
          <div class="ppc-mock-img">🥢</div>
-         <div class="ppc-badge-popular" *ngIf="p.popular || p.idProducto % 5 === 0">TOP SELECTION</div>
-         <div class="ppc-price-tag">S/ {{ p.price || p.precio?.toFixed(2) }}</div>
+         <div class="ppc-badges-layer">
+            <div class="ppc-badge-popular" *ngIf="p.popular || p.idProducto % 5 === 0">
+               <span class="badge-glow"></span>
+               TOP SELECTION
+            </div>
+            <div class="ppc-badge-new" *ngIf="p.idProducto % 7 === 0">NUEVO</div>
+         </div>
+         <div class="ppc-price-tag">
+            <span class="price-currency">S/</span>
+            <span class="price-value">{{ p.price || p.precio?.toFixed(2) }}</span>
+         </div>
       </div>
       
       <div class="ppc-content">
         <div class="ppc-meta">
            <span class="ppc-category">{{ p.nombreCategoria }}</span>
+           <div class="ppc-rating">
+              <span class="star-mini">★</span>
+              <span class="rating-val">4.9</span>
+           </div>
         </div>
         <h3 class="ppc-title">{{ p.nombre }}</h3>
         <p class="ppc-description">{{ p.descripcion }}</p>
         
-        <div class="ppc-actions">
-           <div class="ppc-stat">
-              <span class="ppc-stat-val">🔥 {{ p.idProducto + 20 }}</span>
-              <span class="ppc-stat-lab">Ord/Mes</span>
+        <div class="ppc-footer">
+           <div class="ppc-stats-strip">
+              <div class="ppc-stat-item">
+                 <span class="si-icon">🔥</span>
+                 <span class="si-val">{{ p.idProducto + 20 }}</span>
+              </div>
+              <div class="ppc-stat-item">
+                 <span class="si-icon">⏳</span>
+                 <span class="si-val">15 min</span>
+              </div>
            </div>
-           <button class="btn-ppc-action">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
-           </button>
+           
         </div>
       </div>
     </div>

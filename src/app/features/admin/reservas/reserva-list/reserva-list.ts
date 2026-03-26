@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ReservaService, ReservaDTO } from '../../../../core/services/reserva.service';
+import { WsService } from '../../../../core/services/ws.service';
 import { ToastService } from '../../../../core/services/toast.service';
 
 @Component({
@@ -14,6 +15,7 @@ import { ToastService } from '../../../../core/services/toast.service';
 })
 export class AdminReservaList implements OnInit {
   private reservaService = inject(ReservaService);
+  private wsService = inject(WsService);
   private toastService = inject(ToastService);
 
   searchQuery = signal('');
@@ -30,6 +32,13 @@ export class AdminReservaList implements OnInit {
   ngOnInit() {
     console.log("[ADMIN][ReservaList] Inicializando componente de gestión de reservas...");
     this.cargar();
+    this.setupWebSocket();
+  }
+
+  setupWebSocket() {
+    this.wsService.subscribe('/topic/reservas').subscribe({
+      next: () => this.cargar()
+    });
   }
 
   cargar() {

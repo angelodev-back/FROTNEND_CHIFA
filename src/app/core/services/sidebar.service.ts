@@ -28,9 +28,7 @@ export class SidebarService {
                     { label: 'Mesas', icon: 'grid', route: '/admin/mesas' },
                     { label: 'Reservas', icon: 'calendar', route: '/admin/reservas' },
                     { label: 'Pedidos', icon: 'shopping-bag', route: '/admin/pedidos' },
-                    { label: 'Caja', icon: 'dollar-sign', route: '/admin/caja' },
                     { label: 'Productos', icon: 'book-open', route: '/admin/menu' },
-                    { label: 'Inventario', icon: 'package', route: '/admin/inventario' },
                     { label: 'Usuarios', icon: 'users', route: '/admin/usuarios' },
                     { label: 'Reportes', icon: 'bar-chart', route: '/admin/reportes' },
                     { label: 'Auditoría', icon: 'shield', route: '/admin/auditoria' },
@@ -55,8 +53,6 @@ export class SidebarService {
                 groupLabel: 'COCINA',
                 items: [
                     { label: 'Monitor KDS', icon: 'zap', route: '/cocina/monitor' },
-                    { label: 'En Preparación', icon: 'activity', route: '/cocina/preparacion' },
-                    { label: 'Listos', icon: 'check-circle', route: '/cocina/listos' },
                     { label: 'Historial', icon: 'clock', route: '/cocina/historial' },
                 ]
             }
@@ -67,7 +63,7 @@ export class SidebarService {
                 items: [
                     { label: 'Dashboard', icon: 'home', route: '/recepcion/dashboard' },
                     { label: 'Reservas', icon: 'calendar', route: '/recepcion/reservas' },
-                    { label: 'Mesas', icon: 'grid', route: '/recepcion/mesas' },
+                    { label: 'Pagos', icon: 'dollar-sign', route: '/recepcion/pagos' },
                 ]
             }
         ]

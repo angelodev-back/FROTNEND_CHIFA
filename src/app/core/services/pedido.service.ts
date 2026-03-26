@@ -156,4 +156,26 @@ export class PedidoService {
             })
         );
     }
+
+    /** Cocina: Obtener historial (SERVIDO, PAGADO) */
+    getHistorialCocina(): Observable<PedidoDTO[]> {
+        console.log("[SERVICE][PedidoService] Solicitando HISTORIAL para cocina...");
+        return this.http.get<PedidoDTO[]>(`${this.apiUrl}/historial-cocina`).pipe(
+            tap({
+                next: (res) => console.log("[SERVICE][PedidoService] Historial de cocina recibido:", res.length, "items"),
+                error: (err) => console.error("[SERVICE][PedidoService] Error al obtener historial de cocina:", err)
+            })
+        );
+    }
+
+    /** Recepción: Obtener pedidos en proceso de pago (EN_PAGO) */
+    getPedidosEnPago(): Observable<PedidoDTO[]> {
+        console.log("[SERVICE][PedidoService] Solicitando pedidos EN PAGO para Recepción...");
+        return this.http.get<PedidoDTO[]>(`${this.apiUrl}/en-pago`).pipe(
+            tap({
+                next: (res) => console.log("[SERVICE][PedidoService] Pedidos en pago recibidos:", res.length, "items"),
+                error: (err) => console.error("[SERVICE][PedidoService] Error al obtener pedidos en pago:", err)
+            })
+        );
+    }
 }
