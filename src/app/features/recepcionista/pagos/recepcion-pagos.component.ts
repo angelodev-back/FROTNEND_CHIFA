@@ -54,9 +54,10 @@ export class RecepcionPagosComponent implements OnInit, OnDestroy {
   }
 
   setupWebSocket(): void {
-    // Escuchar cambios de estado globales
+    console.log('[RECEPCION][WS] Suscribiéndose a /topic/pedidos/status...');
     this.subs.add(
-      this.wsService.subscribe('/topic/pedidos/status').subscribe(() => {
+      this.wsService.subscribe('/topic/pedidos/status').subscribe((data) => {
+        console.log('[RECEPCION][WS] ¡Cambio detectado! Recargando pagos...', data);
         this.cargarPedidos();
       })
     );

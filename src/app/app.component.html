@@ -1,3 +1,23 @@
+<!-- Persistent Server Status Modal -->
+<div *ngIf="statusService.isOffline()" class="server-offline-overlay anim-fade-in">
+  <div class="server-offline-modal anim-scale-up">
+    <div class="modal-status-icon">
+      <div class="pulse-ring"></div>
+      <span class="icon-main">⚠️</span>
+    </div>
+    <h2 class="modal-status-title">Conexión Perdida</h2>
+    <p class="modal-status-text">
+        No pudimos contactar con el servidor. Por favor, verifica tu conexión a internet o asegúrate de que el backend esté encendido.
+    </p>
+    <div class="modal-status-footer">
+        <div class="loading-dots">
+            <span></span><span></span><span></span>
+        </div>
+        <span class="reconnect-text">Reintentando conectar automáticamente...</span>
+    </div>
+  </div>
+</div>
+
 <app-navbar *ngIf="authService.isAuthenticated() && authService.getNormalizedRole() !== 'CLIENTE'"></app-navbar>
 
 <!-- Global Notification Hub -->

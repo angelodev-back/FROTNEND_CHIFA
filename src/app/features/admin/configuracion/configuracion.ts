@@ -27,7 +27,7 @@ export class AdminConfiguracion implements OnInit {
     telefono: '',
     email: '',
     horario: '',
-    capacidadTotal: 120,
+    aforo: 120,
     descripcion: ''
   };
 

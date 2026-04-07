@@ -18,7 +18,6 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
     imports: [CommonModule, RouterModule],
     templateUrl: './sidebar.component.html',
     styleUrl: './sidebar.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [
         trigger('slideInOut', [
             state('in', style({ width: '260px', opacity: 1 })),

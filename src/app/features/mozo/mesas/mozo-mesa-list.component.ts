@@ -25,7 +25,8 @@ import { Subject, takeUntil } from 'rxjs';
         </div>
         <div class="aph-right">
            <div class="salit-legend">
-              <span class="legend-item"><span class="dot disp"></span> Libre</span>
+               <span class="legend-item"><span class="dot disp"></span> Libre</span>
+              <span class="legend-item"><span class="dot espera"></span> En Espera</span>
               <span class="legend-item"><span class="dot ocup"></span> Ocupada</span>
               <span class="legend-item"><span class="dot mia"></span> Propia</span>
               <span class="legend-item"><span class="dot pago"></span> Cobrando</span>
@@ -46,8 +47,8 @@ import { Subject, takeUntil } from 'rxjs';
           <div class="mpc-header">
             <span class="mpc-number">Mesa {{ m.numeroMesa }}</span>
             <div class="mpc-state-indicator">
-              <span class="state-dot"></span>
-              <span class="state-text">{{ m.estado === 'EN_PAGO' ? 'COBRANDO' : m.estado }}</span>
+               <span class="state-dot"></span>
+              <span class="state-text">{{ m.estado === 'EN_PAGO' ? 'COBRANDO' : (m.estado === 'EN_ESPERA' ? 'ESPERANDO' : m.estado) }}</span>
             </div>
           </div>
 
@@ -58,10 +59,11 @@ import { Subject, takeUntil } from 'rxjs';
                  {{ m.capacidad }}
               </div>
               <div class="mpc-role-icon">
-                <i class="bi bi-wallet2" *ngIf="m.estado === 'EN_PAGO'"></i>
+                 <i class="bi bi-wallet2" *ngIf="m.estado === 'EN_PAGO'"></i>
                 <i class="bi bi-person-workspace" *ngIf="m.estado === 'OCUPADA'"></i>
                 <i class="bi bi-check-circle-fill" *ngIf="m.estado === 'DISPONIBLE'"></i>
                 <i class="bi bi-calendar-check" *ngIf="m.estado === 'RESERVADA'"></i>
+                <i class="bi bi-alarm" *ngIf="m.estado === 'EN_ESPERA'"></i>
               </div>
             </div>
 
@@ -79,18 +81,23 @@ import { Subject, takeUntil } from 'rxjs';
                  </div>
                </div>
                
-               <div class="mpc-empty-info" *ngIf="m.estado === 'DISPONIBLE'">
+                <div class="mpc-empty-info" *ngIf="m.estado === 'DISPONIBLE'">
                  Lista para recibir comensales
+               </div>
+
+               <div class="mpc-waiting-info" *ngIf="m.estado === 'EN_ESPERA'">
+                 <div class="waiting-badge">¡Llegó el cliente! Requiere atención</div>
                </div>
             </div>
           </div>
 
           <div class="mpc-actions">
-            <!-- Botón Atender: Si está Disponible o está Ocupada pero nadie la tomó -->
-            <button *ngIf="m.estado === 'DISPONIBLE' || (m.estado === 'OCUPADA' && !m.idMozoAsignado)" 
-                    class="mpc-btn btn-primary-glass" 
+            <!-- Botón Atender: Solo para mesas en espera o reservadas -->
+            <button *ngIf="m.estado === 'EN_ESPERA' || m.estado === 'RESERVADA' || (m.estado === 'OCUPADA' && !m.idMozoAsignado)" 
+                    class="mpc-btn" 
+                    [ngClass]="m.estado === 'EN_ESPERA' ? 'btn-amber-pulse' : 'btn-primary-glass'"
                     (click)="atenderMesa(m.idMesa)">
-              Atender Mesa
+              {{ m.estado === 'EN_ESPERA' ? 'Atender Ahora' : 'Atender Mesa' }}
             </button>
             
             <!-- Botones Mi Mesa (Cuando ya la atiendo yo) -->
@@ -147,7 +154,8 @@ import { Subject, takeUntil } from 'rxjs';
     .salit-legend { display: flex; gap: 1rem; background: #f8fafc; padding: 0.5rem 1rem; border-radius: 12px; border: 1px solid #e2e8f0; }
     .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 700; color: #64748b; }
     .dot { width: 8px; height: 8px; border-radius: 50%; }
-    .dot.disp { background: #10b981; }
+     .dot.disp { background: #10b981; }
+    .dot.espera { background: #f59e0b; }
     .dot.ocup { background: #ef4444; }
     .dot.mia { background: #4f46e5; }
     .dot.pago { background: #f59e0b; }
@@ -209,10 +217,22 @@ import { Subject, takeUntil } from 'rxjs';
     
     .mpc-btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
     
-    .btn-primary-glass { background: #1e293b; color: white; }
+     .btn-primary-glass { background: #1e293b; color: white; }
     .btn-indigo { background: #4f46e5; color: white; }
     .btn-danger-glass { background: #fef2f2; color: #ef4444; border: 1px solid #fee2e2; }
     .btn-warning { background: #f59e0b; color: white; }
+    
+    .btn-amber-pulse { 
+      background: #f59e0b; color: white; 
+      animation: amber-pulse 1.5s infinite;
+      box-shadow: 0 0 0 rgba(245, 158, 11, 0.4);
+    }
+
+    @keyframes amber-pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+      70% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(245, 158, 11, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
     
     .mpc-btn:hover { filter: brightness(1.2); transform: translateY(-2px); }
 
@@ -223,9 +243,25 @@ import { Subject, takeUntil } from 'rxjs';
     .status-disponible .state-dot { background: #10b981; box-shadow: 0 0 8px #10b981; }
     .status-disponible .mpc-role-icon { color: #10b981; background: #ecfdf5; }
     
-    .status-ocupada { border-top: 4px solid #ef4444; }
+     .status-ocupada { border-top: 4px solid #ef4444; }
     .status-ocupada .state-dot { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
     .status-ocupada .mpc-role-icon { color: #ef4444; background: #fef2f2; }
+
+    .status-en_espera { border-top: 4px solid #f59e0b; animation: border-glow-amber 2s infinite; }
+    .status-en_espera .state-dot { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+    .status-en_espera .mpc-role-icon { color: #f59e0b; background: #fff7ed; }
+    
+    @keyframes border-glow-amber {
+      0%, 100% { border-color: #f59e0b; }
+      50% { border-color: #fbbf24; }
+    }
+
+    .waiting-badge { 
+      background: #fff7ed; color: #c2410c; 
+      padding: 0.5rem; border-radius: 8px; 
+      font-size: 0.75rem; font-weight: 850; 
+      text-align: center; border: 1px dashed #fdba74; 
+    }
 
     .status-en_pago { border-top: 4px solid #f59e0b; }
     .status-en_pago .state-dot { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }

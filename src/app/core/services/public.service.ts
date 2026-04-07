@@ -13,6 +13,10 @@ export interface RestauranteInfo {
     instagram: string;
     latitud: number;
     longitud: number;
+    ruc?: string;
+    email?: string;
+    aforo?: number;
+    descripcion?: string;
 }
 
 @Injectable({

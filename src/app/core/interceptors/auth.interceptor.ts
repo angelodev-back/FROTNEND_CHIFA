@@ -3,7 +3,8 @@ import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { LoadingService } from '../services/loading.service';
 import { ToastService } from '../services/toast.service';
-import { Observable, catchError, throwError, finalize } from 'rxjs';
+import { ServerStatusService } from '../services/server-status.service';
+import { Observable, catchError, throwError, finalize, tap } from 'rxjs';
 
 let isExpiring = false;
 
@@ -11,6 +12,7 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
     const authService = inject(AuthService);
     const loadingService = inject(LoadingService);
     const toastService = inject(ToastService);
+    const serverStatusService = inject(ServerStatusService);
     const token = authService.getToken();
 
     loadingService.show();
@@ -25,6 +27,10 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
     }
 
     return next(authReq).pipe(
+        tap(() => {
+            // If request succeeds, server is online
+            serverStatusService.setOffline(false);
+        }),
         catchError((error: HttpErrorResponse) => {
             if (error.status === 401) {
                 console.error(`[AUTH][401] Unauthorized error on: ${req.method} ${req.url}`);
@@ -41,6 +47,7 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
                 toastService.error('Sin permisos para esta acción');
             } else if (error.status === 0) {
                 console.error(`[AUTH][0] Connection error on: ${req.method} ${req.url}`);
+                serverStatusService.setOffline(true);
                 toastService.error('Error de conexión con el servidor');
             }
             return throwError(() => error);
